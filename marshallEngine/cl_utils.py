@@ -4,11 +4,20 @@
 Documentation for marshallEngine can be found here: http://marshallEngine.readthedocs.org/en/stable
 
 Usage:
-    marshallEngine init
-    marshallEngine [-s <pathToSettingsFile>]
+    marshall init
+    marshall clean [-s <pathToSettingsFile>]
+    marshall import <survey> [<withInLastDay>] [-s <pathToSettingsFile>]
+    marshall lightcurve <transientBucketId> [-s <pathToSettingsFile>]
 
 Options:
     init                  setup the marshallEngine settings file for the first time
+    clean                 preform cleanup tasks like updating transient summaries table
+    import                import data, images, lightcurves from a feeder survey
+    lightcurve            generate a lightcurve for a transient in the marshall database
+    transientBucketId     the transient ID from the database
+    survey                name of survey to import [panstarrs]
+    withInLastDay         import transient detections from the last N days (Default 30)
+
     -h, --help            show this help message
     -v, --version         show version
     -s, --settings        the settings file
@@ -101,6 +110,10 @@ def main(arguments=None):
             pickleMe[k] = theseLocals[k]
         pickle.dump(pickleMe, open(pathToPickleFile, "wb"))
 
+    # DEFAULT VALUES
+    if not withInLastDay:
+        withInLastDay = 30
+
     if init:
         from os.path import expanduser
         home = expanduser("~")
@@ -118,6 +131,55 @@ def main(arguments=None):
         return
 
     # CALL FUNCTIONS/OBJECTS
+    if clean:
+        # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).update()
+
+    if iimport:
+        if survey.lower() == "panstarrs":
+            from marshallEngine.feeders.panstarrs.data import data
+            ingester = data(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).ingest(withinLastDays=withInLastDay)
+
+            from marshallEngine.feeders.panstarrs import images
+            cacher = images(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).cache(limit=3000)
+        if survey.lower() == "atlas":
+            from marshallEngine.feeders.atlas.data import data
+            ingester = data(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).ingest(withinLastDays=withInLastDay)
+
+            from marshallEngine.feeders.atlas import images
+            cacher = images(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).cache(limit=3000)
+
+    if lightcurve:
+        from marshallEngine.lightcurves import marshall_lightcurves
+        lc = marshall_lightcurves(
+            log=log,
+            dbConn=dbConn,
+            settings=settings,
+            transientBucketIds=transientBucketId
+        )
+        filepath = lc.plot()
+        print "The lightcurve plot for transient %(transientBucketId)s can be found here: %(filepath)s" % locals()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
