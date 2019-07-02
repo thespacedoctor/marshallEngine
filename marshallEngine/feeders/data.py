@@ -363,7 +363,7 @@ class data():
             dbConn=self.dbConn
         )
 
-        if not len(rows) and rows[0]["maxId"]:
+        if not len(rows) or rows[0]["maxId"]:
             maxId = 1
         else:
             maxId = rows[0]["maxId"] + 1
