@@ -362,7 +362,11 @@ class data():
             sqlQuery=sqlQuery,
             dbConn=self.dbConn
         )
-        maxId = rows[0]["maxId"] + 1
+
+        if not len(rows):
+            maxId = 1
+        else:
+            maxId = rows[0]["maxId"] + 1
 
         # ADD NEW TRANSIENTBUCKETIDS TO FEEDER SURVEY TABLE
         updates = []
