@@ -167,8 +167,13 @@ class data(basedata):
             except:
                 pass
             thisDictionary["discMag"] = row["cal_psf_mag"]
-            thisDictionary[
-                "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["id"]
+
+            if "transient_object_id" in row.keys():
+                thisDictionary[
+                    "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["transient_object_id"]
+            else:
+                thisDictionary[
+                    "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["id"]
 
             # CLEAN UP IMAGE URLS
             target = row["target"]
