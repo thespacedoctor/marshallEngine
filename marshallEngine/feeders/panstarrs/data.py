@@ -194,10 +194,6 @@ class data(basedata):
                 thisDictionary["diffImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/site_media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + diff + '.jpeg'
 
-            if row["ps1_designation"] == "PS17ajr":
-                print thisDictionary
-                sys.exit(0)
-
             self.dictList.append(thisDictionary)
 
         self.log.debug('completed the ``_clean_data_pre_ingest`` method')
