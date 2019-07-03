@@ -152,8 +152,7 @@ class data(basedata):
             if row["ra_psf"] < 0:
                 row["ra_psf"] = 360. + row["ra_psf"]
             thisDictionary = {}
-            if row["ps1_designation"] == "PS17ajr":
-                print row
+
             thisDictionary["candidateID"] = row["ps1_designation"]
             thisDictionary["ra_deg"] = row["ra_psf"]
             thisDictionary["dec_deg"] = row["dec_psf"]
