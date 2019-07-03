@@ -152,6 +152,8 @@ class data(basedata):
             if row["ra_psf"] < 0:
                 row["ra_psf"] = 360. + row["ra_psf"]
             thisDictionary = {}
+            if row["ps1_designation"] == "PS17ajr":
+                print row
             thisDictionary["candidateID"] = row["ps1_designation"]
             thisDictionary["ra_deg"] = row["ra_psf"]
             thisDictionary["dec_deg"] = row["dec_psf"]
@@ -186,6 +188,10 @@ class data(basedata):
                 id, mjdString, diffId, ippIdet, type = diff.split('_')
                 thisDictionary["diffImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/site_media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + diff + '.jpeg'
+
+            if row["ps1_designation"] == "PS17ajr":
+                print thisDictionary
+                sys.exit(0)
 
             self.dictList.append(thisDictionary)
 
