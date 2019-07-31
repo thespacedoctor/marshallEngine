@@ -15,7 +15,7 @@ Options:
     import                import data, images, lightcurves from a feeder survey
     lightcurve            generate a lightcurve for a transient in the marshall database
     transientBucketId     the transient ID from the database
-    survey                name of survey to import [panstarrs]
+    survey                name of survey to import [panstarrs|atlas|useradded]
     withInLastDay         import transient detections from the last N days (Default 30)
 
     -h, --help            show this help message
@@ -132,6 +132,15 @@ def main(arguments=None):
 
     # CALL FUNCTIONS/OBJECTS
     if clean:
+        # RESCUE ORPHANED TRANSIENTS - NO MASTER ID FLAG
+        print "rescuing orphaned transients"
+        from fundamentals.mysql import writequery
+        sqlQuery = """CALL `update_transients_with_no_masteridflag`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         from marshallEngine.housekeeping import update_transient_summaries
         updater = update_transient_summaries(
@@ -164,6 +173,20 @@ def main(arguments=None):
             ).ingest(withinLastDays=withInLastDay)
 
             from marshallEngine.feeders.atlas import images
+            cacher = images(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).cache(limit=3000)
+        if survey.lower() == "useradded":
+            from marshallEngine.feeders.useradded.data import data
+            ingester = data(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).ingest(withinLastDays=withInLastDay)
+
+            from marshallEngine.feeders.useradded import images
             cacher = images(
                 log=log,
                 settings=settings,

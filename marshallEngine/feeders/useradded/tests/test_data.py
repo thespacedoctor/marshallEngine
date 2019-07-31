@@ -7,10 +7,19 @@ from marshallEngine.utKit import utKit
 
 from fundamentals import tools
 
-moduleDirectory = os.path.dirname(__file__)
+packageDirectory = utKit("").get_project_root()
+# su = tools(
+#     arguments={"settingsFile": packageDirectory +
+#                "/test_settings.yaml"},
+#     docString=__doc__,
+#     logLevel="DEBUG",
+#     options_first=False,
+#     projectName="marshall_webapp",
+#     defaultSettingsFile=False
+# )
 su = tools(
-    arguments={"settingsFile": moduleDirectory +
-               "/../../../test_settings.yaml"},
+    arguments={
+        "settingsFile": "/Users/Dave/.config/marshallEngine/marshallEngine.yaml"},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,

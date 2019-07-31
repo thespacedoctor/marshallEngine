@@ -7,7 +7,7 @@
     David Young
 
 :Date Created:
-    June 26, 2019
+    July 30, 2019
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -65,12 +65,12 @@ class images(baseimages):
             "useradded", "useradded"]
 
         # SET THESE IMAGE FLAG COLUMNS FOR THE SURVEY
-        # self.stampFlagColumns = {
-        #     "subtracted": "ps1_subtracted_stamp",
-        #     "target": "ps1_target_stamp",
-        #     "reference": "ps1_reference_stamp",
-        #     "triplet": None
-        # }
+        self.stampFlagColumns = {
+            "subtracted": None,
+            "target": "user_added_stamp",
+            "reference": None,
+            "triplet": None
+        }
         self.survey = "useradded"
 
         return None

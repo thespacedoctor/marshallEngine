@@ -7,12 +7,14 @@ from marshallEngine.utKit import utKit
 
 from fundamentals import tools
 
+packageDirectory = utKit("").get_project_root()
 su = tools(
-    arguments={"settingsFile": None},
+    arguments={"settingsFile": packageDirectory +
+               "/test_settings.yaml"},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="marshallEngine",
+    projectName="marshall_webapp",
     defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()

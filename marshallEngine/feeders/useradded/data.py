@@ -7,7 +7,7 @@
     David Young
 
 :Date Created:
-    June  6, 2019
+    July 30, 2019
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -70,7 +70,7 @@ class data(basedata):
         **Key Arguments:**
             - ``withinLastDays`` -- within the last number of days. *Default: 50*
         """
-        self.log.debug('starting the ``ingest`` method')
+        self.log.info('starting the ``ingest`` method')
 
         allLists = []
 
@@ -88,7 +88,7 @@ class data(basedata):
 
         self.insert_into_transientBucket()
 
-        self.log.debug('completed the ``ingest`` method')
+        self.log.info('completed the ``ingest`` method')
         return None
 
     def _clean_data_pre_ingest(
@@ -114,7 +114,7 @@ class data(basedata):
 
             Note you will also be able to access the data via ``ingester.dictList``
         """
-        self.log.debug('starting the ``_clean_data_pre_ingest`` method')
+        self.log.info('starting the ``_clean_data_pre_ingest`` method')
 
         self.dictList = []
 
@@ -137,7 +137,7 @@ class data(basedata):
 
             self.dictList.append(thisDictionary)
 
-        self.log.debug('completed the ``_clean_data_pre_ingest`` method')
+        self.log.info('completed the ``_clean_data_pre_ingest`` method')
         return self.dictList
 
     # use the tab-trigger below for new method
