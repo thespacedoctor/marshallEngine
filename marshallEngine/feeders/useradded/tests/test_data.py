@@ -8,18 +8,9 @@ from marshallEngine.utKit import utKit
 from fundamentals import tools
 
 packageDirectory = utKit("").get_project_root()
-# su = tools(
-#     arguments={"settingsFile": packageDirectory +
-#                "/test_settings.yaml"},
-#     docString=__doc__,
-#     logLevel="DEBUG",
-#     options_first=False,
-#     projectName="marshall_webapp",
-#     defaultSettingsFile=False
-# )
 su = tools(
-    arguments={
-        "settingsFile": "/Users/Dave/.config/marshallEngine/marshallEngine.yaml"},
+    arguments={"settingsFile": packageDirectory +
+               "/test_settings.yaml"},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
@@ -32,6 +23,8 @@ arguments, settings, log, dbConn = su.setup()
 moduleDirectory = os.path.dirname(__file__)
 utKit = utKit(moduleDirectory)
 log2, dbConn2, pathToInputDir, pathToOutputDir = utKit.setupModule()
+# EMPTY OUT THE UNIT TEST DATABASE BEFORE TESTING
+utKit.refresh_database()
 utKit.tearDownModule()
 
 import shutil
