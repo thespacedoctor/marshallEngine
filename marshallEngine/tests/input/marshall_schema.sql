@@ -2754,6 +2754,7 @@ CREATE TABLE `pesstoObjects` (
   `atlas_reference_stamp` tinyint(4) DEFAULT NULL,
   `atlas_fp_lightcurve` datetime DEFAULT NULL,
   `ztf_stamp` tinyint(4) DEFAULT NULL,
+  `user_added_stamp` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`pesstoObjectsId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `pesstoObjectId_UNIQUE` (`pesstoObjectsId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `masterSnId_UNIQUE` (`transientBucketId`) KEY_BLOCK_SIZE=1024,
@@ -4540,7 +4541,7 @@ CREATE TABLE `transientBucket` (
   `raDegErr` double DEFAULT NULL,
   `decDegErr` double DEFAULT NULL,
   `observationDate` datetime DEFAULT NULL COMMENT 'the survey observation date',
-  `observationMJD` double NOT NULL COMMENT 'the survey observation MJD',
+  `observationMJD` double DEFAULT NULL COMMENT 'the survey observation MJD',
   `magnitude` float DEFAULT NULL COMMENT 'the survey discovery magnitude',
   `magnitudeError` float DEFAULT NULL,
   `filter` varchar(20) DEFAULT NULL COMMENT 'survey discovery filter',
@@ -4590,16 +4591,16 @@ CREATE TABLE `transientBucket` (
   KEY `name` (`name`),
   KEY `idx_htm10ID` (`htm13ID`),
   KEY `idx_htm13ID` (`htm13ID`),
-  KEY `i_htm10ID` (`htm10ID`),
-  KEY `i_htm13ID` (`htm13ID`),
-  KEY `i_htm16ID` (`htm16ID`),
   KEY `idx_transientBucketId` (`transientBucketId`),
   KEY `idx_replacedByRowId` (`replacedByRowId`),
   KEY `idx_sherlockClassifcaition` (`sherlockClassification`),
   KEY `idx_magnitude` (`magnitude`),
   KEY `idx_dateLastModified` (`dateLastModified`),
   KEY `idx_limiting_mag` (`limitingMag`),
-  KEY `idx_replacedByRowId_limiting_mag_obdate` (`replacedByRowId`,`limitingMag`,`observationDate`)
+  KEY `idx_replacedByRowId_limiting_mag_obdate` (`replacedByRowId`,`limitingMag`,`observationDate`),
+  KEY `idx_observationmjd` (`observationMJD`),
+  KEY `idx_observationDate` (`observationDate`),
+  KEY `idx_surveyObjectUrl` (`surveyObjectUrl`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31194869 DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 COMMENT='This is the core table of the marshall containing all detections of all sources.';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -4654,7 +4655,8 @@ CREATE TABLE `transientBucketSummaries` (
   KEY `masterName` (`masterName`),
   KEY `ra_dec` (`raDeg`,`decDeg`),
   KEY `idx_dateLastModified` (`dateLastModified`),
-  KEY `idx_updateNeeded` (`updateNeeded`)
+  KEY `idx_updateNeeded` (`updateNeeded`),
+  KEY `idx_surveyObjectUrl` (`surveyObjectUrl`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -14253,15 +14255,11 @@ BEGIN
     -- SURVEY NAME
     set @survey = (select fs_survey_name from marshall_fs_column_map where fs_table_name = ARG_fs_table limit 1);  
     -- NOW SYNC THE TRANSIENTBUCKETIDS > FS_TABLE
-    set @myquery = concat('UPDATE ',ARG_fs_table,' a,
-    (SELECT DISTINCT
-        transientBucketId, name
-    FROM
-        transientBucket) b 
+    set @myquery = concat('UPDATE ',ARG_fs_table,' a, transientBucket b 
 SET 
     a.transientBucketId = b.transientBucketId
 WHERE
-    a.',@object,' = b.name
+    a.candidateID = b.name
         AND a.transientBucketId IS NULL;');
 	PREPARE stmt FROM @myquery;
 	EXECUTE stmt;
@@ -14276,7 +14274,6 @@ WHERE
 		set @fscolumns = (select GROUP_CONCAT(fs_table_column  order  by primaryId) from marshall_fs_column_map where fs_table_name = ARG_fs_table);
 		set @myquery = concat('insert ignore into transientBucket (transientBucketId,',@tbcolumns,') select transientBucketId,',@fscolumns,' from ',ARG_fs_table,' where ingested = 0 and transientBucketId is not null;' );
 	end if;
-    select @myquery;
     PREPARE stmt FROM @myquery;
     EXECUTE stmt;
     
@@ -14396,24 +14393,6 @@ DELIMITER ;;
 CREATE  PROCEDURE `update_transientbucketsummaries`()
 BEGIN
 
--- RESCUE ORPHANED OBJECTS
-update transientbucket t, transientBucketSummaries s set t.masterIDFlag = 1, s.updateNeeded = 1 where t.transientBucketId = s.transientBucketId and primaryKeyId in (select * from 
-(select  
-    MIN(primaryKeyId)
-FROM
-    transientbucket
-WHERE
-    transientBucketId NOT IN (SELECT 
-            *
-        FROM
-            (SELECT DISTINCT
-                transientBucketId
-            FROM
-                transientbucket
-            WHERE
-                masterIDFlag = 1) AS a)
-GROUP BY transientBucketId) as b);
-
 -- ADD NEW SOURCES TO PESSTOOBJECTS -- NEED TO MERGE PESSTOOBJECTS INTO transientBucketSummaries TABLE
 INSERT INTO pesstoObjects (
 		pesstoObjectsId,
@@ -14425,14 +14404,14 @@ INSERT INTO pesstoObjects (
 		dateAdded,
 		dateLastModified)  
 	SELECT 
-		distinct transientBucketId, transientBucketId, 0, "Inbox", 'Pending Classification', 1, now(), now()
+		transientBucketId, transientBucketId, 0, "Inbox", 'Pending Classification', 1, now(), now()
 	FROM
 		transientBucket
 	WHERE
 		transientBucketId NOT IN (SELECT 
 				transientBucketId
 			FROM
-				pesstoObjects) AND transientBucketId > 0;
+				pesstoObjects) AND transientBucketId > 0 and masterIDFlag = 1;
 
 -- ADD NEW TRANSIENTS TO THE transientBucketSummaries TABLE
 INSERT ignore INTO transientBucketSummaries (transientBucketId)
@@ -14468,7 +14447,7 @@ WHERE
     masterIdFlag = 1 AND replacedByRowId = 0 
         AND s.transientBucketId = t.transientBucketId
         AND s.updateNeeded = 1;
-        
+       
 -- UPDATE SURVEYURL IF MISSING
 UPDATE transientBucket t,
     transientBucketSummaries s 
@@ -14482,6 +14461,7 @@ WHERE
         AND t.surveyObjectUrl NOT LIKE '%%roche%%'
         AND replacedByRowId = 0
         AND masterIDFlag = 1;
+
 UPDATE transientBucket t,
     transientBucketSummaries s 
 SET 
@@ -14493,7 +14473,7 @@ WHERE
         AND t.surveyObjectUrl NOT LIKE '%%astronomerstelegram%%'
         AND t.surveyObjectUrl NOT LIKE '%%roche%%'
         AND replacedByRowId = 0;
-        
+      
 -- ADDED BY WHICH USER     
 UPDATE transientBucketSummaries s,
     transientBucket t 
@@ -14504,7 +14484,7 @@ WHERE
         AND t.spectralType IS NULL
         AND t.transientBucketId = s.transientBucketId
         AND replacedByRowId = 0 AND s.updateNeeded = 1;
-        
+      
 -- UPDATE OBJECT'S METADATA
 UPDATE transientBucketSummaries s,
     (select * from (SELECT 
@@ -14526,7 +14506,7 @@ SET
 WHERE
     s.transientBucketId = t.transientBucketId 
     AND s.updateNeeded = 1;
-    
+
 -- NULL RA/DEC
 UPDATE transientBucketSummaries s,
     (select * from (SELECT 
@@ -14544,7 +14524,7 @@ SET
 WHERE
     s.transientBucketId = t.transientBucketId 
     AND s.updateNeeded = 1;
-    
+
 UPDATE transientBucketSummaries s,
     (select * from (SELECT 
         transientBucketId,
@@ -14559,7 +14539,7 @@ SET
 WHERE
     s.transientBucketId = t.transientBucketId 
     AND updateNeeded = 1;
-    
+
 -- UPDATE EARLIEST DETECTION INFORMATION
 UPDATE transientBucketSummaries s,
     (select * from (SELECT 
@@ -14711,7 +14691,6 @@ SET
 WHERE
     s.transientBucketId = t.transientBucketId
     AND s.updateNeeded = 1;
-    
 
         
 -- UPDATE CONTEXT INFO FROM SHERLOCK 
@@ -14728,7 +14707,7 @@ WHERE
     s.transientBucketId = c.transient_object_id
     and c.transient_object_id in (select * from (select transientBucketId from transientBucketSummaries where updateNeeded = 1) as a)
     AND s.updateNeeded = 1;
-    
+
 -- UPDATE ABS PEAK MAG
 update transientBucketSummaries set absolutePeakMagnitude = peakMagnitude - (5*log10(distanceMpc*1000000)-5) where distanceMpc is not null and peakMagnitude is not null and peakMagnitude < 24.0 and absolutePeakMagnitude is null;
     
@@ -14749,19 +14728,57 @@ DELIMITER ;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+/*!50003 SET sql_mode              = '' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transientbucket_observation_dates`()
 BEGIN
-	UPDATE transientBucket 
+	UPDATE transientBucket set observationMJD = null where observationMJD = 0;
+UPDATE transientBucket set observationMJD = observationMJD - 2400000.5 where observationMJD > 245000;
+
+UPDATE transientBucket 
 SET 
     observationDate = FROM_UNIXTIME((observationMJD + 678941) * (3600 * 24) - TO_SECONDS('1970-01-01 00:00:00') + TO_SECONDS(UTC_TIMESTAMP()) - TO_SECONDS(CURRENT_TIMESTAMP()))
 WHERE
     observationMJD IS NOT NULL and observationDate is null;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `update_transients_with_no_masteridflag` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE  PROCEDURE `update_transients_with_no_masteridflag`()
+BEGIN
+	update transientbucket t, transientBucketSummaries s set t.masterIDFlag = 1, s.updateNeeded = 1 where t.transientBucketId = s.transientBucketId and primaryKeyId in (select * from 
+(select  
+    MIN(primaryKeyId)
+FROM
+    transientbucket
+WHERE
+    transientBucketId NOT IN (SELECT 
+            *
+        FROM
+            (SELECT DISTINCT
+                transientBucketId
+            FROM
+                transientbucket
+            WHERE
+                masterIDFlag = 1) AS a)
+GROUP BY transientBucketId) as b);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -15444,7 +15461,7 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-30 15:16:11
+-- Dump completed on 2019-07-31 15:30:02
 -- MySQL dump 10.13  Distrib 5.7.26, for macos10.14 (x86_64)
 --
 -- Host: localhost    Database: marshall
@@ -15554,4 +15571,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-30 15:16:11
+-- Dump completed on 2019-07-31 15:30:02
