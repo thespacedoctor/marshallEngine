@@ -3,7 +3,6 @@ import nose2
 import shutil
 import unittest
 import yaml
-from marshallEngine import data, cl_utils
 from marshallEngine.utKit import utKit
 
 from fundamentals import tools
@@ -20,25 +19,11 @@ su = tools(
 )
 arguments, settings, log, dbConn = su.setup()
 
-# # load settings
-# stream = file(
-#     "/Users/Dave/.config/marshallEngine/marshallEngine.yaml", 'r')
-# settings = yaml.load(stream)
-# stream.close()
-
 # SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE
 moduleDirectory = os.path.dirname(__file__)
 utKit = utKit(moduleDirectory)
-log, dbConn, pathToInputDir, pathToOutputDir = utKit.setupModule()
+log2, dbConn2, pathToInputDir, pathToOutputDir = utKit.setupModule()
 utKit.tearDownModule()
-
-# load settings
-from os.path import expanduser
-home = expanduser("~")
-stream = file(
-    home + "/.config/marshallEngine/marshallEngine.yaml", 'r')
-settings = yaml.load(stream)
-stream.close()
 
 import shutil
 try:
@@ -55,22 +40,40 @@ if not os.path.exists(pathToOutputDir):
 # xt-setup-unit-testing-files-and-folders
 
 
-class test_data(unittest.TestCase):
+class test_images(unittest.TestCase):
 
-    def test_data_function(self):
+    def test_images_function(self):
 
-        from marshallEngine import data
-        this = data(
+        from marshallEngine.feeders.useradded import images
+        cacher = images(
             log=log,
-            settings=settings
+            settings=settings,
+            dbConn=dbConn
         )
-        this.get()
+        transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = cacher._list_images_needing_cached()
+        subtractedStatus, targetStatus, referenceStatus, tripletStatus = cacher._download(
+            transientBucketIds=transientBucketIds[:10],
+            subtractedUrls=subtractedUrls[:10],
+            targetUrls=targetUrls[:10],
+            referenceUrls=referenceUrls[:10],
+            tripletUrls=tripletUrls[:10]
+        )
+        cacher._update_database()
 
-    def test_data_function_exception(self):
+    def test_images_function2(self):
 
-        from marshallEngine import data
+        from marshallEngine.feeders.useradded import images
+        cacher = images(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).cache(limit=1000)
+
+    def test_images_function_exception(self):
+
+        from marshallEngine.feeders.useradded import images
         try:
-            this = data(
+            this = images(
                 log=log,
                 settings=settings,
                 fakeKey="break the code"

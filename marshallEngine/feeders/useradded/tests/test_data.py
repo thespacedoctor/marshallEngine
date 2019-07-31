@@ -23,6 +23,8 @@ arguments, settings, log, dbConn = su.setup()
 moduleDirectory = os.path.dirname(__file__)
 utKit = utKit(moduleDirectory)
 log2, dbConn2, pathToInputDir, pathToOutputDir = utKit.setupModule()
+# EMPTY OUT THE UNIT TEST DATABASE BEFORE TESTING
+utKit.refresh_database()
 utKit.tearDownModule()
 
 import shutil
@@ -45,26 +47,26 @@ class test_data(unittest.TestCase):
     def test_data_function(self):
 
         allLists = []
-        from marshallEngine.feeders.atlas.data import data
+        from marshallEngine.feeders.useradded.data import data
         ingester = data(
             log=log,
             settings=settings,
             dbConn=dbConn
         )
 
-        csvDicts = ingester.get_csv_data(
-            url=settings["atlas urls"]["summary csv"]
-        )
-        ingester._clean_data_pre_ingest(
-            surveyName="ATLAS", withinLastDays=50)
-
         # ADD DATA IMPORTING CODE HERE
-        ingester._import_to_feeder_survey_table()
+        from fundamentals.mysql import writequery
+        sqlQuery = """INSERT IGNORE INTO `fs_user_added` (`id`,`candidateID`,`ra_deg`,`dec_deg`,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`objectURL`,`summaryRow`,`ingested`,`htm16ID`,`survey`,`author`,`dateCreated`,`dateLastModified`,`suggestedClassification`,`htm13ID`,`htm10ID`,`transientBucketId`) VALUES (856,'TestSource',155.125958333,-15.1787369444,20.3,NULL,NULL,57627.5,'2016-08-27',20.3,'SN',NULL,0.34,'http://thespacedoctor.co.uk/images/thespacedoctor_icon_white_circle.png','http://thespacedoctor.co.uk',1,0,NULL,'testSurvey','None','2019-07-30 14:25:39','2019-07-30 14:25:39',NULL,NULL,NULL,NULL);""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn
+        )
         ingester.insert_into_transientBucket()
 
     def test_data_function2(self):
 
-        from marshallEngine.feeders.atlas.data import data
+        from marshallEngine.feeders.useradded.data import data
         ingester = data(
             log=log,
             settings=settings,
@@ -73,7 +75,7 @@ class test_data(unittest.TestCase):
 
     def test_data_function_exception(self):
 
-        from marshallEngine.feeders.atlas.data import data
+        from marshallEngine.feeders.useradded.data import data
         try:
             this = data(
                 log=log,

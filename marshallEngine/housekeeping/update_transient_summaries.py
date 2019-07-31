@@ -72,7 +72,7 @@ class update_transient_summaries():
             dbConn=self.dbConn
         )
 
-        print "Updating the transientbucket summary table"
+        print "updating transient summaries table"
         # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
         sqlQuery = "call update_transientbucketsummaries()"
         writequery(

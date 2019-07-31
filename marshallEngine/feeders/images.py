@@ -104,7 +104,8 @@ class images():
         dbSurveyNames2 = dbSurveyNames.replace("survey L", "a.survey L")
 
         # NOW GENERATE SQL TO GET THE URLS OF STAMPS NEEDING DOWNLOADED
-        sqlQuery = u"""
+        if self.survey == "useradded":
+            sqlQuery = u"""
             SELECT 
     a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
 FROM
@@ -120,19 +121,49 @@ FROM
             OR targetImageUrl IS NOT NULL
             OR referenceImageUrl IS NOT NULL
             OR tripletImageUrl IS NOT NULL)
+            AND transientBucketId in (select transientBucketId from fs_user_added)
             AND transientBucketId IN (SELECT 
                 transientBucketId
             FROM
                 pesstoObjects
             WHERE
                 %(stampWhere)s)
-            AND (%(dbSurveyNames)s)
+            
     GROUP BY transientBucketId
     ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
         AND a.magnitude = b.mag
-WHERE
-    (%(dbSurveyNames2)s) GROUP BY transientBucketId;
+    GROUP BY transientBucketId;
         """ % locals()
+        else:
+            sqlQuery = u"""
+                SELECT 
+        a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
+    FROM
+        transientBucket a
+            JOIN
+        (SELECT 
+            MIN(magnitude) AS mag, transientBucketId
+        FROM
+            transientBucket
+        WHERE
+            magnitude IS NOT NULL
+                AND (subtractedImageUrl IS NOT NULL
+                OR targetImageUrl IS NOT NULL
+                OR referenceImageUrl IS NOT NULL
+                OR tripletImageUrl IS NOT NULL)
+                AND transientBucketId IN (SELECT 
+                    transientBucketId
+                FROM
+                    pesstoObjects
+                WHERE
+                    %(stampWhere)s)
+                AND (%(dbSurveyNames)s)
+        GROUP BY transientBucketId
+        ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
+            AND a.magnitude = b.mag
+    WHERE
+        (%(dbSurveyNames2)s) GROUP BY transientBucketId;
+            """ % locals()
 
         rows = readquery(
             log=self.log,
@@ -215,9 +246,15 @@ WHERE
         """
         self.log.debug('starting the ``_update_database`` method')
 
+        if not len(self.tripletStatus):
+            self.log.debug('completed the ``_update_database`` method')
+            return None
+
         # ITERATE OVER 4 STAMP COLUMNS AND THE IMAGE DOWNLOADED STATUS
         for column, status in zip(self.stampFlagColumns.values(), [self.subtractedStatus, self.targetStatus, self.referenceStatus, self.tripletStatus]):
             if column:
+                print column, status
+                print "HEEERERERERE"
                 nonexist = []
                 exist = []
                 # NON-EXISTANT == STATUS 2
