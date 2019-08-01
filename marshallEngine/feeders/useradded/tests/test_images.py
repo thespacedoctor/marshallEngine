@@ -14,7 +14,7 @@ su = tools(
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="marshall_webapp",
+    projectName=None,
     defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()
@@ -49,16 +49,7 @@ class test_images(unittest.TestCase):
             log=log,
             settings=settings,
             dbConn=dbConn
-        )
-        transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = cacher._list_images_needing_cached()
-        subtractedStatus, targetStatus, referenceStatus, tripletStatus = cacher._download(
-            transientBucketIds=transientBucketIds[:10],
-            subtractedUrls=subtractedUrls[:10],
-            targetUrls=targetUrls[:10],
-            referenceUrls=referenceUrls[:10],
-            tripletUrls=tripletUrls[:10]
-        )
-        cacher._update_database()
+        ).cache(limit=3000)
 
     def test_images_function2(self):
 

@@ -46,15 +46,8 @@ class test_data(unittest.TestCase):
 
     def test_data_function(self):
 
-        allLists = []
-        from marshallEngine.feeders.useradded.data import data
-        ingester = data(
-            log=log,
-            settings=settings,
-            dbConn=dbConn
-        )
-
-        # ADD DATA IMPORTING CODE HERE
+        # ADD A ROW TO BE IMPORTED
+        utKit.refresh_database()
         from fundamentals.mysql import writequery
         sqlQuery = """INSERT IGNORE INTO `fs_user_added` (`id`,`candidateID`,`ra_deg`,`dec_deg`,`mag`,`magErr`,`filter`,`observationMJD`,`discDate`,`discMag`,`suggestedType`,`catalogType`,`hostZ`,`targetImageURL`,`objectURL`,`summaryRow`,`ingested`,`htm16ID`,`survey`,`author`,`dateCreated`,`dateLastModified`,`suggestedClassification`,`htm13ID`,`htm10ID`,`transientBucketId`) VALUES (856,'TestSource',155.125958333,-15.1787369444,20.3,NULL,NULL,57627.5,'2016-08-27',20.3,'SN',NULL,0.34,'http://thespacedoctor.co.uk/images/thespacedoctor_icon_white_circle.png','http://thespacedoctor.co.uk',1,0,NULL,'testSurvey','None','2019-07-30 14:25:39','2019-07-30 14:25:39',NULL,NULL,NULL,NULL);""" % locals()
         writequery(
@@ -62,7 +55,13 @@ class test_data(unittest.TestCase):
             sqlQuery=sqlQuery,
             dbConn=dbConn
         )
-        ingester.insert_into_transientBucket()
+
+        from marshallEngine.feeders.useradded.data import data
+        ingester = data(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).ingest(withinLastDays=300)
 
     def test_data_function2(self):
 

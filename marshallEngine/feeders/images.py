@@ -253,8 +253,6 @@ FROM
         # ITERATE OVER 4 STAMP COLUMNS AND THE IMAGE DOWNLOADED STATUS
         for column, status in zip(self.stampFlagColumns.values(), [self.subtractedStatus, self.targetStatus, self.referenceStatus, self.tripletStatus]):
             if column:
-                print column, status
-                print "HEEERERERERE"
                 nonexist = []
                 exist = []
                 # NON-EXISTANT == STATUS 2
