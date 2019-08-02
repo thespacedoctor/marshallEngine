@@ -320,14 +320,19 @@ def download_image_array(
 
         try:
             response = requests.get(
-                url=url
+                url=url,
+                timeout=1.0
                 # params={},
                 # auth=HTTPBasicAuth('user', 'pwd')
             )
             content = response.content
             status_code = response.status_code
-        except requests.exceptions.RequestException:
-            print 'HTTP Request failed'
+        except requests.exceptions.RequestException as e:
+            if 'timed out' in str(e):
+                print 'timed out - try again next time' % locals()
+            else:
+                print 'HTTP Request failed - %(e)s' % locals()
+                print ""
             statusArray.append(0)
             continue
 
