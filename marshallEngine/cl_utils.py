@@ -18,9 +18,9 @@ Options:
     survey                name of survey to import [panstarrs|atlas|useradded]
     withInLastDay         import transient detections from the last N days (Default 30)
 
-    -h, --help            show this help message
-    -v, --version         show version
-    -s, --settings        the settings file
+    -h, --help                              show this help message
+    -v, --version                           show version
+    -s, --settings <pathToSettingsFile>     the settings file
 """
 ################# GLOBAL IMPORTS ####################
 import sys
