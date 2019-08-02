@@ -564,7 +564,7 @@ class marshall_lightcurves():
             print "updating lightcurves for %(total)s transients" % locals()
 
         results = fmultiprocess(log=self.log, function=_plot_one,
-                                inputArray=self.transientBucketIds, poolSize=False, timeout=600, settings=self.settings)
+                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
 
         sqlQuery = ""
         updatedTransientBucketIds = []
