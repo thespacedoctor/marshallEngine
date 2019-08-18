@@ -509,12 +509,12 @@ class marshall_lightcurves():
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists(saveLocation):
-            os.makedirs(saveLocation)
+            try:
+                os.makedirs(saveLocation)
+            except:
+                pass
         # SAVE THE PLOT
         filepath = """%(saveLocation)s%(saveFileName)s.png""" % locals()
-        exists = os.path.exists(filePath)
-        if exists:
-            os.remove(fileName)
         plt.savefig(filepath, format='PNG', bbox_inches='tight', transparent=False,
                     pad_inches=0.4)
         # plt.show()
@@ -636,7 +636,7 @@ def _plot_one(
     )
 
     cacheFolder = settings["downloads"]["transient cache directory"]
-    saveLocation = """%(cacheFolder)s%(transientBucketId)s""" % locals()
+    saveLocation = """%(cacheFolder)s%(transientBucketId)s/""" % locals()
 
     # SELECT DATA AND PLOT THE SOURCE
     dataset, flatdata, flatLimits = lc._select_data_for_transient(
