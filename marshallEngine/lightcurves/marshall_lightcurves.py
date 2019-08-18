@@ -515,9 +515,6 @@ class marshall_lightcurves():
                 pass
         # SAVE THE PLOT
         filepath = """%(saveLocation)s%(saveFileName)s.png""" % locals()
-        exists = os.path.exists(filepath)
-        if exists:
-            os.remove(fileName)
         plt.savefig(filepath, format='PNG', bbox_inches='tight', transparent=False,
                     pad_inches=0.4)
         # plt.show()
