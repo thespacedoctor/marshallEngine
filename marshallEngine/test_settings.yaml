@@ -27,7 +27,7 @@ ssh tunnel:
 apache prefix: ""
 
 downloads:
-    transient cache directory: "/Users/Dave/git_repos/marshall_webapp/marshall_webapp/static/caches/transients/"
+    transient cache directory: "/Users/Dave/git_repos/_webapps_/marshall_webapp/marshall_webapp/static/caches/transients/"
 
 stats cache directory: "/Users/Dave/git_repos/marshall_webapp/marshall_webapp/static/caches/stats/"
 

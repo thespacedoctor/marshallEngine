@@ -1279,7 +1279,7 @@
 <p id="t564" class="stm run hide_run">            <span class="key">print</span> <span class="str">"updating lightcurves for %(total)s transients"</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t565" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t566" class="stm run hide_run">        <span class="nam">results</span> <span class="op">=</span> <span class="nam">fmultiprocess</span><span class="op">(</span><span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span> <span class="nam">function</span><span class="op">=</span><span class="nam">_plot_one</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
-<p id="t567" class="pln">                                <span class="nam">inputArray</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">transientBucketIds</span><span class="op">,</span> <span class="nam">poolSize</span><span class="op">=</span><span class="nam">False</span><span class="op">,</span> <span class="nam">timeout</span><span class="op">=</span><span class="num">600</span><span class="op">,</span> <span class="nam">settings</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">settings</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t567" class="pln">                                <span class="nam">inputArray</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">transientBucketIds</span><span class="op">,</span> <span class="nam">poolSize</span><span class="op">=</span><span class="nam">False</span><span class="op">,</span> <span class="nam">timeout</span><span class="op">=</span><span class="num">3600</span><span class="op">,</span> <span class="nam">settings</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">settings</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t568" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t569" class="stm run hide_run">        <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">""</span><span class="strut">&nbsp;</span></p>
 <p id="t570" class="stm run hide_run">        <span class="nam">updatedTransientBucketIds</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
@@ -1378,7 +1378,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io/en/coverage-5.0a5">coverage.py v5.0a5</a>,
-            created at 2019-08-01 13:07
+            created at 2019-08-18 19:38
         </p>
     </div>
 </div>

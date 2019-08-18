@@ -9,8 +9,7 @@ BUILDDIR      = build
 SOURCEDIR     = source
 ASDIR         = source/_autosummary
 APIDIR        = source/_api
-INDIR         = source/_includes
-READMERST = ../README.rst
+INDIR         = pages
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -80,24 +79,6 @@ htmlhelp:
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
 
-qthelp:
-	$(SPHINXBUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
-	@echo
-	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
-	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/marshallEngine.qhcp"
-	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/marshallEngine.qhc"
-
-devhelp:
-	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
-	@echo
-	@echo "Build finished."
-	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/marshallEngine"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/marshallEngine"
-	@echo "# devhelp"
-
 epub:
 	$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	@echo
@@ -162,7 +143,7 @@ doctest:
 
 buildapi:
 	rm -rf $(APIDIR)
-	SPHINX_APIDOC_OPTIONS='members,private-members,undoc-members,show-inheritance,inherited-members,member-order=bysource' sphinx-apidoc -fMeTPF --ext-mathjax --ext-githubpages --full -o source/_api ../ ../setup.py ../marshallEngine/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
+	SPHINX_APIDOC_OPTIONS='members,private-members,undoc-members,show-inheritance,inherited-members,member-order=bysource' sphinx-apidoc -fMeTPF --ext-mathjax --ext-githubpages --full -o source/_api ../ ../setup.py ../*/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
 	@echo "Auto-generation of API documentation finished. " \
 		"The generated files are in '_api/'"
 

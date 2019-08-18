@@ -5,8 +5,10 @@ import os
 
 # -- GENERAL CONFIGURATION -----------------------------------------------
 # GET THE VERSION OF THE CODE FROM THE __version__ FILE
-moduleDirectory = os.path.dirname(os.path.realpath(__file__))
-exec(open(moduleDirectory + "/../../marshallEngine/__version__.py").read())
+moduleDirectory = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.realpath(__file__))))
+projectName = os.path.basename(moduleDirectory)
+exec(open(moduleDirectory + "/" + projectName + "/__version__.py").read())
 
 # SPHINX EXTENSION
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',

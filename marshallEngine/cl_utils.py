@@ -152,46 +152,30 @@ def main(arguments=None):
     if iimport:
         if survey.lower() == "panstarrs":
             from marshallEngine.feeders.panstarrs.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)
-
             from marshallEngine.feeders.panstarrs import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=3000)
         if survey.lower() == "atlas":
             from marshallEngine.feeders.atlas.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)
-
             from marshallEngine.feeders.atlas import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=3000)
         if survey.lower() == "useradded":
             from marshallEngine.feeders.useradded.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)
-
             from marshallEngine.feeders.useradded import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=3000)
+        ingester = data(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).ingest(withinLastDays=withInLastDay)
+        cacher = images(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).cache(limit=3000)
+
+        from marshallEngine.services import panstarrs_location_stamps
+        ps_stamp = panstarrs_location_stamps(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).get()
 
     if lightcurve:
         from marshallEngine.lightcurves import marshall_lightcurves
