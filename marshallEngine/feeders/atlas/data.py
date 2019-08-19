@@ -140,23 +140,26 @@ class data(basedata):
             if target:
                 mjdStr = str(int(float(target.split("_")[1])))
                 if target:
-                    id, mjdString, diffId, ippIdet, type = target.split('_')
+                    iid, mjdString, diffId, ippIdet, type = target.split('_')
                     targetImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + target + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             if ref:
                 mjdStr = str(int(float(ref.split("_")[1])))
                 if ref:
-                    id, mjdString, diffId, ippIdet, type = ref.split('_')
+                    iid, mjdString, diffId, ippIdet, type = ref.split('_')
                     refImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + ref + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             if diff:
                 mjdStr = str(int(float(diff.split("_")[1])))
                 if diff:
-                    id, mjdString, diffId, ippIdet, type = diff.split('_')
+                    iid, mjdString, diffId, ippIdet, type = diff.split('_')
                     diffImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + diff + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             discDate = converter.mjd_to_ut_datetime(
                 mjd=row["earliest_mjd"], sqlDate=True)
@@ -174,6 +177,7 @@ class data(basedata):
             thisDictionary["targetImageURL"] = targetImageURL
             thisDictionary["refImageURL"] = refImageURL
             thisDictionary["diffImageURL"] = diffImageURL
+            thisDictionary["objectURL"] = objectURL
 
             self.dictList.append(thisDictionary)
 
