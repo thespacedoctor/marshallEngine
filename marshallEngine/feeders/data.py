@@ -75,7 +75,7 @@ class data():
 
             Note you will also be able to access the data via ``ingester.csvDicts`` 
         """
-        self.log.info('starting the ``get_csv_data`` method')
+        self.log.debug('starting the ``get_csv_data`` method')
 
         # DOWNLOAD THE CSV FILE DATA
         try:
@@ -101,7 +101,7 @@ class data():
         self.csvDicts = csv.DictReader(
             response.iter_lines(), dialect='excel', delimiter='|', quotechar='"')
 
-        self.log.info('completed the ``get_csv_data`` method')
+        self.log.debug('completed the ``get_csv_data`` method')
         return self.csvDicts
 
     def _import_to_feeder_survey_table(
@@ -117,7 +117,7 @@ class data():
 
                 self._import_to_feeder_survey_table()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_import_to_feeder_survey_table`` method')
 
         if not len(self.dictList):
@@ -136,7 +136,7 @@ class data():
             dbSettings=self.settings["database settings"]
         )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_import_to_feeder_survey_table`` method')
         return None
 
@@ -159,7 +159,7 @@ class data():
 
                 ingester.insert_into_transientBucket()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``crossmatch_with_transientBucket`` method')
 
         fsTableName = self.fsTableName
@@ -195,9 +195,9 @@ class data():
             log=self.log,
             settings=self.settings,
             dbConn=self.dbConn
-        ).update()  # 26
+        ).update()
 
-        self.log.info(
+        self.log.debug(
             'completed the ``crossmatch_with_transientBucket`` method')
         return None
 
@@ -214,7 +214,7 @@ class data():
 
                 self._feeder_survey_transientbucket_name_match_and_import()
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_feeder_survey_transientbucket_name_match_and_import`` method')
 
         fsTableName = self.fsTableName
@@ -229,7 +229,7 @@ class data():
             dbConn=self.dbConn
         )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_feeder_survey_transientbucket_name_match_and_import`` method')
         return None
 
@@ -240,7 +240,7 @@ class data():
         **Return:**
             - ``unmatched`` -- a list of the unmatched (i.e. new to the marshall) feeder survey surveys
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_feeder_survey_transientbucket_crossmatch`` method')
 
         fsTableName = self.fsTableName
@@ -332,7 +332,7 @@ class data():
             if i not in matchIndies:
                 unmatched.append(v)
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_feeder_survey_transientbucket_crossmatch`` method')
         return unmatched
 
@@ -344,12 +344,10 @@ class data():
         **Key Arguments:**
             - ``unmatched`` -- the remaining unmatched feeder survey object names.
         """
-        self.log.info(
+        self.log.debug(
             'starting the ``_import_unmatched_feeder_survey_sources_to_transientbucket`` method')
 
         if not len(unmatched):
-            self.log.info(
-                'completed the ``_import_unmatched_feeder_survey_sources_to_transientbucket`` method')
             return None
 
         fsTableName = self.fsTableName
@@ -365,7 +363,7 @@ class data():
             dbConn=self.dbConn
         )
 
-        if not rows[0]["maxId"]:
+        if not len(rows):
             maxId = 1
         else:
             maxId = rows[0]["maxId"] + 1
@@ -405,7 +403,7 @@ GROUP BY transientBucketId) as a )""" % locals()
             dbConn=self.dbConn
         )
 
-        self.log.info(
+        self.log.debug(
             'completed the ``_import_unmatched_feeder_survey_sources_to_transientbucket`` method')
         return None
 
