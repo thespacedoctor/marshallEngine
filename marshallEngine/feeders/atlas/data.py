@@ -153,7 +153,10 @@ class data(basedata):
 
         for row in self.csvDicts:
             # IF NOW IN THE LAST N DAYS - SKIP
-            if withinLastDays and float(row["earliest_mjd"]) < mjdLimit:
+            flagMjd = converter.ut_datetime_to_mjd(
+                utDatetime=row["followup_flag_date"])
+
+            if withinLastDays and (float(row["earliest_mjd"]) < mjdLimit and float(flagMjd) < mjdLimit):
                 continue
 
             # MASSAGE THE DATA IN THE INPUT FORMAT TO WHAT IS NEEDED IN THE
