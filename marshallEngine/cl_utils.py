@@ -141,6 +141,12 @@ def main(arguments=None):
             sqlQuery=sqlQuery,
             dbConn=dbConn,
         )
+        sqlQuery = """CALL `insert_new_transients_into_transientbucketsummaries`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         from marshallEngine.housekeeping import update_transient_summaries
         updater = update_transient_summaries(

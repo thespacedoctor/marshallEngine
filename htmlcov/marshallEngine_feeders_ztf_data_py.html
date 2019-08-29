@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for marshallEngine/feeders/useradded/data.py: 0%</title>
+    <title>Coverage for marshallEngine/feeders/ztf/data.py: 0%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
@@ -16,7 +16,7 @@
 <body class="pyfile">
 <div id="header">
     <div class="content">
-        <h1>Coverage for <b>marshallEngine/feeders/useradded/data.py</b> :
+        <h1>Coverage for <b>marshallEngine/feeders/ztf/data.py</b> :
             <span class="pc_cov">0%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
@@ -203,13 +203,13 @@
 <p id="t1" class="pln"><span class="com">#!/usr/local/bin/python</span><span class="strut">&nbsp;</span></p>
 <p id="t2" class="pln"><span class="com"># encoding: utf-8</span><span class="strut">&nbsp;</span></p>
 <p id="t3" class="mis show_mis"><span class="str">"""</span><span class="strut">&nbsp;</span></p>
-<p id="t4" class="pln"><span class="str">*import the useradded stream into the marshall*</span><span class="strut">&nbsp;</span></p>
+<p id="t4" class="pln"><span class="str">*import the ZTF stream into the marshall*</span><span class="strut">&nbsp;</span></p>
 <p id="t5" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t6" class="pln"><span class="str">:Author:</span><span class="strut">&nbsp;</span></p>
 <p id="t7" class="pln"><span class="str">    David Young</span><span class="strut">&nbsp;</span></p>
 <p id="t8" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t9" class="pln"><span class="str">:Date Created:</span><span class="strut">&nbsp;</span></p>
-<p id="t10" class="pln"><span class="str">    July 30, 2019</span><span class="strut">&nbsp;</span></p>
+<p id="t10" class="pln"><span class="str">    August 19, 2019</span><span class="strut">&nbsp;</span></p>
 <p id="t11" class="pln"><span class="str">"""</span><span class="strut">&nbsp;</span></p>
 <p id="t12" class="pln"><span class="com">################# GLOBAL IMPORTS ####################</span><span class="strut">&nbsp;</span></p>
 <p id="t13" class="mis show_mis"><span class="key">import</span> <span class="nam">sys</span><span class="strut">&nbsp;</span></p>
@@ -222,7 +222,7 @@
 <p id="t20" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t21" class="mis show_mis"><span class="key">class</span> <span class="nam">data</span><span class="op">(</span><span class="nam">basedata</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
 <p id="t22" class="pln">    <span class="str">"""</span><span class="strut">&nbsp;</span></p>
-<p id="t23" class="pln"><span class="str">    *Import the useradded transient data into the marshall database*</span><span class="strut">&nbsp;</span></p>
+<p id="t23" class="pln"><span class="str">    *Import the ZTF transient data into the marshall database*</span><span class="strut">&nbsp;</span></p>
 <p id="t24" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t25" class="pln"><span class="str">    **Key Arguments:**</span><span class="strut">&nbsp;</span></p>
 <p id="t26" class="pln"><span class="str">        - ``log`` -- logger</span><span class="strut">&nbsp;</span></p>
@@ -237,7 +237,7 @@
 <p id="t35" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t36" class="pln"><span class="str">        .. code-block:: python </span><span class="strut">&nbsp;</span></p>
 <p id="t37" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t38" class="pln"><span class="str">            from marshallEngine.feeders.useradded.data import data</span><span class="strut">&nbsp;</span></p>
+<p id="t38" class="pln"><span class="str">            from marshallEngine.feeders.ztf.data import data</span><span class="strut">&nbsp;</span></p>
 <p id="t39" class="pln"><span class="str">            ingester = data(</span><span class="strut">&nbsp;</span></p>
 <p id="t40" class="pln"><span class="str">                log=log,</span><span class="strut">&nbsp;</span></p>
 <p id="t41" class="pln"><span class="str">                settings=settings,</span><span class="strut">&nbsp;</span></p>
@@ -257,8 +257,8 @@
 <p id="t55" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">settings</span> <span class="op">=</span> <span class="nam">settings</span><span class="strut">&nbsp;</span></p>
 <p id="t56" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">dbConn</span> <span class="op">=</span> <span class="nam">dbConn</span><span class="strut">&nbsp;</span></p>
 <p id="t57" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t58" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">fsTableName</span> <span class="op">=</span> <span class="str">"fs_user_added"</span><span class="strut">&nbsp;</span></p>
-<p id="t59" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">survey</span> <span class="op">=</span> <span class="str">"useradded"</span><span class="strut">&nbsp;</span></p>
+<p id="t58" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">fsTableName</span> <span class="op">=</span> <span class="str">"fs_ztf"</span><span class="strut">&nbsp;</span></p>
+<p id="t59" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">survey</span> <span class="op">=</span> <span class="str">"ZTF"</span><span class="strut">&nbsp;</span></p>
 <p id="t60" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t61" class="pln">        <span class="com"># xt-self-arg-tmpx</span><span class="strut">&nbsp;</span></p>
 <p id="t62" class="pln"><span class="strut">&nbsp;</span></p>
@@ -272,7 +272,7 @@
 <p id="t70" class="pln"><span class="str">        **Key Arguments:**</span><span class="strut">&nbsp;</span></p>
 <p id="t71" class="pln"><span class="str">            - ``withinLastDays`` -- within the last number of days. *Default: 50*</span><span class="strut">&nbsp;</span></p>
 <p id="t72" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
-<p id="t73" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'starting the ``ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t73" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t74" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t75" class="mis show_mis">        <span class="nam">allLists</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
 <p id="t76" class="pln"><span class="strut">&nbsp;</span></p>
@@ -290,17 +290,17 @@
 <p id="t88" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t89" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">insert_into_transientBucket</span><span class="op">(</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t90" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t91" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'completed the ``ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t91" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t92" class="mis show_mis">        <span class="key">return</span> <span class="nam">None</span><span class="strut">&nbsp;</span></p>
 <p id="t93" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t94" class="mis show_mis">    <span class="key">def</span> <span class="nam">_clean_data_pre_ingest</span><span class="op">(</span><span class="strut">&nbsp;</span></p>
 <p id="t95" class="pln">            <span class="nam">self</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t96" class="pln">            <span class="nam">surveyName</span><span class="op">,</span><span class="strut">&nbsp;</span></p>
 <p id="t97" class="pln">            <span class="nam">withinLastDays</span><span class="op">=</span><span class="nam">False</span><span class="op">)</span><span class="op">:</span><span class="strut">&nbsp;</span></p>
-<p id="t98" class="pln">        <span class="str">"""*clean up the list of dictionaries containing the useradded data, pre-ingest*</span><span class="strut">&nbsp;</span></p>
+<p id="t98" class="pln">        <span class="str">"""*clean up the list of dictionaries containing the ZTF data, pre-ingest*</span><span class="strut">&nbsp;</span></p>
 <p id="t99" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t100" class="pln"><span class="str">        **Key Arguments:**</span><span class="strut">&nbsp;</span></p>
-<p id="t101" class="pln"><span class="str">            - ``surveyName`` -- the useradded survey name</span><span class="strut">&nbsp;</span></p>
+<p id="t101" class="pln"><span class="str">            - ``surveyName`` -- the ZTF survey name</span><span class="strut">&nbsp;</span></p>
 <p id="t102" class="pln"><span class="str">            -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit</span><span class="strut">&nbsp;</span></p>
 <p id="t103" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t104" class="pln"><span class="str">        **Return:**</span><span class="strut">&nbsp;</span></p>
@@ -308,15 +308,15 @@
 <p id="t106" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t107" class="pln"><span class="str">        **Usage:**</span><span class="strut">&nbsp;</span></p>
 <p id="t108" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t109" class="pln"><span class="str">            To clean the data from the useradded survey:</span><span class="strut">&nbsp;</span></p>
+<p id="t109" class="pln"><span class="str">            To clean the data from the ZTF survey:</span><span class="strut">&nbsp;</span></p>
 <p id="t110" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t111" class="pln"><span class="str">            .. code-block:: python </span><span class="strut">&nbsp;</span></p>
 <p id="t112" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t113" class="pln"><span class="str">                dictList = ingesters._clean_data_pre_ingest(surveyName="useradded")</span><span class="strut">&nbsp;</span></p>
+<p id="t113" class="pln"><span class="str">                dictList = ingesters._clean_data_pre_ingest(surveyName="ZTF")</span><span class="strut">&nbsp;</span></p>
 <p id="t114" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t115" class="pln"><span class="str">            Note you will also be able to access the data via ``ingester.dictList``</span><span class="strut">&nbsp;</span></p>
 <p id="t116" class="pln"><span class="str">        """</span><span class="strut">&nbsp;</span></p>
-<p id="t117" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'starting the ``_clean_data_pre_ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t117" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'starting the ``_clean_data_pre_ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t118" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t119" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">dictList</span> <span class="op">=</span> <span class="op">[</span><span class="op">]</span><span class="strut">&nbsp;</span></p>
 <p id="t120" class="pln"><span class="strut">&nbsp;</span></p>
@@ -339,7 +339,7 @@
 <p id="t137" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t138" class="mis show_mis">            <span class="nam">self</span><span class="op">.</span><span class="nam">dictList</span><span class="op">.</span><span class="nam">append</span><span class="op">(</span><span class="nam">thisDictionary</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t139" class="pln"><span class="strut">&nbsp;</span></p>
-<p id="t140" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">info</span><span class="op">(</span><span class="str">'completed the ``_clean_data_pre_ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
+<p id="t140" class="mis show_mis">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``_clean_data_pre_ingest`` method'</span><span class="op">)</span><span class="strut">&nbsp;</span></p>
 <p id="t141" class="mis show_mis">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">dictList</span><span class="strut">&nbsp;</span></p>
 <p id="t142" class="pln"><span class="strut">&nbsp;</span></p>
 <p id="t143" class="pln">    <span class="com"># use the tab-trigger below for new method</span><span class="strut">&nbsp;</span></p>
