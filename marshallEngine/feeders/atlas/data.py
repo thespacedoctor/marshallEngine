@@ -17,6 +17,8 @@ from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
 from astrocalc.times import conversions
+from fundamentals.mysql import writequery
+from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
 
 
 class data(basedata):
@@ -80,7 +82,33 @@ class data(basedata):
             surveyName="ATLAS", withinLastDays=withinLastDays)
 
         self._import_to_feeder_survey_table()
-        self.insert_into_transientBucket()
+        self.insert_into_transientBucket(updateTransientSummaries=False)
+
+        sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
+        self.fsTableName = "fs_atlas_forced_phot"
+        self.survey = "ATLAS FP"
+
+        sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
+        self.insert_into_transientBucket(importUnmatched=False)
+
+        # UPDATE THE ATLAS SPECIFIC FLUX SPACE LIGHTCURVES
+        generate_atlas_lightcurves(
+            log=self.log,
+            dbConn=self.dbConn,
+            settings=self.settings
+        )
 
         self.log.debug('completed the ``ingest`` method')
         return None

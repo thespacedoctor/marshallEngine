@@ -3,3 +3,4 @@
 """
 from data import data
 from images import images
+import lightcurve

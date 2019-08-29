@@ -60,9 +60,10 @@ class update_transient_summaries():
         self.log = log
         log.debug("instansiating a new 'update_transient_summaries' object")
         self.settings = settings
-        self.dbConn = dbConn
         self.transientBucketIds = []
         # xt-self-arg-tmpx
+
+        self.dbConn = dbConn
 
         # UPDATE OBSERVATION DATES FROM MJDs
         sqlQuery = "call update_transientbucket_observation_dates()"
