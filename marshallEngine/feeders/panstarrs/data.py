@@ -16,6 +16,7 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
+from fundamentals.mysql import writequery
 
 
 class data(basedata):
