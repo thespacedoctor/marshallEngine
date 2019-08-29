@@ -214,7 +214,7 @@ FROM
         self.referenceStatus = []
         self.tripletStatus = []
         index = 1
-        survey = self.survey
+        survey = lower(self.survey)
 
         # TOTAL TO DOWNLOAD
         count = len(transientBucketIds)
