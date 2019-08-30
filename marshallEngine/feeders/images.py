@@ -307,7 +307,7 @@ def download_image_array(
     downloadPath = "%(downloadPath)s/%(tid)s/" % locals()
     if not os.path.exists(downloadPath):
         os.makedirs(downloadPath)
-    filepath = downloadPath + survey
+    filepath = downloadPath + survey.lower()
 
     for url, stamp in zip(imageArray[1:], ["subtracted", "target", "reference", "triplet"]):
         if url:
