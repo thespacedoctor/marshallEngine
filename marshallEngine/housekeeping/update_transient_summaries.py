@@ -169,7 +169,7 @@ class update_transient_summaries():
 
         if total > 1000:
             print """%(total)s transients need updated - updating the next 1000""" % locals()
-            self.transientBucketIds = self.transientBucketIds[:1000]
+            rows = rows[:1000]
 
         # CREATE 3 LISTS - RA, DEC, ID
         raDeg = []
