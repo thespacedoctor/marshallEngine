@@ -18,9 +18,7 @@ marshallEngine
 Command-Line Usage
 ==================
 
-.. todo::
 
-    - add usage
 
 Documentation
 =============

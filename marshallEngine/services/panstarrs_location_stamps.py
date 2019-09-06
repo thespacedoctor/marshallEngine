@@ -35,11 +35,6 @@ class panstarrs_location_stamps():
 
         To initiate a panstarrs_location_stamps object, use the following:
 
-        .. todo::
-
-            - add a tutorial about ``panstarrs_location_stamps`` to documentation
-            - create a blog post about what ``panstarrs_location_stamps`` does
-
         .. code-block:: python 
 
             from marshallEngine.services import panstarrs_location_stamps
@@ -50,9 +45,6 @@ class panstarrs_location_stamps():
                 transientId=None
             ).get()
     """
-    # Initialisation
-    # 1. @flagged: what are the unique attrributes for each object? Add them
-    # to __init__
 
     def __init__(
             self,
@@ -69,44 +61,21 @@ class panstarrs_location_stamps():
 
         # xt-self-arg-tmpx
 
-        # 2. @flagged: what are the default attrributes each object could have? Add them to variable attribute set here
-        # Variable Data Atrributes
-
-        # 3. @flagged: what variable attrributes need overriden in any baseclass(es) used
-        # Override Variable Data Atrributes
-
-        # Initial Actions
-
         return None
 
-    # 4. @flagged: what actions does each object have to be able to perform? Add them here
-    # Method Attributes
     def get(self):
         """
         *get the panstarrs_location_stamps object*
-
-        **Return:**
-            - ``panstarrs_location_stamps``
-
-        **Usage:**
-        .. todo::
-
-            - add usage info
-            - create a sublime snippet for usage
-            - create cl-util for this method
-            - update the package tutorial if needed
-
-        .. code-block:: python 
-
-            usage code 
         """
         self.log.debug('starting the ``get`` method')
 
+        # FOR A SINGLE TRANSIENT
         if self.transientId:
             transientId = self.transientId
             sqlQuery = u"""
                 select t.transientBucketId, t.raDeg,t.decDeg from pesstoObjects p, transientBucketSummaries t where p.transientBucketId = t.transientBucketId and t.transientBucketId = %(transientId)s;
             """ % locals()
+        # OR THE NEXT 200 TRANSIENTS NEEDING STAMPS
         else:
             # GET NEXT 200 TRANSIENTS NEEDING PANSTARRS STAMPS
             sqlQuery = u"""
@@ -183,10 +152,4 @@ class panstarrs_location_stamps():
             )
 
         self.log.debug('completed the ``get`` method')
-        return panstarrs_location_stamps
-
-    # xt-class-method
-
-    # 5. @flagged: what actions of the base class(es) need ammending? ammend them here
-    # Override Method Attributes
-    # method-override-tmpx
+        return None
