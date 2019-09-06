@@ -179,12 +179,21 @@ class data():
         # with sources in the transientbucket. Add associated
         # transientBucketIds to matched feeder survey sources. Copy matched
         # feeder survey rows to the transientbucket.
+        from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+        add_htm_ids_to_mysql_database_table(
+            raColName="raDeg",
+            declColName="decDeg",
+            tableName="transientBucket",
+            dbConn=self.dbConn,
+            log=self.log,
+            primaryIdColumnName="primaryKeyId"
+        )
         unmatched = self._feeder_survey_transientbucket_crossmatch()
 
         # 3. assign a new transientbucketid to any feeder survey source not
         # matched in steps 1 & 2. Copy these unmatched feeder survey rows to
         # the transientbucket as new transient detections.
-        if importUnmatched:
+        if importUnmatched and 1 == 0:
             self._import_unmatched_feeder_survey_sources_to_transientbucket(
                 unmatched)
 
@@ -320,6 +329,7 @@ class data():
         updates = []
         originalList = matches.list
         total = len(originalList)
+
         print "Adding recurrance detections for %(total)s matched %(fsTableName)s sources to the transientBucket table" % locals()
         if total:
             updates = []

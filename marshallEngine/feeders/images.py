@@ -58,6 +58,10 @@ class images():
         """
         self.log.debug('starting the ``cache`` method')
 
+        # THESE SURVEY DON'T HAVE IMAGES - PASS
+        if self.survey in ["tns"]:
+            return
+
         transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = self._list_images_needing_cached()
         leng = len(transientBucketIds)
         survey = self.survey

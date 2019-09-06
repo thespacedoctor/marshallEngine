@@ -118,8 +118,12 @@ class update_transient_summaries():
         )
         lc.plot()
 
+        transientBucketIds = ('","').join(str(x)
+                                          for x in self.transientBucketIds)
+
         # RESET UPDATE-NEEDED FLAG
-        sqlQuery = """update transientBucketSummaries set updateNeeded = 0 where updateNeeded = 2""" % locals()
+        sqlQuery = """update transientBucketSummaries set updateNeeded = 0 where updateNeeded = 2 and transientBucketId in ("%(transientBucketIds)s")""" % locals(
+        )
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -149,7 +153,7 @@ class update_transient_summaries():
 
         # SELECT THE TRANSIENTS NEEDING UPDATED
         sqlQuery = u"""
-            select raDeg, decDeg, transientBucketId from transientBucketSummaries where updateNeeded = 2
+            select raDeg, decDeg, transientBucketId from transientBucketSummaries where updateNeeded = 2 order by transientBucketId desc
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -158,9 +162,13 @@ class update_transient_summaries():
             quiet=False
         )
 
+        total = len(rows)
         # STOP IF NOTHING TO UPDATE
-        if not len(rows):
+        if not total:
             return
+
+        if total > 1000:
+            print """%(total)s transients need updated - updating the next 1000""" % locals()
 
         # CREATE 3 LISTS - RA, DEC, ID
         raDeg = []

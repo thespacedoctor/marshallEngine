@@ -147,6 +147,12 @@ def main(arguments=None):
             sqlQuery=sqlQuery,
             dbConn=dbConn,
         )
+        sqlQuery = """CALL `resurrect_objects`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         from marshallEngine.housekeeping import update_transient_summaries
         updater = update_transient_summaries(
@@ -165,6 +171,9 @@ def main(arguments=None):
         if survey.lower() == "useradded":
             from marshallEngine.feeders.useradded.data import data
             from marshallEngine.feeders.useradded import images
+        if survey.lower() == "tns":
+            from marshallEngine.feeders.tns.data import data
+            from marshallEngine.feeders.tns import images
         ingester = data(
             log=log,
             settings=settings,
