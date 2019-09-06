@@ -16,7 +16,8 @@ install_requires = [
     'astrocalc',
     'hmpty',
     'astropy',
-    'matplotlib'
+    'matplotlib',
+    'panstamps'
 ]
 
 # READ THE DOCS SERVERS

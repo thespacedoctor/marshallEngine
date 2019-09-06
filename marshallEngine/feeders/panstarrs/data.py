@@ -16,6 +16,7 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
+from fundamentals.mysql import writequery
 
 
 class data(basedata):
@@ -109,6 +110,14 @@ class data(basedata):
 
         self.insert_into_transientBucket()
 
+        # FIX ODD PANSTARRS COORDINATES
+        sqlQuery = """update transientBucket set raDeg = raDeg+360.0 where raDeg  < 0;""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
         self.log.debug('completed the ``ingest`` method')
         return None
 
@@ -152,6 +161,7 @@ class data(basedata):
             if row["ra_psf"] < 0:
                 row["ra_psf"] = 360. + row["ra_psf"]
             thisDictionary = {}
+
             thisDictionary["candidateID"] = row["ps1_designation"]
             thisDictionary["ra_deg"] = row["ra_psf"]
             thisDictionary["dec_deg"] = row["dec_psf"]
@@ -165,8 +175,13 @@ class data(basedata):
             except:
                 pass
             thisDictionary["discMag"] = row["cal_psf_mag"]
-            thisDictionary[
-                "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["id"]
+
+            if "transient_object_id" in row.keys():
+                thisDictionary[
+                    "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["transient_object_id"]
+            else:
+                thisDictionary[
+                    "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["id"]
 
             # CLEAN UP IMAGE URLS
             target = row["target"]

@@ -18,7 +18,6 @@ import requests
 from requests.auth import HTTPBasicAuth
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
 from fundamentals import tools
-from marshallEngine.housekeeping import update_transient_summaries
 
 
 class data():
@@ -141,8 +140,14 @@ class data():
         return None
 
     def insert_into_transientBucket(
-            self):
+            self,
+            importUnmatched=True,
+            updateTransientSummaries=True):
         """*insert objects/detections from the feeder survey table into the transientbucket*
+
+        **Key Arguments:**
+            - ``importUnmatched`` -- import unmatched (new) transients into the marshall (not wanted in some circumstances)
+            - ``updateTransientSummaries`` -- update the transient summaries and lightcurves?
 
         This method aims to reduce crossmatching and load on the database by:
 
@@ -174,13 +179,23 @@ class data():
         # with sources in the transientbucket. Add associated
         # transientBucketIds to matched feeder survey sources. Copy matched
         # feeder survey rows to the transientbucket.
+        from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+        add_htm_ids_to_mysql_database_table(
+            raColName="raDeg",
+            declColName="decDeg",
+            tableName="transientBucket",
+            dbConn=self.dbConn,
+            log=self.log,
+            primaryIdColumnName="primaryKeyId"
+        )
         unmatched = self._feeder_survey_transientbucket_crossmatch()
 
         # 3. assign a new transientbucketid to any feeder survey source not
         # matched in steps 1 & 2. Copy these unmatched feeder survey rows to
         # the transientbucket as new transient detections.
-        self._import_unmatched_feeder_survey_sources_to_transientbucket(
-            unmatched)
+        if importUnmatched and 1 == 0:
+            self._import_unmatched_feeder_survey_sources_to_transientbucket(
+                unmatched)
 
         # UPDATE OBSERVATION DATES FROM MJDs
         sqlQuery = "call update_transientbucket_observation_dates()"
@@ -191,11 +206,14 @@ class data():
         )
 
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
-        updater = update_transient_summaries(
-            log=self.log,
-            settings=self.settings,
-            dbConn=self.dbConn
-        ).update()
+        if updateTransientSummaries:
+            from marshallEngine.housekeeping import update_transient_summaries
+            updater = update_transient_summaries(
+                log=self.log,
+                settings=self.settings,
+                dbConn=self.dbConn
+            )
+            updater.update()
 
         self.log.debug(
             'completed the ``crossmatch_with_transientBucket`` method')
@@ -311,6 +329,7 @@ class data():
         updates = []
         originalList = matches.list
         total = len(originalList)
+
         print "Adding recurrance detections for %(total)s matched %(fsTableName)s sources to the transientBucket table" % locals()
         if total:
             updates = []
@@ -362,7 +381,11 @@ class data():
             sqlQuery=sqlQuery,
             dbConn=self.dbConn
         )
-        maxId = rows[0]["maxId"] + 1
+
+        if not len(rows) or not rows[0]["maxId"]:
+            maxId = 1
+        else:
+            maxId = rows[0]["maxId"] + 1
 
         # ADD NEW TRANSIENTBUCKETIDS TO FEEDER SURVEY TABLE
         updates = []

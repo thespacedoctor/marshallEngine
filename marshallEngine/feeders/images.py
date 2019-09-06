@@ -58,6 +58,10 @@ class images():
         """
         self.log.debug('starting the ``cache`` method')
 
+        # THESE SURVEY DON'T HAVE IMAGES - PASS
+        if self.survey in ["tns"]:
+            return
+
         transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = self._list_images_needing_cached()
         leng = len(transientBucketIds)
         survey = self.survey
@@ -104,7 +108,8 @@ class images():
         dbSurveyNames2 = dbSurveyNames.replace("survey L", "a.survey L")
 
         # NOW GENERATE SQL TO GET THE URLS OF STAMPS NEEDING DOWNLOADED
-        sqlQuery = u"""
+        if self.survey == "useradded":
+            sqlQuery = u"""
             SELECT 
     a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
 FROM
@@ -120,19 +125,49 @@ FROM
             OR targetImageUrl IS NOT NULL
             OR referenceImageUrl IS NOT NULL
             OR tripletImageUrl IS NOT NULL)
+            AND transientBucketId in (select transientBucketId from fs_user_added)
             AND transientBucketId IN (SELECT 
                 transientBucketId
             FROM
                 pesstoObjects
             WHERE
                 %(stampWhere)s)
-            AND (%(dbSurveyNames)s)
+            
     GROUP BY transientBucketId
     ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
         AND a.magnitude = b.mag
-WHERE
-    (%(dbSurveyNames2)s) GROUP BY transientBucketId;
+    GROUP BY transientBucketId;
         """ % locals()
+        else:
+            sqlQuery = u"""
+                SELECT 
+        a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
+    FROM
+        transientBucket a
+            JOIN
+        (SELECT 
+            MIN(magnitude) AS mag, transientBucketId
+        FROM
+            transientBucket
+        WHERE
+            magnitude IS NOT NULL
+                AND (subtractedImageUrl IS NOT NULL
+                OR targetImageUrl IS NOT NULL
+                OR referenceImageUrl IS NOT NULL
+                OR tripletImageUrl IS NOT NULL)
+                AND transientBucketId IN (SELECT 
+                    transientBucketId
+                FROM
+                    pesstoObjects
+                WHERE
+                    %(stampWhere)s)
+                AND (%(dbSurveyNames)s)
+        GROUP BY transientBucketId
+        ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
+            AND a.magnitude = b.mag
+    WHERE
+        (%(dbSurveyNames2)s) GROUP BY transientBucketId;
+            """ % locals()
 
         rows = readquery(
             log=self.log,
@@ -183,7 +218,7 @@ WHERE
         self.referenceStatus = []
         self.tripletStatus = []
         index = 1
-        survey = self.survey
+        survey = self.survey.lower()
 
         # TOTAL TO DOWNLOAD
         count = len(transientBucketIds)
@@ -214,6 +249,10 @@ WHERE
         """*update the database to show which images have been cached on the server*
         """
         self.log.debug('starting the ``_update_database`` method')
+
+        if not len(self.tripletStatus):
+            self.log.debug('completed the ``_update_database`` method')
+            return None
 
         # ITERATE OVER 4 STAMP COLUMNS AND THE IMAGE DOWNLOADED STATUS
         for column, status in zip(self.stampFlagColumns.values(), [self.subtractedStatus, self.targetStatus, self.referenceStatus, self.tripletStatus]):
@@ -272,7 +311,7 @@ def download_image_array(
     downloadPath = "%(downloadPath)s/%(tid)s/" % locals()
     if not os.path.exists(downloadPath):
         os.makedirs(downloadPath)
-    filepath = downloadPath + survey
+    filepath = downloadPath + survey.lower()
 
     for url, stamp in zip(imageArray[1:], ["subtracted", "target", "reference", "triplet"]):
         if url:
@@ -285,14 +324,19 @@ def download_image_array(
 
         try:
             response = requests.get(
-                url=url
+                url=url,
+                timeout=1.0
                 # params={},
                 # auth=HTTPBasicAuth('user', 'pwd')
             )
             content = response.content
             status_code = response.status_code
-        except requests.exceptions.RequestException:
-            print 'HTTP Request failed'
+        except requests.exceptions.RequestException as e:
+            if 'timed out' in str(e):
+                print 'timed out - try again next time' % locals()
+            else:
+                print 'HTTP Request failed - %(e)s' % locals()
+                print ""
             statusArray.append(0)
             continue
 

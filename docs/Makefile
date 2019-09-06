@@ -9,11 +9,7 @@ BUILDDIR      = build
 SOURCEDIR     = source
 ASDIR         = source/_autosummary
 APIDIR        = source/_api
-INDIR         = source/_includes
-READMERST = ../README.rst
-READMEMD = ../README.md
-BLOGRST = ../blog-post.rst
-BLOGMD = ../blog-post.md
+INDIR         = pages
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
@@ -51,39 +47,6 @@ clean:
 
 html:
 	
-	@cat $(INDIR)/description.rst > $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/usage.rst >> $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/documentation.rst >> $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/installation.rst >> $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/development.rst >> $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/issues.rst >> $(READMERST)
-	@echo "" >> $(READMERST)
-	@cat $(INDIR)/license.rst >> $(READMERST)
-	@echo "" >> $(BLOGRST)
-	sed -i -e "s/Here's a summary of what's included in the python package://g" $(READMERST)
-	sed -i -e "s/.. include:: \/classes_and_functions.rst//g" $(READMERST)	
-	@cat $(INDIR)/description.rst > $(BLOGRST)
-	@echo "" >> $(BLOGRST)
-	@cat $(INDIR)/usage.rst >> $(BLOGRST)
-	@echo "" >> $(BLOGRST)
-	@cat $(INDIR)/installation.rst >> $(BLOGRST)
-	@echo "" >> $(BLOGRST)
-	@cat $(INDIR)/documentation.rst >> $(BLOGRST)
-	@echo "" >> $(BLOGRST)
-	@cat $(INDIR)/tutorial.rst >> $(BLOGRST)
-	@echo "" >> $(BLOGRST)
-	sed -i -e "s/Here's a summary of what's included in the python package://g" $(BLOGRST)
-	sed -i -e "s/.. include:: \/classes_and_functions.rst//g" $(BLOGRST)
-
-	pandoc -s --columns=3000 --smart --wrap=preserve -f rst -t  markdown_mmd+yaml_metadata_block+tex_math_dollars+mmd_link_attributes+raw_html+backtick_code_blocks --output=$(BLOGMD) $(BLOGRST)
-
-	pandoc --from=rst --to=markdown_mmd --output=$(READMEMD) $(READMERST)
-
 	rm -rf $(BUILDDIR)/html/todo.html
 	rm -rf $(ASDIR)
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
@@ -115,24 +78,6 @@ htmlhelp:
 	@echo
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
-
-qthelp:
-	$(SPHINXBUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
-	@echo
-	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
-	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/marshallEngine.qhcp"
-	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/marshallEngine.qhc"
-
-devhelp:
-	$(SPHINXBUILD) -b devhelp $(ALLSPHINXOPTS) $(BUILDDIR)/devhelp
-	@echo
-	@echo "Build finished."
-	@echo "To view the help file:"
-	@echo "# mkdir -p $$HOME/.local/share/devhelp/marshallEngine"
-	@echo "# ln -s $(BUILDDIR)/devhelp $$HOME/.local/share/devhelp/marshallEngine"
-	@echo "# devhelp"
 
 epub:
 	$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub
@@ -198,7 +143,7 @@ doctest:
 
 buildapi:
 	rm -rf $(APIDIR)
-	SPHINX_APIDOC_OPTIONS='members,private-members,undoc-members,show-inheritance,inherited-members,member-order=bysource' sphinx-apidoc -fMeTPF --ext-mathjax --ext-githubpages --full -o source/_api ../ ../setup.py ../marshallEngine/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
+	SPHINX_APIDOC_OPTIONS='members,private-members,undoc-members,show-inheritance,inherited-members,member-order=bysource' sphinx-apidoc -fMeTPF --ext-mathjax --ext-githubpages --full -o source/_api ../ ../setup.py ../*/__version__.py ../*/tests* ../*/*/tests* ../*/*/*/tests* ../*/*/*/*/tests*
 	@echo "Auto-generation of API documentation finished. " \
 		"The generated files are in '_api/'"
 

@@ -1,19 +1,55 @@
-marshallEngine
-===========================
+marshallEngine 
+=========================
 
-A python package and command-line tools to *The engine behind the marshall webapp*.
+.. image:: https://readthedocs.org/projects/marshallEngine/badge/
+    :target: http://marshallEngine.readthedocs.io/en/latest/?badge
+    :alt: Documentation Status
+
+.. image:: https://cdn.rawgit.com/thespacedoctor/marshallEngine/master/coverage.svg
+    :target: https://cdn.rawgit.com/thespacedoctor/marshallEngine/master/htmlcov/index.html
+    :alt: Coverage Status
+
+*A python package and command-line tools for The engine behind the marshall webapp*.
+
+
+
+
+
+Command-Line Usage
+==================
+
+.. todo::
+
+    - add usage
+
+Documentation
+=============
+
+Documentation for marshallEngine is hosted by `Read the Docs <http://marshallEngine.readthedocs.org/en/stable/>`__ (last `stable version <http://marshallEngine.readthedocs.org/en/stable/>`__ and `latest version <http://marshallEngine.readthedocs.org/en/latest/>`__).
 
 Installation
-------------
+============
 
-The easiest way to install marshallEngine is to use
-``pip``:
+The easiest way to install marshallEngine is to use ``pip``:
 
-``bash pip install marshallEngine``
+.. code:: bash
 
-Or you can clone this repo and install from a local version of the code:
+    pip install marshallEngine
 
-``bash git clone git@github.com:thespacedoctor/marshallEngine.git cd marshallEngine python setup.py install``
+Or you can clone the `github repo <https://github.com/thespacedoctor/marshallEngine>`__ and install from a local version of the code:
+
+.. code:: bash
+
+    git clone git@github.com:thespacedoctor/marshallEngine.git
+    cd marshallEngine
+    python setup.py install
+
+To upgrade to the latest version of marshallEngine use the command:
+
+.. code:: bash
+
+    pip install marshallEngine --upgrade
+
 
 Development
 -----------
@@ -21,11 +57,19 @@ Development
 If you want to tinker with the code, then install in development mode.
 This means you can modify the code from your cloned repo:
 
-``bash git clone git@github.com:thespacedoctor/marshallEngine.git cd marshallEngine python setup.py develop``
+.. code:: bash
 
-`Pull
-requests <https://github.com/thespacedoctor/marshallEngine/pulls>`__
+    git clone git@github.com:thespacedoctor/marshallEngine.git
+    cd marshallEngine
+    python setup.py develop
+
+`Pull requests <https://github.com/thespacedoctor/marshallEngine/pulls>`__
 are welcomed!
+
+Sublime Snippets
+~~~~~~~~~~~~~~~~
+
+If you use `Sublime Text <https://www.sublimetext.com/>`_ as your code editor, and you're planning to develop your own python code with marshallEngine, you might find `my Sublime Snippets <https://github.com/thespacedoctor/marshallEngine-Sublime-Snippets>`_ useful. 
 
 Issues
 ------
@@ -34,7 +78,7 @@ Please report any issues
 `here <https://github.com/thespacedoctor/marshallEngine/issues>`__.
 
 License
--------
+=======
 
 Copyright (c) 2018 David Young
 

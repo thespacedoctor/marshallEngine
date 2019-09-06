@@ -17,6 +17,8 @@ from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
 from astrocalc.times import conversions
+from fundamentals.mysql import writequery
+from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
 
 
 class data(basedata):
@@ -80,7 +82,33 @@ class data(basedata):
             surveyName="ATLAS", withinLastDays=withinLastDays)
 
         self._import_to_feeder_survey_table()
-        self.insert_into_transientBucket()
+        self.insert_into_transientBucket(updateTransientSummaries=False)
+
+        sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
+        self.fsTableName = "fs_atlas_forced_phot"
+        self.survey = "ATLAS FP"
+
+        sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
+        self.insert_into_transientBucket(importUnmatched=False)
+
+        # UPDATE THE ATLAS SPECIFIC FLUX SPACE LIGHTCURVES
+        generate_atlas_lightcurves(
+            log=self.log,
+            dbConn=self.dbConn,
+            settings=self.settings
+        )
 
         self.log.debug('completed the ``ingest`` method')
         return None
@@ -125,7 +153,10 @@ class data(basedata):
 
         for row in self.csvDicts:
             # IF NOW IN THE LAST N DAYS - SKIP
-            if withinLastDays and float(row["earliest_mjd"]) < mjdLimit:
+            flagMjd = converter.ut_datetime_to_mjd(
+                utDatetime=row["followup_flag_date"])
+
+            if withinLastDays and (float(row["earliest_mjd"]) < mjdLimit and float(flagMjd) < mjdLimit):
                 continue
 
             # MASSAGE THE DATA IN THE INPUT FORMAT TO WHAT IS NEEDED IN THE
@@ -140,23 +171,26 @@ class data(basedata):
             if target:
                 mjdStr = str(int(float(target.split("_")[1])))
                 if target:
-                    id, mjdString, diffId, ippIdet, type = target.split('_')
+                    iid, mjdString, diffId, ippIdet, type = target.split('_')
                     targetImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + target + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             if ref:
                 mjdStr = str(int(float(ref.split("_")[1])))
                 if ref:
-                    id, mjdString, diffId, ippIdet, type = ref.split('_')
+                    iid, mjdString, diffId, ippIdet, type = ref.split('_')
                     refImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + ref + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             if diff:
                 mjdStr = str(int(float(diff.split("_")[1])))
                 if diff:
-                    id, mjdString, diffId, ippIdet, type = diff.split('_')
+                    iid, mjdString, diffId, ippIdet, type = diff.split('_')
                     diffImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + diff + '.jpeg'
+                    objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
             discDate = converter.mjd_to_ut_datetime(
                 mjd=row["earliest_mjd"], sqlDate=True)
@@ -174,6 +208,7 @@ class data(basedata):
             thisDictionary["targetImageURL"] = targetImageURL
             thisDictionary["refImageURL"] = refImageURL
             thisDictionary["diffImageURL"] = diffImageURL
+            thisDictionary["objectURL"] = objectURL
 
             self.dictList.append(thisDictionary)
 

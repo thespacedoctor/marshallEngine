@@ -509,7 +509,10 @@ class marshall_lightcurves():
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists(saveLocation):
-            os.makedirs(saveLocation)
+            try:
+                os.makedirs(saveLocation)
+            except:
+                pass
         # SAVE THE PLOT
         filepath = """%(saveLocation)s%(saveFileName)s.png""" % locals()
         plt.savefig(filepath, format='PNG', bbox_inches='tight', transparent=False,
@@ -562,9 +565,10 @@ class marshall_lightcurves():
 
         if total:
             print "updating lightcurves for %(total)s transients" % locals()
+            print
 
         results = fmultiprocess(log=self.log, function=_plot_one,
-                                inputArray=self.transientBucketIds, poolSize=False, timeout=600, settings=self.settings)
+                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
 
         sqlQuery = ""
         updatedTransientBucketIds = []

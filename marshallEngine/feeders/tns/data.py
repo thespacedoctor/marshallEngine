@@ -1,0 +1,96 @@
+#!/usr/local/bin/python
+# encoding: utf-8
+"""
+*import the tns stream into the marshall*
+
+:Author:
+    David Young
+
+:Date Created:
+    August 30, 2019
+"""
+################# GLOBAL IMPORTS ####################
+import sys
+import os
+os.environ['TERM'] = 'vt100'
+from fundamentals import tools
+from ..data import data as basedata
+from astrocalc.times import now
+
+
+class data(basedata):
+    """
+    *Import the tns transient data into the marshall database*
+
+    **Key Arguments:**
+        - ``log`` -- logger
+        - ``dbConn`` -- the marshall database connection
+        - ``settings`` -- the settings dictionary
+
+    **Usage:**
+
+        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+
+        To initiate a data object, use the following:
+
+        .. code-block:: python 
+
+            from marshallEngine.feeders.tns.data import data
+            ingester = data(
+                log=log,
+                settings=settings,
+                dbConn=dbConn
+            ).ingest()   
+    """
+
+    def __init__(
+            self,
+            log,
+            dbConn,
+            settings=False,
+    ):
+        self.log = log
+        log.debug("instansiating a new 'data' object")
+        self.settings = settings
+        self.dbConn = dbConn
+        self.fsTableName = "tns_sources"
+        self.survey = "tns"
+
+        # xt-self-arg-tmpx
+
+        return None
+
+    def ingest(
+            self,
+            withinLastDays=False):
+        """*Ingest the data into the marshall feeder survey table*
+
+        **Key Arguments:**
+            - ``withinLastDays`` -- note this will be handle by the transientNamer import to the database
+        """
+        self.log.debug('starting the ``ingest`` method')
+
+        # UPDATE THE TNS SPECTRA TABLE WITH EXTRA INFOS
+        from fundamentals.mysql import writequery
+        sqlQuery = """CALL `update_tns_tables`();""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+
+        # INSERT THE SOURCES TABLE
+        self.insert_into_transientBucket()
+
+        # NOW THE SPECTRA TABLE
+        self.fsTableName = "tns_spectra"
+        self.survey = "tns"
+        self.insert_into_transientBucket()
+
+        # NOW THE PHOTOMETRY TABLE
+        self.fsTableName = "tns_photometry"
+        self.survey = "tns"
+        self.insert_into_transientBucket()
+
+        self.log.debug('completed the ``ingest`` method')
+        return None

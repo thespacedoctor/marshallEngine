@@ -15,12 +15,12 @@ Options:
     import                import data, images, lightcurves from a feeder survey
     lightcurve            generate a lightcurve for a transient in the marshall database
     transientBucketId     the transient ID from the database
-    survey                name of survey to import [panstarrs]
+    survey                name of survey to import [panstarrs|atlas|useradded]
     withInLastDay         import transient detections from the last N days (Default 30)
 
-    -h, --help            show this help message
-    -v, --version         show version
-    -s, --settings        the settings file
+    -h, --help                              show this help message
+    -v, --version                           show version
+    -s, --settings <pathToSettingsFile>     the settings file
 """
 ################# GLOBAL IMPORTS ####################
 import sys
@@ -132,6 +132,27 @@ def main(arguments=None):
 
     # CALL FUNCTIONS/OBJECTS
     if clean:
+        # RESCUE ORPHANED TRANSIENTS - NO MASTER ID FLAG
+        print "rescuing orphaned transients"
+        from fundamentals.mysql import writequery
+        sqlQuery = """CALL `update_transients_with_no_masteridflag`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
+        sqlQuery = """CALL `insert_new_transients_into_transientbucketsummaries`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
+        sqlQuery = """CALL `resurrect_objects`();""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         from marshallEngine.housekeeping import update_transient_summaries
         updater = update_transient_summaries(
@@ -143,32 +164,33 @@ def main(arguments=None):
     if iimport:
         if survey.lower() == "panstarrs":
             from marshallEngine.feeders.panstarrs.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)
-
             from marshallEngine.feeders.panstarrs import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=3000)
         if survey.lower() == "atlas":
             from marshallEngine.feeders.atlas.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)
-
             from marshallEngine.feeders.atlas import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=3000)
+        if survey.lower() == "useradded":
+            from marshallEngine.feeders.useradded.data import data
+            from marshallEngine.feeders.useradded import images
+        if survey.lower() == "tns":
+            from marshallEngine.feeders.tns.data import data
+            from marshallEngine.feeders.tns import images
+        ingester = data(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).ingest(withinLastDays=withInLastDay)
+        cacher = images(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).cache(limit=3000)
+
+        from marshallEngine.services import panstarrs_location_stamps
+        ps_stamp = panstarrs_location_stamps(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).get()
 
     if lightcurve:
         from marshallEngine.lightcurves import marshall_lightcurves
