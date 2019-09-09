@@ -174,6 +174,9 @@ def main(arguments=None):
         if survey.lower() == "tns":
             from marshallEngine.feeders.tns.data import data
             from marshallEngine.feeders.tns import images
+        if survey.lower() == "ztf":
+            from marshallEngine.feeders.ztf.data import data
+            from marshallEngine.feeders.ztf import images
         ingester = data(
             log=log,
             settings=settings,

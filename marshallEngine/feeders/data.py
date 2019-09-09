@@ -193,7 +193,7 @@ class data():
         # 3. assign a new transientbucketid to any feeder survey source not
         # matched in steps 1 & 2. Copy these unmatched feeder survey rows to
         # the transientbucket as new transient detections.
-        if importUnmatched and 1 == 0:
+        if importUnmatched:
             self._import_unmatched_feeder_survey_sources_to_transientbucket(
                 unmatched)
 
@@ -293,63 +293,80 @@ class data():
             quiet=False
         )
 
-        fs_name_list = []
-        fs_ra_list = []
-        fs_dec_list = []
-        fs_name_list = [row[fs_name] for row in rows]
-        fs_ra_list = [row[fs_ra] for row in rows]
-        fs_dec_list = [row[fs_dec] for row in rows]
-
-        total = len(fs_name_list)
-        print "Matching %(total)s sources in the %(fsTableName)s against the transientBucket table" % locals()
-
         # STOP IF NO MATCHES
-        if not total:
+        if not len(rows):
             return []
 
-        # CONESEARCH TRANSIENT BUCKET FOR PRE-KNOWN SOURCES FROM OTHER SURVEYS
-        from HMpTy.mysql import conesearch
-        cs = conesearch(
-            log=self.log,
-            dbConn=self.dbConn,
-            tableName="transientBucket",
-            columns="transientBucketId, name",
-            ra=fs_ra_list,
-            dec=fs_dec_list,
-            radiusArcsec=7,
-            separations=True,
-            distinct=True,
-            sqlWhere="masterIDFlag=1",
-            closest=True
-        )
-        matchIndies, matches = cs.search()
+        # SPLIT INTO BATCHES SO NOT TO OVERWHELM MEMORY
+        batchSize = 5000
+        total = len(rows[1:])
+        batches = int(total / batchSize)
+        start = 0
+        end = 0
+        theseBatches = []
+        for i in range(batches + 1):
+            end = end + batchSize
+            start = i * batchSize
+            thisBatch = rows[start:end]
+            theseBatches.append(thisBatch)
 
-        # CREATE SQL QUERY TO UPDATE MATCHES IN FS TABLE WITH MATCHED
-        # TRANSIENTBUCKET IDs
-        updates = []
-        originalList = matches.list
-        total = len(originalList)
+        unmatched = []
+        ticker = 0
+        for batch in theseBatches:
 
-        print "Adding recurrance detections for %(total)s matched %(fsTableName)s sources to the transientBucket table" % locals()
-        if total:
-            updates = []
-            updates[:] = ["update " + fsTableName + " set transientBucketId = " + str(o['transientBucketId']) +
-                          " where " + fs_name + " = '" + str(fs_name_list[m]) + "' and transientBucketId is null;" for m, o in zip(matchIndies, originalList)]
-            updates = ("\n").join(updates)
-            writequery(
+            fs_name_list = []
+            fs_ra_list = []
+            fs_dec_list = []
+            fs_name_list = [row[fs_name] for row in batch]
+            fs_ra_list = [row[fs_ra] for row in batch]
+            fs_dec_list = [row[fs_dec] for row in batch]
+
+            ticker += len(fs_name_list)
+            print "Matching %(ticker)s/%(total)s sources in the %(fsTableName)s against the transientBucket table" % locals()
+
+            # CONESEARCH TRANSIENT BUCKET FOR PRE-KNOWN SOURCES FROM OTHER
+            # SURVEYS
+            from HMpTy.mysql import conesearch
+            cs = conesearch(
                 log=self.log,
-                sqlQuery=updates,
-                dbConn=self.dbConn
+                dbConn=self.dbConn,
+                tableName="transientBucket",
+                columns="transientBucketId, name",
+                ra=fs_ra_list,
+                dec=fs_dec_list,
+                radiusArcsec=7,
+                separations=True,
+                distinct=True,
+                sqlWhere="masterIDFlag=1",
+                closest=True
             )
+            matchIndies, matches = cs.search()
+
+            # CREATE SQL QUERY TO UPDATE MATCHES IN FS TABLE WITH MATCHED
+            # TRANSIENTBUCKET IDs
+            updates = []
+            originalList = matches.list
+            originalTotal = len(originalList)
+
+            print "Adding %(originalTotal)s new %(fsTableName)s transient detections to the transientBucket table" % locals()
+            if originalTotal:
+                updates = []
+                updates[:] = ["update " + fsTableName + " set transientBucketId = " + str(o['transientBucketId']) +
+                              " where " + fs_name + " = '" + str(fs_name_list[m]) + "' and transientBucketId is null;" for m, o in zip(matchIndies, originalList)]
+                updates = ("\n").join(updates)
+                writequery(
+                    log=self.log,
+                    sqlQuery=updates,
+                    dbConn=self.dbConn
+                )
+
+            # RETURN UNMATCHED TRANSIENTS
+            for i, v in enumerate(fs_name_list):
+                if i not in matchIndies:
+                    unmatched.append(v)
 
         # COPY MATCHED ROWS TO TRANSIENTBUCKET
         self._feeder_survey_transientbucket_name_match_and_import()
-
-        # RETURN UNMATCHED TRANSIENTS
-        unmatched = []
-        for i, v in enumerate(fs_name_list):
-            if i not in matchIndies:
-                unmatched.append(v)
 
         self.log.debug(
             'completed the ``_feeder_survey_transientbucket_crossmatch`` method')
