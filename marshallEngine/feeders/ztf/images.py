@@ -65,12 +65,12 @@ class images(baseimages):
             "ztf", "ZTF"]
 
         # SET THESE IMAGE FLAG COLUMNS FOR THE SURVEY
-        # self.stampFlagColumns = {
-        #     "subtracted": "ps1_subtracted_stamp",
-        #     "target": "ps1_target_stamp",
-        #     "reference": "ps1_reference_stamp",
-        #     "triplet": None
-        # }
+        self.stampFlagColumns = {
+            "subtracted": None,
+            "target": None,
+            "reference": None,
+            "triplet": "ztf_stamp"
+        }
         self.survey = "ZTF"
 
         return None

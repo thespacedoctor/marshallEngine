@@ -56,6 +56,7 @@ class test_images(unittest.TestCase):
             referenceUrls=referenceUrls[:10],
             tripletUrls=tripletUrls[:10]
         )
+        print tripletUrls[:10]
         cacher._update_database()
 
     def test_images_function2(self):
