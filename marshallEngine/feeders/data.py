@@ -298,7 +298,7 @@ class data():
             return []
 
         # SPLIT INTO BATCHES SO NOT TO OVERWHELM MEMORY
-        batchSize = 5000
+        batchSize = 2000
         total = len(rows[1:])
         batches = int(total / batchSize)
         start = 0
