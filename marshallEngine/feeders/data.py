@@ -186,7 +186,8 @@ class data():
             tableName="transientBucket",
             dbConn=self.dbConn,
             log=self.log,
-            primaryIdColumnName="primaryKeyId"
+            primaryIdColumnName="primaryKeyId",
+            dbSettings=self.settings["database settings"]
         )
         unmatched = self._feeder_survey_transientbucket_crossmatch()
 
