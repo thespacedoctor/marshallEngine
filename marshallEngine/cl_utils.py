@@ -135,24 +135,24 @@ def main(arguments=None):
         # RESCUE ORPHANED TRANSIENTS - NO MASTER ID FLAG
         print "rescuing orphaned transients"
         from fundamentals.mysql import writequery
-        sqlQuery = """CALL `update_transients_with_no_masteridflag`();""" % locals()
-        writequery(
-            log=log,
-            sqlQuery=sqlQuery,
-            dbConn=dbConn,
-        )
-        sqlQuery = """CALL `insert_new_transients_into_transientbucketsummaries`();""" % locals()
-        writequery(
-            log=log,
-            sqlQuery=sqlQuery,
-            dbConn=dbConn,
-        )
-        sqlQuery = """CALL `resurrect_objects`();""" % locals()
-        writequery(
-            log=log,
-            sqlQuery=sqlQuery,
-            dbConn=dbConn,
-        )
+
+        procedureNames = [
+            "update_transients_with_no_masteridflag",
+            "insert_new_transients_into_transientbucketsummaries",
+            "resurrect_objects",
+            "update_sherlock_xmatch_counts",
+            "update_inbox_auto_archiver"
+        ]
+
+        # CALL EACH PROCEDURE
+        for p in procedureNames:
+            sqlQuery = "CALL `%(p)s`();" % locals()
+            writequery(
+                log=log,
+                sqlQuery=sqlQuery,
+                dbConn=dbConn,
+            )
+
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         from marshallEngine.housekeeping import update_transient_summaries
         updater = update_transient_summaries(
