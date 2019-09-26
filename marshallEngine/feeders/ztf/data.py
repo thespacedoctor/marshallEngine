@@ -16,6 +16,7 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
+from fundamentals.mysql import writequery
 
 
 class data(basedata):
@@ -74,71 +75,15 @@ class data(basedata):
 
         allLists = []
 
-        # MIGHT NEED SOMETHING LIKE THIS ... OTHERWISE DELETE AND ADD ANOTHER IMPORT METHOD
-        # csvDicts = self.get_csv_data(
-        #     url=self.settings["panstarrs urls"]["ps13pi"]["summary csv"],
-        #     user=self.settings["credentials"]["ps13pi"]["username"],
-        #     pwd=self.settings["credentials"]["ps13pi"]["password"]
-        # )
-        # allLists.extend(self._clean_data_pre_ingest(
-        #     surveyName="ps13pi", withinLastDays=withinLastDays))
+        sqlQuery = """call update_fs_ztf()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
-        self.dictList = allLists
-        self._import_to_feeder_survey_table()
-
+        # self._import_to_feeder_survey_table()
         self.insert_into_transientBucket()
 
         self.log.debug('completed the ``ingest`` method')
         return None
-
-    def _clean_data_pre_ingest(
-            self,
-            surveyName,
-            withinLastDays=False):
-        """*clean up the list of dictionaries containing the ZTF data, pre-ingest*
-
-        **Key Arguments:**
-            - ``surveyName`` -- the ZTF survey name
-            -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
-
-        **Return:**
-            - ``dictList`` -- the cleaned list of dictionaries ready for ingest
-
-        **Usage:**
-
-            To clean the data from the ZTF survey:
-
-            .. code-block:: python 
-
-                dictList = ingesters._clean_data_pre_ingest(surveyName="ZTF")
-
-            Note you will also be able to access the data via ``ingester.dictList``
-        """
-        self.log.debug('starting the ``_clean_data_pre_ingest`` method')
-
-        self.dictList = []
-
-        # CALC MJD LIMIT
-        if withinLastDays:
-            mjdLimit = now(
-                log=self.log
-            ).get_mjd() - float(withinLastDays)
-
-        for row in self.csvDicts:
-            # IF NOW IN THE LAST N DAYS - SKIP
-            if withinLastDays and float(row["mjd_obs"]) < mjdLimit:
-                continue
-
-            # MASSAGE THE DATA IN THE INPT FORMAT TO WHAT IS NEEDED IN THE
-            # FEEDER SURVEY TABLE IN THE DATABASE
-            thisDictionary = {}
-            # thisDictionary["candidateID"] = row["ps1_designation"]
-            # ...
-
-            self.dictList.append(thisDictionary)
-
-        self.log.debug('completed the ``_clean_data_pre_ingest`` method')
-        return self.dictList
-
-    # use the tab-trigger below for new method
-    # xt-class-method

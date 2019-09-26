@@ -67,7 +67,7 @@ class images():
         survey = self.survey
 
         if not leng:
-            print "All images are cached for the %(survey)s survey" % locals()
+            print "All _new_ images are cached for the %(survey)s survey" % locals()
 
         else:
 
@@ -84,12 +84,35 @@ class images():
             )
             self._update_database()
 
+        transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = self._list_images_needing_cached(
+            failedImage=True)
+        leng = len(transientBucketIds)
+
+        if not leng:
+            print "All images are cached for the %(survey)s survey" % locals()
+
+        else:
+
+            print "Downloading image stamps for the remaining %(leng)s transients for %(survey)s - previously failed" % locals()
+            subtractedStatus, targetStatus, referenceStatus, tripletStatus = self._download(
+                transientBucketIds=transientBucketIds,
+                subtractedUrls=subtractedUrls,
+                targetUrls=targetUrls,
+                referenceUrls=referenceUrls,
+                tripletUrls=tripletUrls
+            )
+            self._update_database()
+
         self.log.debug('completed the ``cache`` method')
         return None
 
     def _list_images_needing_cached(
-            self):
+            self,
+            failedImage=False):
         """*get lists of the transientBucketIds and images needing cached for those transients*
+
+        **Key Arguments:**
+            - ``failedImage`` -- second pass attempt to download alternative image for transients
 
         **Return:**
             - ``transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls`` -- synced lists of transientBucketIds, subtracted-, target-, reference- and triplet-image urls. All lists are the same size.
@@ -97,10 +120,16 @@ class images():
         self.log.debug('starting the ``_list_images_needing_cached`` method')
 
         # CREATE THE STAMP WHERE CLAUSE
-        stampWhere = []
-        stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
-        stampWhere = (" IS NULL OR ").join(
-            stampWhere) + " IS NULL "
+        if not failedImage:
+            stampWhere = []
+            stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
+            stampWhere = (" IS NULL OR ").join(
+                stampWhere) + " IS NULL "
+        else:
+            stampWhere = []
+            stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
+            stampWhere = (" = 2 ").join(
+                stampWhere) + " = 2 "
 
         # CREATE THE SURVEY WHERE CLAUSE
         dbSurveyNames = "survey LIKE '%%" + \
@@ -131,11 +160,12 @@ FROM
             FROM
                 pesstoObjects
             WHERE
-                %(stampWhere)s)
+                (%(stampWhere)s) and limitingMag = 0)
             
     GROUP BY transientBucketId
     ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
         AND a.magnitude = b.mag
+        WHERE limitingMag = 0
     GROUP BY transientBucketId;
         """ % locals()
         else:
@@ -160,14 +190,18 @@ FROM
                 FROM
                     pesstoObjects
                 WHERE
-                    %(stampWhere)s)
-                AND (%(dbSurveyNames)s)
+                    (%(stampWhere)s))
+                AND (%(dbSurveyNames)s) and limitingMag = 0
         GROUP BY transientBucketId
         ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
             AND a.magnitude = b.mag
     WHERE
-        (%(dbSurveyNames2)s) GROUP BY transientBucketId;
+        (%(dbSurveyNames2)s) and limitingMag = 0 GROUP BY transientBucketId;
             """ % locals()
+
+        if failedImage:
+            sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "").replace(
+                "GROUP BY transientBucketId;", "")
 
         rows = readquery(
             log=self.log,
@@ -270,10 +304,12 @@ FROM
                 # GENERATE THE SQL TO UPDATE DATABASE
                 sqlQuery = ""
                 if len(nonexist):
-                    sqlQuery += """update pesstoObjects set %(column)s = 2 where transientBucketId in (%(nonexist)s);""" % locals(
+                    sqlQuery += """update pesstoObjects set %(column)s = 2 where transientBucketId in (%(nonexist)s) and (%(column)s is null or %(column)s = 0);""" % locals(
+                    )
+                    sqlQuery += """update pesstoObjects set %(column)s = 3 where transientBucketId in (%(nonexist)s) and %(column)s = 2;""" % locals(
                     )
                 if len(exist):
-                    sqlQuery += """update pesstoObjects set %(column)s = 1 where transientBucketId in (%(exist)s);""" % locals(
+                    sqlQuery += """update pesstoObjects set %(column)s = 1 where transientBucketId in (%(exist)s) and %(column)s != 1;""" % locals(
                     )
                 writequery(
                     log=self.log,

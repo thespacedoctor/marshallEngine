@@ -85,12 +85,12 @@ class data(basedata):
         # NOW THE SPECTRA TABLE
         self.fsTableName = "tns_spectra"
         self.survey = "tns"
-        self.insert_into_transientBucket()
+        self.insert_into_transientBucket(importUnmatched=False)
 
         # NOW THE PHOTOMETRY TABLE
         self.fsTableName = "tns_photometry"
         self.survey = "tns"
-        self.insert_into_transientBucket()
+        self.insert_into_transientBucket(importUnmatched=False)
 
         self.log.debug('completed the ``ingest`` method')
         return None
