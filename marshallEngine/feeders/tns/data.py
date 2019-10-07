@@ -16,6 +16,8 @@ os.environ['TERM'] = 'vt100'
 from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
+from transientNamer import search
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 
 
 class data(basedata):
@@ -78,6 +80,31 @@ class data(basedata):
             sqlQuery=sqlQuery,
             dbConn=self.dbConn
         )
+
+        # PARSE TNS
+        tns = search(
+            log=self.log,
+            discInLastDays=withinLastDays
+        )
+
+        lists = [tns.sources, tns.photometry, tns.files, tns.spectra]
+        tableNames = ["tns_sources", "tns_photometry",
+                      "tns_files", "tns_photometry"]
+
+        for l, t in zip(lists, tableNames):
+            # USE dbSettings TO ACTIVATE MULTIPROCESSING - INSERT LIST OF
+            # DICTIONARIES INTO DATABASE
+            insert_list_of_dictionaries_into_database_tables(
+                dbConn=self.dbConn,
+                log=self.log,
+                dictList=l,
+                dbTableName=t,
+                dateModified=True,
+                dateCreated=True,
+                batchSize=2500,
+                replace=True,
+                dbSettings=False
+            )
 
         # INSERT THE SOURCES TABLE
         self.insert_into_transientBucket()
