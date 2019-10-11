@@ -17,7 +17,8 @@ install_requires = [
     'hmpty',
     'astropy',
     'matplotlib',
-    'panstamps'
+    'panstamps',
+    'transientNamer'
 ]
 
 # READ THE DOCS SERVERS

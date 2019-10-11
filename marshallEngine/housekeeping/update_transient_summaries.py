@@ -19,6 +19,7 @@ from astropy import units as u
 from astropy.coordinates import SkyCoord
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from astrocalc.distances import converter
+import numpy as np
 
 
 class update_transient_summaries():
@@ -169,7 +170,7 @@ class update_transient_summaries():
 
         if total > 1000:
             print """%(total)s transients need updated - updating the next 1000""" % locals()
-            rows = rows[:1000]
+            rows = np.random.choice(rows, size=1000, replace=False, p=None)
 
         # CREATE 3 LISTS - RA, DEC, ID
         raDeg = []
