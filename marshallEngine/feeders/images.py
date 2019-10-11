@@ -128,8 +128,8 @@ class images():
         else:
             stampWhere = []
             stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
-            stampWhere = (" = 2 ").join(
-                stampWhere) + " = 2 "
+            stampWhere = (" in (2,3) ").join(
+                stampWhere) + " in (2,3) "
 
         # CREATE THE SURVEY WHERE CLAUSE
         dbSurveyNames = "survey LIKE '%%" + \
@@ -202,6 +202,7 @@ FROM
         if failedImage:
             sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "").replace(
                 "GROUP BY transientBucketId;", "")
+        print sqlQuery
 
         rows = readquery(
             log=self.log,
