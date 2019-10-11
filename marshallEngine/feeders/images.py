@@ -92,14 +92,13 @@ class images():
             print "All images are cached for the %(survey)s survey" % locals()
 
         else:
-
-            print "Downloading image stamps for the remaining %(leng)s transients for %(survey)s - previously failed" % locals()
+            print "Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s - previously failed" % locals()
             subtractedStatus, targetStatus, referenceStatus, tripletStatus = self._download(
-                transientBucketIds=transientBucketIds,
-                subtractedUrls=subtractedUrls,
-                targetUrls=targetUrls,
-                referenceUrls=referenceUrls,
-                tripletUrls=tripletUrls
+                transientBucketIds=transientBucketIds[:limit],
+                subtractedUrls=subtractedUrls[:limit],
+                targetUrls=targetUrls[:limit],
+                referenceUrls=referenceUrls[:limit],
+                tripletUrls=tripletUrls[:limit]
             )
             self._update_database()
 
