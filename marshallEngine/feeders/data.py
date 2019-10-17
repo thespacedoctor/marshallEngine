@@ -266,7 +266,7 @@ class data():
 
         # GET THE COLUMN MAP FOR THE FEEDER SURVEY TABLE
         sqlQuery = u"""
-            SELECT * FROM marshall_fs_column_map where fs_table_name = '%(fsTableName)s' and transientBucket_column in ('name','raDeg','decDeg')
+            SELECT * FROM marshall_fs_column_map where fs_table_name = '%(fsTableName)s' and transientBucket_column in ('name','raDeg','decDeg','limitingMag')
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -284,9 +284,13 @@ class data():
         self.fs_name = fs_name
         fs_ra = columns["raDeg"]
         fs_dec = columns["decDeg"]
+        if 'limitingMag' in columns:
+            fs_lim = columns["limitingMag"]
+            limitClause = " and %(limitingMag)s = 0 "
         sqlQuery = u"""
-            select %(fs_name)s, avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from %(fsTableName)s where ingested = 0  group by %(fs_name)s 
+            select %(fs_name)s, avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from %(fsTableName)s where ingested = 0 %(limitClause)s group by %(fs_name)s 
         """ % locals()
+
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
