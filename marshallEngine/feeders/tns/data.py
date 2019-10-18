@@ -89,7 +89,7 @@ class data(basedata):
 
         lists = [tns.sources, tns.photometry, tns.files, tns.spectra]
         tableNames = ["tns_sources", "tns_photometry",
-                      "tns_files", "tns_photometry"]
+                      "tns_files", "tns_spectra"]
 
         for l, t in zip(lists, tableNames):
             # USE dbSettings TO ACTIVATE MULTIPROCESSING - INSERT LIST OF
