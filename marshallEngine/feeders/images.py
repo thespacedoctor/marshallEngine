@@ -201,7 +201,6 @@ FROM
         if failedImage:
             sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "").replace(
                 "GROUP BY transientBucketId;", "")
-        print sqlQuery
 
         rows = readquery(
             log=self.log,
