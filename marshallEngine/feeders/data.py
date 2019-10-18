@@ -287,6 +287,8 @@ class data():
         if 'limitingMag' in columns:
             fs_lim = columns["limitingMag"]
             limitClause = " and %(limitingMag)s = 0 "
+        else:
+            limitClause = ""
         sqlQuery = u"""
             select %(fs_name)s, avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from %(fsTableName)s where ingested = 0 %(limitClause)s group by %(fs_name)s 
         """ % locals()
