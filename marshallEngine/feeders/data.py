@@ -286,7 +286,7 @@ class data():
         fs_dec = columns["decDeg"]
         if 'limitingMag' in columns:
             fs_lim = columns["limitingMag"]
-            limitClause = " and %(limitingMag)s = 0 "
+            limitClause = " and %(limitingMag)s = 0 " % locals()
         else:
             limitClause = ""
         sqlQuery = u"""
