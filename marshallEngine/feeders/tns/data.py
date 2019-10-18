@@ -101,7 +101,7 @@ class data(basedata):
                 dbTableName=t,
                 dateModified=True,
                 dateCreated=True,
-                batchSize=2500,
+                batchSize=500,
                 replace=True,
                 dbSettings=False
             )
