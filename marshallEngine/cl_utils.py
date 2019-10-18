@@ -141,7 +141,8 @@ def main(arguments=None):
             "insert_new_transients_into_transientbucketsummaries",
             "resurrect_objects",
             "update_sherlock_xmatch_counts",
-            "update_inbox_auto_archiver"
+            "update_inbox_auto_archiver",
+            "update_transient_akas"
         ]
 
         # CALL EACH PROCEDURE
