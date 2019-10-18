@@ -101,9 +101,9 @@ class data(basedata):
                 dbTableName=t,
                 dateModified=True,
                 dateCreated=True,
-                batchSize=500,
+                batchSize=2500,
                 replace=True,
-                dbSettings=False
+                dbSettings=self.settings["database settings"]
             )
 
         # INSERT THE SOURCES TABLE
