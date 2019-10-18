@@ -127,7 +127,7 @@ class images():
         else:
             stampWhere = []
             stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
-            stampWhere = (" in (2,3) ").join(
+            stampWhere = (" in (2,3) or ").join(
                 stampWhere) + " in (2,3) "
 
         # CREATE THE SURVEY WHERE CLAUSE
