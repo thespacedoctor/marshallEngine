@@ -63,9 +63,9 @@ class images(baseimages):
 
         self.dbSurveyNames = ["pan%%starrs", "ps1"]
         self.stampFlagColumns = {
-            "subtracted": "ps1_subtracted_stamp",
+            "subtracted": None,
             "target": "ps1_target_stamp",
-            "reference": "ps1_reference_stamp",
+            "reference": None,
             "triplet": None
         }
         self.survey = "ps1"

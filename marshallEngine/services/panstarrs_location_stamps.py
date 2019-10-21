@@ -126,30 +126,35 @@ class panstarrs_location_stamps():
 
             source = colorPath[0]
             destination = downloadPath + "/ps1_map_color.jpeg"
-            os.rename(source, destination)
+	    try:
+            	os.rename(source, destination)
 
-            # DOWNLOAD THE COLOR IMAGE
-            myimage = image(
-                log=self.log,
-                settings=self.settings,
-                imagePath=destination,
-                arcsecSize=60,
-                crosshairs=True,
-                transient=False,
-                scale=True,
-                invert=False,
-                greyscale=False
-            ).get()
+            	# DOWNLOAD THE COLOR IMAGE
+                myimage = image(
+                    log=self.log,
+                    settings=self.settings,
+                    imagePath=destination,
+                    arcsecSize=60,
+                    crosshairs=True,
+                    transient=False,
+                    scale=True,
+                    invert=False,
+                    greyscale=False
+                ).get()
 
-            # UPDATE DATABASE FLAG
-            sqlQuery = u"""
-                update pesstoObjects set ps1_map = 1 where transientBucketId = %(transientBucketId)s
-            """ % locals()
-            writequery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=self.dbConn
-            )
+                # UPDATE DATABASE FLAG
+                sqlQuery = u"""
+                    update pesstoObjects set ps1_map = 1 where transientBucketId = %(transientBucketId)s
+                """ % locals()
+
+                writequery(
+                    log=self.log,
+                    sqlQuery=sqlQuery,
+                    dbConn=self.dbConn
+                )
+            except:
+                self.log.warning("Could not process the image %(destination)s" % locals())
+
 
         self.log.debug('completed the ``get`` method')
         return None

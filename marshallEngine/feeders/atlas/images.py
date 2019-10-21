@@ -66,9 +66,9 @@ class images(baseimages):
 
         # SET THESE IMAGE FLAG COLUMNS FOR THE SURVEY
         self.stampFlagColumns = {
-            "subtracted": "atlas_subtracted_stamp",
+            "subtracted": None,
             "target": "atlas_target_stamp",
-            "reference": "atlas_reference_stamp",
+            "reference": None,
             "triplet": None
         }
         self.survey = "ATLAS"

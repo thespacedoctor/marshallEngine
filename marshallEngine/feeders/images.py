@@ -118,59 +118,27 @@ class images():
         """
         self.log.debug('starting the ``_list_images_needing_cached`` method')
 
-        # CREATE THE STAMP WHERE CLAUSE
-        if not failedImage:
-            stampWhere = []
-            stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
-            stampWhere = (" IS NULL OR ").join(
-                stampWhere) + " IS NULL "
-        else:
-            stampWhere = []
-            stampWhere[:] = [v for v in self.stampFlagColumns.values() if v]
-            stampWhere = (" in (2,3) or ").join(
-                stampWhere) + " in (2,3) "
+        subtractedUrls, targetUrls, referenceUrls, tripletUrls = [], [], [], []
+        for imageType, v in self.stampFlagColumns.iteritems():
+            if not v:
+                continue
+            imageUrl = imageType + "ImageUrl"
+            # CREATE THE STAMP WHERE CLAUSE
+            if not failedImage:
+                stampWhere = v + " IS NULL "
+            else:
+                stampWhere = v + " = 2 "
 
-        # CREATE THE SURVEY WHERE CLAUSE
-        dbSurveyNames = "survey LIKE '%%" + \
-            ("%%' OR survey LIKE '%%").join(self.dbSurveyNames) + "%%'"
-        dbSurveyNames2 = dbSurveyNames.replace("survey L", "a.survey L")
+            # CREATE THE SURVEY WHERE CLAUSE
+            dbSurveyNames = "survey LIKE '%%" + \
+                ("%%' OR survey LIKE '%%").join(self.dbSurveyNames) + "%%'"
+            dbSurveyNames2 = dbSurveyNames.replace("survey L", "a.survey L")
 
-        # NOW GENERATE SQL TO GET THE URLS OF STAMPS NEEDING DOWNLOADED
-        if self.survey == "useradded":
-            sqlQuery = u"""
-            SELECT 
-    a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
-FROM
-    transientBucket a
-        JOIN
-    (SELECT 
-        MIN(magnitude) AS mag, transientBucketId
-    FROM
-        transientBucket
-    WHERE
-        magnitude IS NOT NULL
-            AND (subtractedImageUrl IS NOT NULL
-            OR targetImageUrl IS NOT NULL
-            OR referenceImageUrl IS NOT NULL
-            OR tripletImageUrl IS NOT NULL)
-            AND transientBucketId in (select transientBucketId from fs_user_added)
-            AND transientBucketId IN (SELECT 
-                transientBucketId
-            FROM
-                pesstoObjects
-            WHERE
-                (%(stampWhere)s) and limitingMag = 0)
-            
-    GROUP BY transientBucketId
-    ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
-        AND a.magnitude = b.mag
-        WHERE limitingMag = 0
-    GROUP BY transientBucketId;
-        """ % locals()
-        else:
-            sqlQuery = u"""
+            # NOW GENERATE SQL TO GET THE URLS OF STAMPS NEEDING DOWNLOADED
+            if self.survey == "useradded":
+                sqlQuery = u"""
                 SELECT 
-        a.transientBucketId, a.subtractedImageUrl, a.targetImageUrl, a.referenceImageUrl, a.tripletImageUrl
+        a.transientBucketId, a.%(imageUrl)s 
     FROM
         transientBucket a
             JOIN
@@ -180,41 +148,82 @@ FROM
             transientBucket
         WHERE
             magnitude IS NOT NULL
-                AND (subtractedImageUrl IS NOT NULL
-                OR targetImageUrl IS NOT NULL
-                OR referenceImageUrl IS NOT NULL
-                OR tripletImageUrl IS NOT NULL)
+                AND %(imageUrl)s IS NOT NULL
+                AND transientBucketId in (select transientBucketId from fs_user_added)
                 AND transientBucketId IN (SELECT 
                     transientBucketId
                 FROM
                     pesstoObjects
                 WHERE
-                    (%(stampWhere)s))
-                AND (%(dbSurveyNames)s) and limitingMag = 0
+                    %(stampWhere)s and limitingMag = 0)
         GROUP BY transientBucketId
         ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
             AND a.magnitude = b.mag
-    WHERE
-        (%(dbSurveyNames2)s) and limitingMag = 0 GROUP BY transientBucketId;
+            WHERE limitingMag = 0
+        GROUP BY transientBucketId;
             """ % locals()
+            else:
+                sqlQuery = u"""
+                    SELECT 
+            distinct a.transientBucketId, a.%(imageUrl)s 
+        FROM
+            transientBucket a
+                JOIN
+            (SELECT 
+                MIN(magnitude) AS mag, transientBucketId
+            FROM
+                transientBucket
+            WHERE
+                magnitude IS NOT NULL
+                    AND %(imageUrl)s IS NOT NULL
+                    AND transientBucketId IN (SELECT 
+                        transientBucketId
+                    FROM
+                        pesstoObjects
+                    WHERE
+                        %(stampWhere)s)
+                    AND (%(dbSurveyNames)s) and limitingMag = 0 
+            GROUP BY transientBucketId
+            ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
+                AND a.magnitude = b.mag
+        WHERE
+            (%(dbSurveyNames2)s) and limitingMag = 0 and magnitude IS NOT NULL AND %(imageUrl)s IS NOT NULL GROUP BY a.transientBucketId;
+                """ % locals()
 
-        if failedImage:
-            sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "")
+            if failedImage:
+                sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "").replace(
+                    "GROUP BY a.transientBucketId;", "")
 
-        rows = readquery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.dbConn,
-        )
+            rows = readquery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn,
+            )
 
-        # SPLIT URLS INTO STAMP TYPES AND ORDER ALONGSIDE TRANSIENTBUKCETIDs
-        transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = [], [], [], [], []
-        for row in rows:
-            transientBucketIds.append(row["transientBucketId"])
-            subtractedUrls.append(row["subtractedImageUrl"])
-            targetUrls.append(row["targetImageUrl"])
-            referenceUrls.append(row["referenceImageUrl"])
-            tripletUrls.append(row["tripletImageUrl"])
+            # SPLIT URLS INTO STAMP TYPES AND ORDER ALONGSIDE
+            # TRANSIENTBUKCETIDs
+            transientBucketIds = []
+            for row in rows:
+                transientBucketIds.append(row["transientBucketId"])
+                if imageType == "subtracted":
+                    subtractedUrls.append(row["subtractedImageUrl"])
+                if imageType == "target":
+                    targetUrls.append(row["targetImageUrl"])
+                if imageType == "reference":
+                    referenceUrls.append(row["referenceImageUrl"])
+                if imageType == "triplet":
+                    tripletUrls.append(row["tripletImageUrl"])
+
+        for imageType, v in self.stampFlagColumns.iteritems():
+            if not v:
+                if imageType == "subtracted":
+                    subtractedUrls = [None] * len(transientBucketIds)
+                if imageType == "target":
+                    targetUrls = [None] * len(transientBucketIds)
+                if imageType == "reference":
+                    referenceUrls = [None] * len(transientBucketIds)
+                if imageType == "triplet":
+                    tripletUrls = [None] * len(transientBucketIds)
 
         self.log.debug('completed the ``_list_images_needing_cached`` method')
         self.transientBucketIds = transientBucketIds
@@ -286,9 +295,18 @@ FROM
             self.log.debug('completed the ``_update_database`` method')
             return None
 
-        # ITERATE OVER 4 STAMP COLUMNS AND THE IMAGE DOWNLOADED STATUS
-        for column, status in zip(self.stampFlagColumns.values(), [self.subtractedStatus, self.targetStatus, self.referenceStatus, self.tripletStatus]):
+        # ITERATE OVER 4 STAMP COLUMNS
+        for imageType, column in self.stampFlagColumns.iteritems():
             if column:
+                if imageType == "subtracted":
+                    status = self.subtractedStatus
+                if imageType == "target":
+                    status = self.targetStatus
+                if imageType == "reference":
+                    status = self.referenceStatus
+                if imageType == "triplet":
+                    status = self.tripletStatus
+
                 nonexist = []
                 exist = []
                 # NON-EXISTANT == STATUS 2
@@ -306,14 +324,27 @@ FROM
                     )
                     sqlQuery += """update pesstoObjects set %(column)s = 3 where transientBucketId in (%(nonexist)s) and %(column)s = 2;""" % locals(
                     )
-                if len(exist):
-                    sqlQuery += """update pesstoObjects set %(column)s = 1 where transientBucketId in (%(exist)s) and %(column)s != 1;""" % locals(
+                    print "failed"
+                    print sqlQuery
+                    print
+
+                    writequery(
+                        log=self.log,
+                        sqlQuery=sqlQuery,
+                        dbConn=self.dbConn
                     )
-                writequery(
-                    log=self.log,
-                    sqlQuery=sqlQuery,
-                    dbConn=self.dbConn
-                )
+                if len(exist):
+                    sqlQuery = """update pesstoObjects set %(column)s = 1 where transientBucketId in (%(exist)s) and (%(column)s != 1 or %(column)s is null);""" % locals(
+                    )
+
+                    print "passed"
+                    print sqlQuery
+                    print
+                    writequery(
+                        log=self.log,
+                        sqlQuery=sqlQuery,
+                        dbConn=self.dbConn
+                    )
 
         self.log.debug('completed the ``_update_database`` method')
         return None
@@ -353,7 +384,7 @@ def download_image_array(
             )
         else:
             # NOTHING TO DOWNLOAD
-            statusArray.append(2)
+            statusArray.append(0)
             continue
 
         try:
@@ -368,10 +399,16 @@ def download_image_array(
         except requests.exceptions.RequestException as e:
             if 'timed out' in str(e):
                 print 'timed out - try again next time' % locals()
+                statusArray.append(0)
             else:
                 print 'HTTP Request failed - %(e)s' % locals()
                 print ""
-            statusArray.append(0)
+                statusArray.append(2)
+            continue
+
+        if status_code == 404:
+            print 'image not found' % locals()
+            statusArray.append(2)
             continue
 
         # WRITE STAMP TO FILE
