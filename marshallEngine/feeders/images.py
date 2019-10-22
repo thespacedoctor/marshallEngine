@@ -320,13 +320,10 @@ class images():
                 # GENERATE THE SQL TO UPDATE DATABASE
                 sqlQuery = ""
                 if len(nonexist):
-                    sqlQuery += """update pesstoObjects set %(column)s = 2 where transientBucketId in (%(nonexist)s) and (%(column)s is null or %(column)s = 0);""" % locals(
-                    )
                     sqlQuery += """update pesstoObjects set %(column)s = 3 where transientBucketId in (%(nonexist)s) and %(column)s = 2;""" % locals(
                     )
-                    print "failed"
-                    print sqlQuery
-                    print
+                    sqlQuery += """update pesstoObjects set %(column)s = 2 where transientBucketId in (%(nonexist)s) and (%(column)s is null or %(column)s = 0);""" % locals(
+                    )
 
                     writequery(
                         log=self.log,
@@ -337,9 +334,6 @@ class images():
                     sqlQuery = """update pesstoObjects set %(column)s = 1 where transientBucketId in (%(exist)s) and (%(column)s != 1 or %(column)s is null);""" % locals(
                     )
 
-                    print "passed"
-                    print sqlQuery
-                    print
                     writequery(
                         log=self.log,
                         sqlQuery=sqlQuery,
