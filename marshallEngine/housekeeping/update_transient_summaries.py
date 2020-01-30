@@ -30,6 +30,7 @@ class update_transient_summaries():
         - ``log`` -- logger
         - ``settings`` -- the settings dictionary
         - ``dbConn`` -- the marshall database connection
+        - ``transientBucketId`` -- a single transientBucketId to update transientBucketId. Default *False* (i.e. update all)
 
     **Usage:**
 
@@ -56,32 +57,46 @@ class update_transient_summaries():
             self,
             log,
             dbConn,
-            settings=False
+            settings=False,
+            transientBucketId=False
     ):
         self.log = log
         log.debug("instansiating a new 'update_transient_summaries' object")
         self.settings = settings
         self.transientBucketIds = []
+        self.transientBucketId = transientBucketId
+
         # xt-self-arg-tmpx
 
         self.dbConn = dbConn
 
-        # UPDATE OBSERVATION DATES FROM MJDs
-        sqlQuery = "call update_transientbucket_observation_dates()"
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.dbConn
-        )
+        if self.transientBucketId:
+            print "updating transient summaries table for %(transientBucketId)s" % locals()
+            # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
+            sqlQuery = "call update_single_transientbucket_summary(%(transientBucketId)s)" % locals(
+            )
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
+        else:
+            # UPDATE OBSERVATION DATES FROM MJDs
+            sqlQuery = "call update_transientbucket_observation_dates()"
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
 
-        print "updating transient summaries table"
-        # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
-        sqlQuery = "call update_transientbucketsummaries()"
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.dbConn
-        )
+            print "updating transient summaries table"
+            # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
+            sqlQuery = "call update_transientbucketsummaries()"
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
 
         return None
 
@@ -153,8 +168,13 @@ class update_transient_summaries():
         self.log.debug('starting the ``_add_galactic_coords`` method')
 
         # SELECT THE TRANSIENTS NEEDING UPDATED
+        extra = ""
+        if self.transientBucketId:
+            thisId = self.transientBucketId
+            extra = "and transientBucketId = %(thisId)s" % locals()
+
         sqlQuery = u"""
-            select raDeg, decDeg, transientBucketId from transientBucketSummaries where updateNeeded = 2 order by transientBucketId desc
+            select raDeg, decDeg, transientBucketId from transientBucketSummaries where updateNeeded = 2 %(extra)s order by transientBucketId desc
         """ % locals()
         rows = readquery(
             log=self.log,
@@ -233,9 +253,14 @@ class update_transient_summaries():
         """
         self.log.debug('starting the ``_add_distances`` method')
 
+        extra = ""
+        if self.transientBucketId:
+            thisId = self.transientBucketId
+            extra = "and transientBucketId = %(thisId)s" % locals()
+
         # SELECT THE TRANSIENTS NEEDING UPDATED
         sqlQuery = u"""
-            select best_redshift, transientBucketId from transientBucketSummaries where best_redshift is not null and distanceMpc is null and best_redshift > 0.001
+            select best_redshift, transientBucketId from transientBucketSummaries where best_redshift is not null and distanceMpc is null and best_redshift > 0.001 %(extra)s 
         """ % locals()
         rows = readquery(
             log=self.log,

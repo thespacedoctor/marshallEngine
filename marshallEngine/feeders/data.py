@@ -147,7 +147,7 @@ class data():
 
         **Key Arguments:**
             - ``importUnmatched`` -- import unmatched (new) transients into the marshall (not wanted in some circumstances)
-            - ``updateTransientSummaries`` -- update the transient summaries and lightcurves?
+            - ``updateTransientSummaries`` -- update the transient summaries and lightcurves? Can be True or False, or alternatively a specific transientBucketId
 
         This method aims to reduce crossmatching and load on the database by:
 
@@ -208,11 +208,16 @@ class data():
 
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         if updateTransientSummaries:
+            if isinstance(updateTransientSummaries, int):
+                transientBucketId = updateTransientSummaries
+            else:
+                transientBucketId = False
             from marshallEngine.housekeeping import update_transient_summaries
             updater = update_transient_summaries(
                 log=self.log,
                 settings=self.settings,
-                dbConn=self.dbConn
+                dbConn=self.dbConn,
+                transientBucketId=transientBucketId
             )
             updater.update()
 
@@ -242,6 +247,7 @@ class data():
         # COPY ROWS TO TRANSIENTBUCKET USING COLUMN MATCH TABLE IN DATABASE
         sqlQuery = """CALL `sync_marshall_feeder_survey_transientBucketId`('%(fsTableName)s');""" % locals(
         )
+
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
