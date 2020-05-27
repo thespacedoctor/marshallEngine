@@ -9,6 +9,7 @@
 :Date Created:
     June 26, 2019
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -67,14 +68,14 @@ class images():
         survey = self.survey
 
         if not leng:
-            print "All _new_ images are cached for the %(survey)s survey" % locals()
+            print("All _new_ images are cached for the %(survey)s survey" % locals())
 
         else:
 
             if leng > limit:
-                print "Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s" % locals()
+                print("Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s" % locals())
             else:
-                print "Downloading image stamps for the remaining %(leng)s transients for %(survey)s" % locals()
+                print("Downloading image stamps for the remaining %(leng)s transients for %(survey)s" % locals())
             subtractedStatus, targetStatus, referenceStatus, tripletStatus = self._download(
                 transientBucketIds=transientBucketIds[:limit],
                 subtractedUrls=subtractedUrls[:limit],
@@ -89,10 +90,10 @@ class images():
         leng = len(transientBucketIds)
 
         if not leng:
-            print "All images are cached for the %(survey)s survey" % locals()
+            print("All images are cached for the %(survey)s survey" % locals())
 
         else:
-            print "Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s - previously failed" % locals()
+            print("Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s - previously failed" % locals())
             subtractedStatus, targetStatus, referenceStatus, tripletStatus = self._download(
                 transientBucketIds=transientBucketIds[:limit],
                 subtractedUrls=subtractedUrls[:limit],
@@ -119,7 +120,7 @@ class images():
         self.log.debug('starting the ``_list_images_needing_cached`` method')
 
         subtractedUrls, targetUrls, referenceUrls, tripletUrls = [], [], [], []
-        for imageType, v in self.stampFlagColumns.iteritems():
+        for imageType, v in self.stampFlagColumns.items():
             if not v:
                 continue
             imageUrl = imageType + "ImageUrl"
@@ -214,7 +215,7 @@ class images():
                 if imageType == "triplet":
                     tripletUrls.append(row["tripletImageUrl"])
 
-        for imageType, v in self.stampFlagColumns.iteritems():
+        for imageType, v in self.stampFlagColumns.items():
             if not v:
                 if imageType == "subtracted":
                     subtractedUrls = [None] * len(transientBucketIds)
@@ -272,7 +273,7 @@ class images():
                 sys.stdout.write("\x1b[1A\x1b[2K")
 
             percent = (float(index) / float(count)) * 100.
-            print '%(index)s/%(count)s (%(percent)1.1f%% done): downloading %(survey)s stamps for transientBucketId: %(tid)s' % locals()
+            print('%(index)s/%(count)s (%(percent)1.1f%% done): downloading %(survey)s stamps for transientBucketId: %(tid)s' % locals())
 
             statusArray = download_image_array(imageArray=[
                                                tid, surl, turl, rurl, purl], log=self.log, survey=self.survey, downloadPath=downloadDirectoryPath)
@@ -296,7 +297,7 @@ class images():
             return None
 
         # ITERATE OVER 4 STAMP COLUMNS
-        for imageType, column in self.stampFlagColumns.iteritems():
+        for imageType, column in self.stampFlagColumns.items():
             if column:
                 if imageType == "subtracted":
                     status = self.subtractedStatus
@@ -392,16 +393,16 @@ def download_image_array(
             status_code = response.status_code
         except requests.exceptions.RequestException as e:
             if 'timed out' in str(e):
-                print 'timed out - try again next time' % locals()
+                print('timed out - try again next time' % locals())
                 statusArray.append(0)
             else:
-                print 'HTTP Request failed - %(e)s' % locals()
-                print ""
+                print('HTTP Request failed - %(e)s' % locals())
+                print("")
                 statusArray.append(2)
             continue
 
         if status_code == 404:
-            print 'image not found' % locals()
+            print('image not found' % locals())
             statusArray.append(2)
             continue
 
@@ -409,7 +410,7 @@ def download_image_array(
         try:
             writeFile = codecs.open(
                 pathToWriteFile, mode='wb')
-        except IOError, e:
+        except IOError as e:
             message = 'could not open the file %s' % (pathToWriteFile,)
             raise IOError(message)
         writeFile.write(content)

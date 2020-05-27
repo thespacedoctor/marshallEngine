@@ -176,7 +176,7 @@ class data(basedata):
                 pass
             thisDictionary["discMag"] = row["cal_psf_mag"]
 
-            if "transient_object_id" in row.keys():
+            if "transient_object_id" in list(row.keys()):
                 thisDictionary[
                     "objectURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/psdb/candidate/" % locals() + row["transient_object_id"]
             else:

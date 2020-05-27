@@ -1,5 +1,5 @@
-marshallEngine.commonutils (*subpackage*)
-=========================================
+commonutils
+====================================================
 
 .. automodule:: marshallEngine.commonutils
     :members:
@@ -21,11 +21,11 @@ marshallEngine.commonutils (*subpackage*)
         
         
         
-            
-                ~getpackagepath
-           
+        
         
     
+        
+        
         
         
         

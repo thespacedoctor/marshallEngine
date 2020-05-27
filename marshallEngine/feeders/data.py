@@ -9,6 +9,7 @@
 :Date Created:
     June  6, 2019
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -335,7 +336,7 @@ class data():
             fs_dec_list = [row[fs_dec] for row in batch]
 
             ticker += len(fs_name_list)
-            print "Matching %(ticker)s/%(total)s sources in the %(fsTableName)s against the transientBucket table" % locals()
+            print("Matching %(ticker)s/%(total)s sources in the %(fsTableName)s against the transientBucket table" % locals())
 
             # CONESEARCH TRANSIENT BUCKET FOR PRE-KNOWN SOURCES FROM OTHER
             # SURVEYS
@@ -361,7 +362,7 @@ class data():
             originalList = matches.list
             originalTotal = len(originalList)
 
-            print "Adding %(originalTotal)s new %(fsTableName)s transient detections to the transientBucket table" % locals()
+            print("Adding %(originalTotal)s new %(fsTableName)s transient detections to the transientBucket table" % locals())
             if originalTotal:
                 updates = []
                 updates[:] = ["update " + fsTableName + " set transientBucketId = " + str(o['transientBucketId']) +

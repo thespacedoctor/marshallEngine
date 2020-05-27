@@ -9,6 +9,7 @@
 :Date Created:
     June 28, 2019
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -179,7 +180,7 @@ class marshall_lightcurves():
                         limitCatcher[r["limitConstraint"]] = [
                             r["magnitude"], r["observationMJD"]]
 
-            for k, v in limitCatcher.iteritems():
+            for k, v in limitCatcher.items():
                 limit.append(v[0])
                 limitMjd.append(v[1])
                 flatLimits["mag"].append(v[0])
@@ -433,7 +434,7 @@ class marshall_lightcurves():
         i = 0
         handles = []
         handlesAdded = []
-        for k, v in dataset.iteritems():
+        for k, v in dataset.items():
             mag = v["mag"]
             magErr = v["magErr"]
             magMjd = v["magMjd"]
@@ -564,8 +565,8 @@ class marshall_lightcurves():
         thisDict = {"database settings": self.settings["database settings"]}
 
         if total:
-            print "updating lightcurves for %(total)s transients" % locals()
-            print
+            print("updating lightcurves for %(total)s transients" % locals())
+            print()
 
         results = fmultiprocess(log=self.log, function=_plot_one,
                                 inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
@@ -622,7 +623,7 @@ def _plot_one(
 
     # MULTIPROCESSING NEEDS ONE CONNECTION PERPROCESS
     sys.stdout.write("\x1b[1A\x1b[2K")
-    print "updating LC for transient %(transientBucketId)s" % locals()
+    print("updating LC for transient %(transientBucketId)s" % locals())
     dbConn = database(
         log=log,
         dbSettings=settings["database settings"]

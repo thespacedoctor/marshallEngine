@@ -1,38 +1,33 @@
+from __future__ import print_function
+from builtins import str
 import os
-import nose2
-import shutil
 import unittest
+import shutil
 import yaml
 from marshallEngine.utKit import utKit
-
 from fundamentals import tools
+from os.path import expanduser
+home = expanduser("~")
+
+packageDirectory = utKit("").get_project_root()
+# settingsFile = packageDirectory + "/test_settings.yaml"
+settingsFile = home + "/git_repos/_misc_/settings/marshall/test_settings.yaml"
 
 su = tools(
-    arguments={"settingsFile": None},
+    arguments={"settingsFile": settingsFile},
     docString=__doc__,
     logLevel="DEBUG",
     options_first=False,
-    projectName="marshallEngine",
+    projectName=None,
     defaultSettingsFile=False
 )
 arguments, settings, log, dbConn = su.setup()
 
-# load settings
-from os.path import expanduser
-home = expanduser("~")
-stream = file(
-    home + "/.config/marshallEngine/marshallEngine.yaml", 'r')
-settings = yaml.load(stream)
-stream.close()
-
-# SETUP AND TEARDOWN FIXTURE FUNCTIONS FOR THE ENTIRE MODULE
+# SETUP PATHS TO COMMON DIRECTORIES FOR TEST DATA
 moduleDirectory = os.path.dirname(__file__)
-utKit = utKit(moduleDirectory)
-log2, dbConn2, pathToInputDir, pathToOutputDir = utKit.setupModule()
-utKit.tearDownModule()
+pathToInputDir = moduleDirectory + "/input/"
+pathToOutputDir = moduleDirectory + "/output/"
 
-
-import shutil
 try:
     shutil.rmtree(pathToOutputDir)
 except:
@@ -43,8 +38,6 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 # Recursively create missing directories
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
-
-# xt-setup-unit-testing-files-and-folders
 
 
 class test_update_transient_summaries(unittest.TestCase):
@@ -80,7 +73,7 @@ class test_update_transient_summaries(unittest.TestCase):
 
     def test_update_transient_summaries_function_exception(self):
 
-        from marshallEngine import update_transient_summaries
+        from marshallEngine.housekeeping import update_transient_summaries
         try:
             this = update_transient_summaries(
                 log=log,
@@ -89,9 +82,9 @@ class test_update_transient_summaries(unittest.TestCase):
             )
             this.get()
             assert False
-        except Exception, e:
+        except Exception as e:
             assert True
-            print str(e)
+            print(str(e))
 
         # x-print-testpage-for-pessto-marshall-web-object
 

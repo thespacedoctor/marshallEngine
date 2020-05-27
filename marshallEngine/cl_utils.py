@@ -1,7 +1,7 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # encoding: utf-8
 """
-Documentation for marshallEngine can be found here: http://marshallEngine.readthedocs.org/en/stable
+Documentation for marshallEngine can be found here: http://marshallEngine.readthedocs.org
 
 Usage:
     marshall init
@@ -22,7 +22,7 @@ Options:
     -v, --version                           show version
     -s, --settings <pathToSettingsFile>     the settings file
 """
-################# GLOBAL IMPORTS ####################
+from __future__ import print_function
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -32,7 +32,6 @@ import pickle
 from docopt import docopt
 from fundamentals import tools, times
 from subprocess import Popen, PIPE, STDOUT
-# from ..__init__ import *
 
 
 def tab_complete(text, state):
@@ -41,13 +40,13 @@ def tab_complete(text, state):
 
 def main(arguments=None):
     """
-    *The main function used when ``cl_utils.py`` is run as a single script from the cl, or when installed as a cl command*
+    *The main function used when `cl_utils.py` is run as a single script from the cl, or when installed as a cl command*
     """
     # setup the command-line util settings
     su = tools(
         arguments=arguments,
         docString=__doc__,
-        logLevel="DEBUG",
+        logLevel="WARNING",
         options_first=False,
         projectName="marshallEngine",
         defaultSettingsFile=True
@@ -59,21 +58,18 @@ def main(arguments=None):
     readline.parse_and_bind("tab: complete")
     readline.set_completer(tab_complete)
 
-    # unpack remaining cl arguments using `exec` to setup the variable names
-    # automatically
-    for arg, val in arguments.iteritems():
+    # UNPACK REMAINING CL ARGUMENTS USING `EXEC` TO SETUP THE VARIABLE NAMES
+    # AUTOMATICALLY
+    a = {}
+    for arg, val in list(arguments.items()):
         if arg[0] == "-":
             varname = arg.replace("-", "") + "Flag"
         else:
             varname = arg.replace("<", "").replace(">", "")
-        if varname == "import":
-            varname = "iimport"
-        if isinstance(val, str) or isinstance(val, unicode):
-            exec(varname + " = '%s'" % (val,))
-        else:
-            exec(varname + " = %s" % (val,))
+        a[varname] = val
         if arg == "--dbConn":
             dbConn = val
+            a["dbConn"] = val
         log.debug('%s = %s' % (varname, val,))
 
     ## START LOGGING ##
@@ -82,8 +78,17 @@ def main(arguments=None):
         '--- STARTING TO RUN THE cl_utils.py AT %s' %
         (startTime,))
 
+    init = a["init"]
+    clean = a["clean"]
+    iimport = a["iimport"]
+    lightcurve = a["lightcurve"]
+    transientBucketId = a["transientBucketId"]
+    survey = a["survey"]
+    withInLastDay = a["withInLastDay"]
+    settingsFlag = a["settingsFlag"]
+
     # set options interactively if user requests
-    if "interactiveFlag" in locals() and interactiveFlag:
+    if "interactiveFlag" in a and a["interactiveFlag"]:
 
         # load previous settings
         moduleDirectory = os.path.dirname(__file__) + "/resources"
@@ -110,11 +115,7 @@ def main(arguments=None):
             pickleMe[k] = theseLocals[k]
         pickle.dump(pickleMe, open(pathToPickleFile, "wb"))
 
-    # DEFAULT VALUES
-    if not withInLastDay:
-        withInLastDay = 30
-
-    if init:
+    if a["init"]:
         from os.path import expanduser
         home = expanduser("~")
         filepath = home + "/.config/marshallEngine/marshallEngine.yaml"
@@ -131,9 +132,14 @@ def main(arguments=None):
         return
 
     # CALL FUNCTIONS/OBJECTS
+    # DEFAULT VALUES
+    if not withInLastDay:
+        withInLastDay = 30
+
+    # CALL FUNCTIONS/OBJECTS
     if clean:
         # RESCUE ORPHANED TRANSIENTS - NO MASTER ID FLAG
-        print "rescuing orphaned transients"
+        print("rescuing orphaned transients")
         from fundamentals.mysql import writequery
 
         procedureNames = [
@@ -205,7 +211,7 @@ def main(arguments=None):
             transientBucketIds=transientBucketId
         )
         filepath = lc.plot()
-        print "The lightcurve plot for transient %(transientBucketId)s can be found here: %(filepath)s" % locals()
+        print("The lightcurve plot for transient %(transientBucketId)s can be found here: %(filepath)s" % locals())
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()

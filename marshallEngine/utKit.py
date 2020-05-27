@@ -2,6 +2,7 @@
 *Unit testing tools*
 """
 from fundamentals import utKit
+
 # OVERRIDES
 
 
@@ -16,7 +17,8 @@ class utKit(utKit):
     # Initialisation
     def __init__(
             self,
-            moduleDirectory
+            moduleDirectory,
+            dbConn=False
     ):
         self.moduleDirectory = moduleDirectory
         # x-self-arg-tmpx
@@ -49,20 +51,33 @@ class utKit(utKit):
             handlers: [console]"""
 
         # Override Variable Data Atrributes
-        self.dbConfig = """
-         version: 1
-         db: unit_tests
-         host: localhost
-         user: utuser
-         password: utpass
-         loginPath: unittesting
-         """
+        self.dbConfig = False
+        if dbConn:
+            self.dbConfig = """
+             version: 1
+             db: dryx_unit_testing
+             host: localhost
+             user: unittesting
+             password: utpass
+             """
 
         return
 
+    def get_project_root(self):
+        """
+        *Get the root of the `python` package - useful for getting files in the root directory of a project*
+
+        **Return:**
+            - ``rootPath`` -- the root path of a project
+        """
+        import os
+        rootPath = os.path.dirname(__file__)
+
+        return rootPath
+
     def refresh_database(self):
         """
-        Refresh the unit test database
+        *Refresh the unit test database*
         """
         from fundamentals.mysql import directory_script_runner
         from fundamentals import tools
@@ -80,22 +95,7 @@ class utKit(utKit):
         directory_script_runner(
             log=log,
             pathToScriptDirectory=packageDirectory + "/tests/input",
-            databaseName=settings["database settings"]["db"],
-            force=True,
-            loginPath=settings["database settings"]["loginPath"],
-            waitForResult=True,
+            dbConn=dbConn,
             successRule=None,
             failureRule=None
         )
-
-    def get_project_root(self):
-        """
-        *Get the root of the python package - useful for getting files in the root directory of a project*
-
-        **Return:**
-            - ``rootPath`` -- the root path of a project
-        """
-        import os
-        rootPath = os.path.dirname(__file__)
-
-        return rootPath

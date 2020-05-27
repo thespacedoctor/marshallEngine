@@ -9,6 +9,7 @@
 :Date Created:
     June 24, 2019
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -71,7 +72,7 @@ class update_transient_summaries():
         self.dbConn = dbConn
 
         if self.transientBucketId:
-            print "updating transient summaries table for %(transientBucketId)s" % locals()
+            print("updating transient summaries table for %(transientBucketId)s" % locals())
             # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
             sqlQuery = "call update_single_transientbucket_summary(%(transientBucketId)s)" % locals(
             )
@@ -89,7 +90,7 @@ class update_transient_summaries():
                 dbConn=self.dbConn
             )
 
-            print "updating transient summaries table"
+            print("updating transient summaries table")
             # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
             sqlQuery = "call update_transientbucketsummaries()"
             writequery(
@@ -189,7 +190,7 @@ class update_transient_summaries():
             return
 
         if total > 1000:
-            print """%(total)s transients need updated - updating the next 1000""" % locals()
+            print("""%(total)s transients need updated - updating the next 1000""" % locals())
             rows = np.random.choice(rows, size=1000, replace=False, p=None)
 
         # CREATE 3 LISTS - RA, DEC, ID

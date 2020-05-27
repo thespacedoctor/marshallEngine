@@ -9,6 +9,7 @@
 :Date Created:
     September  9, 2016
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os
@@ -99,7 +100,7 @@ def create_lc(
             magnitudes[epoch["filter"]]["mags"].append(epoch["fnu"])
             magnitudes[epoch["filter"]]["magErrs"].append(epoch["fnu_error"])
 
-    for fil, d in magnitudes.iteritems():
+    for fil, d in magnitudes.items():
         distinctMjds = {}
         for m, f, e in zip(d["mjds"], d["mags"], d["magErrs"]):
             key = str(int(math.floor(m)))
@@ -114,7 +115,7 @@ def create_lc(
                 distinctMjds[key]["mags"].append(f)
                 distinctMjds[key]["magErrs"].append(e)
 
-        for k, v in distinctMjds.iteritems():
+        for k, v in distinctMjds.items():
             summedMagnitudes[fil]["mjds"].append(
                 sum(v["mjds"]) / len(v["mjds"]))
             summedMagnitudes[fil]["mags"].append(
@@ -485,7 +486,7 @@ def generate_atlas_lightcurves(
     )
 
     total = len(rows)
-    print "Generating ATLAS lightcurves for %(total)s sources" % locals()
+    print("Generating ATLAS lightcurves for %(total)s sources" % locals())
 
     index = 1
     for row in rows:
@@ -498,7 +499,7 @@ def generate_atlas_lightcurves(
             sys.stdout.write("\x1b[1A\x1b[2K")
 
         percent = (float(index) / float(total)) * 100.
-        print '%(index)s/%(total)s (%(percent)1.1f%% done): generating ATLAS LC for transientBucketId: %(transientBucketId)s' % locals()
+        print('%(index)s/%(total)s (%(percent)1.1f%% done): generating ATLAS LC for transientBucketId: %(transientBucketId)s' % locals())
         index += 1
 
         sqlQuery = u"""

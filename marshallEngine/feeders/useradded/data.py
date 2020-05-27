@@ -9,6 +9,7 @@
 :Date Created:
     July 30, 2019
 """
+from __future__ import print_function
 ################# GLOBAL IMPORTS ####################
 import sys
 import os

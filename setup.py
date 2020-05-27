@@ -6,7 +6,7 @@ exec(open(moduleDirectory + "/marshallEngine/__version__.py").read())
 
 
 def readme():
-    with open(moduleDirectory + '/README.rst') as f:
+    with open(moduleDirectory + '/README.md') as f:
         return f.read()
 
 install_requires = [
@@ -18,7 +18,8 @@ install_requires = [
     'astropy',
     'matplotlib',
     'panstamps',
-    'transientNamer'
+    'transientNamer',
+    'numpy'
 ]
 
 # READ THE DOCS SERVERS
@@ -34,15 +35,17 @@ if exists:
 
 setup(name="marshallEngine",
       version=__version__,
-      description="A python package and command-line tools to The engine behind the marshall webapp",
+      description="the engine behind the marshall webapp",
       long_description=readme(),
+      long_description_content_type='text/markdown',
       classifiers=[
           'Development Status :: 4 - Beta',
           'License :: OSI Approved :: MIT License',
+          'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 2.7',
           'Topic :: Utilities',
       ],
-      keywords=['marshall, engine'],
+      keywords=['astronomy, marshall, webapp'],
       url='https://github.com/thespacedoctor/marshallEngine',
       download_url='https://github.com/thespacedoctor/marshallEngine/archive/v%(__version__)s.zip' % locals(
       ),
@@ -55,6 +58,6 @@ setup(name="marshallEngine",
       test_suite='nose2.collector.collector',
       tests_require=['nose2', 'cov-core'],
       entry_points={
-          'console_scripts': ['marshall=marshallEngine.cl_utils:main']
+          'console_scripts': ['marshallEngine=marshallEngine.cl_utils:main'],
       },
       zip_safe=False)

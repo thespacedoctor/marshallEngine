@@ -172,7 +172,10 @@ coverage.index_ready = function ($) {
     // Look for a localStorage item containing previous sort settings:
     var sort_list = [];
     var storage_name = "COVERAGE_INDEX_SORT";
-    var stored_list = localStorage.getItem(storage_name);
+    var stored_list = undefined;
+    try {
+        stored_list = localStorage.getItem(storage_name);
+    } catch(err) {}
 
     if (stored_list) {
         sort_list = JSON.parse('[[' + stored_list + ']]');
@@ -222,7 +225,9 @@ coverage.index_ready = function ($) {
 
     // Watch for page unload events so we can save the final sort settings:
     $(window).unload(function () {
-        localStorage.setItem(storage_name, sort_list.toString())
+        try {
+            localStorage.setItem(storage_name, sort_list.toString())
+        } catch(err) {}
     });
 };
 
@@ -231,7 +236,7 @@ coverage.index_ready = function ($) {
 coverage.pyfile_ready = function ($) {
     // If we're directed to a particular line number, highlight the line.
     var frag = location.hash;
-    if (frag.length > 2 && frag[1] === 'n') {
+    if (frag.length > 2 && frag[1] === 't') {
         $(frag).addClass('highlight');
         coverage.set_sel(parseInt(frag.substr(2), 10));
     }
@@ -512,7 +517,7 @@ coverage.finish_scrolling = function () {
 coverage.init_scroll_markers = function () {
     var c = coverage;
     // Init some variables
-    c.lines_len = $('td.text p').length;
+    c.lines_len = $('#source p').length;
     c.body_h = $('body').height();
     c.header_h = $('div#header').height();
 
@@ -526,7 +531,7 @@ coverage.build_scroll_markers = function () {
         max_line_height = 10,
         visible_window_h = $(window).height();
 
-    c.lines_to_mark = $('td.text').find('p.show_run, p.show_mis, p.show_exc, p.show_par');
+    c.lines_to_mark = $('#source').find('p.show_run, p.show_mis, p.show_exc, p.show_exc, p.show_par');
     $('#scroll_marker').remove();
     // Don't build markers if the window has no scroll bar.
     if (c.body_h <= visible_window_h) {
