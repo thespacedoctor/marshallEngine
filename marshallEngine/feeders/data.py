@@ -22,6 +22,7 @@ from requests.auth import HTTPBasicAuth
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
 from fundamentals import tools
 
+
 class data(object):
     """
     *This baseclass for the feeder survey data imports*
@@ -39,7 +40,7 @@ class data(object):
     class data(basedata):
         ....
     ```
-    
+
     """
 
     def get_csv_data(
@@ -54,12 +55,12 @@ class data(object):
         - ``url`` -- the url to the csv file
         - ``user`` -- basic auth username
         - ``pwd`` -- basic auth password
-        
+
 
         **Return**
 
         - ``csvData`` -- a list of dictionaries from the csv file
-        
+
 
         **Usage**
 
@@ -80,7 +81,7 @@ class data(object):
         ```
 
         Note you will also be able to access the data via ``ingester.csvDicts`` 
-        
+
         """
         self.log.debug('starting the ``get_csv_data`` method')
 
@@ -100,6 +101,12 @@ class data(object):
             print('HTTP Request failed')
             sys.exit(0)
 
+        if status_code != 502:
+            print('HTTP Request failed - status %(status_code)s' % locals())
+            print(url)
+            self.csvDicts = []
+            return self.csvDicts
+
         if status_code != 200:
             print('HTTP Request failed - status %(status_code)s' % locals())
             sys.exit(0)
@@ -118,14 +125,14 @@ class data(object):
         **Return**
 
         - None
-        
+
 
         **Usage**
 
         ```python
         self._import_to_feeder_survey_table()
         ```
-        
+
         """
         self.log.debug(
             'starting the ``_import_to_feeder_survey_table`` method')
@@ -160,7 +167,7 @@ class data(object):
 
         - ``importUnmatched`` -- import unmatched (new) transients into the marshall (not wanted in some circumstances)
         - ``updateTransientSummaries`` -- update the transient summaries and lightcurves? Can be True or False, or alternatively a specific transientBucketId
-        
+
 
         This method aims to reduce crossmatching and load on the database by:
 
@@ -171,14 +178,14 @@ class data(object):
         **Return**
 
         - None
-        
+
 
         **Usage**
 
         ```python
         ingester.insert_into_transientBucket()
         ```
-        
+
         """
         self.log.debug(
             'starting the ``crossmatch_with_transientBucket`` method')
@@ -248,14 +255,14 @@ class data(object):
         **Return**
 
         - None
-        
+
 
         **Usage**
 
         ```python
         self._feeder_survey_transientbucket_name_match_and_import()
         ```
-        
+
         """
         self.log.debug(
             'starting the ``_feeder_survey_transientbucket_name_match_and_import`` method')
@@ -284,7 +291,7 @@ class data(object):
         **Return**
 
         - ``unmatched`` -- a list of the unmatched (i.e. new to the marshall) feeder survey surveys
-        
+
         """
         self.log.debug(
             'starting the ``_feeder_survey_transientbucket_crossmatch`` method')
@@ -414,7 +421,7 @@ class data(object):
         **Key Arguments**
 
         - ``unmatched`` -- the remaining unmatched feeder survey object names.
-        
+
         """
         self.log.debug(
             'starting the ``_import_unmatched_feeder_survey_sources_to_transientbucket`` method')
