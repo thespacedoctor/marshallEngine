@@ -53,9 +53,9 @@ class test_cl_utils(unittest.TestCase):
 
         pathToSettingsFile = settingsFile
         # TEST CL-OPTIONS
-        command = "marshall init"
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall init"
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
         command = "marshall clean -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
