@@ -47,7 +47,7 @@ if not os.path.exists(pathToOutputDir):
 
 class test_cl_utils(unittest.TestCase):
 
-    def test_cl(self):
+    def test_01_cl(self):
 
         utKit("").refresh_database()
 
@@ -61,28 +61,46 @@ class test_cl_utils(unittest.TestCase):
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_02_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall import atlas 1 -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_03_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall import panstarrs 1 -s %(pathToSettingsFile)s" % locals(
         )
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_04_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall import tns 1 -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_05_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall import useradded 1 -s %(pathToSettingsFile)s" % locals(
         )
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_06_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall import ztf 1 -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
+    def test_07_cl(self):
+
+        pathToSettingsFile = settingsFile
         command = "marshall lightcurve 1 -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
