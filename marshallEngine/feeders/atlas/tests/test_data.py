@@ -48,6 +48,7 @@ try:
 except:
     pass
 
+
 class test_data(unittest.TestCase):
 
     def test_data_function(self):
@@ -64,7 +65,7 @@ class test_data(unittest.TestCase):
             url=settings["atlas urls"]["summary csv"]
         )
         ingester._clean_data_pre_ingest(
-            surveyName="ATLAS", withinLastDays=10)
+            surveyName="ATLAS", withinLastDays=1)
 
         # ADD DATA IMPORTING CODE HERE
         ingester._import_to_feeder_survey_table()
@@ -77,7 +78,7 @@ class test_data(unittest.TestCase):
             log=log,
             settings=settings,
             dbConn=dbConn
-        ).ingest(withinLastDays=10)
+        ).ingest(withinLastDays=1)
 
     def test_data_function_exception(self):
 

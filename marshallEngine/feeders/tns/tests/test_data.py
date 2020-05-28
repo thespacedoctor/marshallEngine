@@ -47,7 +47,7 @@ if not os.path.exists(pathToOutputDir):
             log=log,
             settings=settings,
             dbConn=dbConn
-        ).ingest()
+        ).ingest(withinLastDays=1)
 
     def test_data_function_exception(self):
 
