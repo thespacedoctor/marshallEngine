@@ -49,13 +49,13 @@ class test_cl_utils(unittest.TestCase):
 
     def test_cl(self):
 
-        utKit("").refresh_database()
+        # utKit("").refresh_database()
 
-        pathToSettingsFile = settingsFile
-        # TEST CL-OPTIONS
-        command = "marshallEngine init"
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # pathToSettingsFile = settingsFile
+        # # TEST CL-OPTIONS
+        # command = "marshallEngine init"
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
         # command = "marshallEngine clean -s %(pathToSettingsFile)s" % locals()
         # args = docopt(doc, command.split(" ")[1:])
