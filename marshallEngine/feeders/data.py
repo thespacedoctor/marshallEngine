@@ -101,7 +101,7 @@ class data(object):
             print('HTTP Request failed')
             sys.exit(0)
 
-        if status_code != 502:
+        if status_code == 502:
             print('HTTP Request failed - status %(status_code)s' % locals())
             print(url)
             self.csvDicts = []
