@@ -1,9 +1,9 @@
-utKit *(class)*
-====================================
+panstarrs_location_stamps *(class)*
+===========================================================
 
-.. currentmodule:: marshallEngine.utKit
+.. currentmodule:: marshallEngine.services
 
-.. autoclass:: utKit
+.. autoclass:: panstarrs_location_stamps
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,27 +19,9 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~panstarrs_location_stamps.get
        
    
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
-       
-   
-   .. 
-   ..     
-   .. 
-   ..     
-   .. 
-   ..     
    .. 
    ..     
    .. 

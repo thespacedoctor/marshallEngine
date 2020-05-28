@@ -1,9 +1,9 @@
-commonutils *(module)*
-=====================================
+panstarrs *(module)*
+===========================================
 
 
 
-.. automodule:: marshallEngine.commonutils
+.. automodule:: marshallEngine.feeders.panstarrs
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,8 +40,16 @@ commonutils *(module)*
     
     
         
-            ~getpackagepath (nice)
+            ~data (nice)
        
+    
+    
+        
+            ~images (nice)
+       
+    
+    
+        
     
     
     

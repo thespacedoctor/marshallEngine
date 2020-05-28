@@ -1,9 +1,9 @@
-commonutils *(module)*
+lightcurves *(module)*
 =====================================
 
 
 
-.. automodule:: marshallEngine.commonutils
+.. automodule:: marshallEngine.lightcurves
     :members:
     :undoc-members:
     :show-inheritance:
@@ -39,9 +39,13 @@ commonutils *(module)*
     
     
     
+    
         
-            ~getpackagepath (nice)
+            ~marshall_lightcurves (nice)
        
+    
+    
+        
     
     
     

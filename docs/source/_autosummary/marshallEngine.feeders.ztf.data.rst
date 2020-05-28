@@ -1,9 +1,9 @@
-utKit *(class)*
-====================================
+data *(class)*
+=========================================
 
-.. currentmodule:: marshallEngine.utKit
+.. currentmodule:: marshallEngine.feeders.ztf
 
-.. autoclass:: utKit
+.. autoclass:: data
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,15 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
+            ~data.get_csv_data
        
    
         
-            ~utKit.refresh_database
+            ~data.ingest
        
    
         
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~data.insert_into_transientBucket
        
    
    .. 
@@ -88,6 +84,20 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~data._feeder_survey_transientbucket_crossmatch
+   ..      
+   .. 
+   ..     
+   ..          ~data._feeder_survey_transientbucket_name_match_and_import
+   ..      
+   .. 
+   ..     
+   ..          ~data._import_to_feeder_survey_table
+   ..      
+   .. 
+   ..     
+   ..          ~data._import_unmatched_feeder_survey_sources_to_transientbucket
+   ..      
    .. 
    ..     
    .. 

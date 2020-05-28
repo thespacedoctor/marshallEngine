@@ -1,9 +1,9 @@
-commonutils *(module)*
-=====================================
+housekeeping *(module)*
+======================================
 
 
 
-.. automodule:: marshallEngine.commonutils
+.. automodule:: marshallEngine.housekeeping
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,7 +40,10 @@ commonutils *(module)*
     
     
         
-            ~getpackagepath (nice)
+    
+    
+        
+            ~update_transient_summaries (nice)
        
     
     

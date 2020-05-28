@@ -1,9 +1,9 @@
-utKit *(class)*
-====================================
+update_transient_summaries *(class)*
+================================================================
 
-.. currentmodule:: marshallEngine.utKit
+.. currentmodule:: marshallEngine.housekeeping
 
-.. autoclass:: utKit
+.. autoclass:: update_transient_summaries
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~update_transient_summaries.update
        
    
    .. 
@@ -88,10 +76,12 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~update_transient_summaries._add_distances
+   ..      
    .. 
    ..     
-   .. 
-   ..     
+   ..          ~update_transient_summaries._add_galactic_coords
+   ..      
    .. 
    ..     
    .. 

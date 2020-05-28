@@ -1,9 +1,9 @@
-utKit *(class)*
-====================================
+marshall_lightcurves *(class)*
+=========================================================
 
-.. currentmodule:: marshallEngine.utKit
+.. currentmodule:: marshallEngine.lightcurves
 
-.. autoclass:: utKit
+.. autoclass:: marshall_lightcurves
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~marshall_lightcurves.plot
        
    
    .. 
@@ -88,10 +76,12 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~marshall_lightcurves._create_lightcurve_plot_file
+   ..      
    .. 
    ..     
-   .. 
-   ..     
+   ..          ~marshall_lightcurves._select_data_for_transient
+   ..      
    .. 
    ..     
    .. 

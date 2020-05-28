@@ -1,9 +1,9 @@
-utKit *(class)*
-====================================
+images *(class)*
+=============================================
 
-.. currentmodule:: marshallEngine.utKit
+.. currentmodule:: marshallEngine.feeders.atlas
 
-.. autoclass:: utKit
+.. autoclass:: images
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,19 +19,7 @@ utKit *(class)*
         
    
         
-            ~utKit.get_project_root
-       
-   
-        
-            ~utKit.refresh_database
-       
-   
-        
-            ~utKit.setupModule
-       
-   
-        
-            ~utKit.tearDownModule
+            ~images.cache
        
    
    .. 
@@ -88,10 +76,16 @@ utKit *(class)*
    ..     
    .. 
    ..     
+   ..          ~images._download
+   ..      
    .. 
    ..     
+   ..          ~images._list_images_needing_cached
+   ..      
    .. 
    ..     
+   ..          ~images._update_database
+   ..      
    .. 
    ..     
    .. 

@@ -1,9 +1,9 @@
-commonutils *(module)*
-=====================================
+services *(module)*
+==================================
 
 
 
-.. automodule:: marshallEngine.commonutils
+.. automodule:: marshallEngine.services
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,8 +40,11 @@ commonutils *(module)*
     
     
         
-            ~getpackagepath (nice)
+            ~panstarrs_location_stamps (nice)
        
+    
+    
+        
     
     
     

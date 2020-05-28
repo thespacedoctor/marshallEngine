@@ -1,9 +1,9 @@
-commonutils *(module)*
-=====================================
+atlas *(module)*
+=======================================
 
 
 
-.. automodule:: marshallEngine.commonutils
+.. automodule:: marshallEngine.feeders.atlas
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,8 +40,21 @@ commonutils *(module)*
     
     
         
-            ~getpackagepath (nice)
+            ~data (nice)
        
+    
+    
+        
+            ~images (nice)
+       
+    
+    
+        
+            ~lightcurve (nice)
+       
+    
+    
+        
     
     
     
