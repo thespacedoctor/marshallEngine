@@ -39,5 +39,4 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
 # TESTS OF THIS SUPERCLASS GET DOWN VIA ITS SUBCLASSES

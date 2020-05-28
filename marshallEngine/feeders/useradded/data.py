@@ -5,12 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    July 30, 2019
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -20,30 +16,32 @@ from astrocalc.times import now
 from fundamentals.mysql import readquery
 from marshallEngine.housekeeping import update_transient_summaries
 
-
 class data(basedata):
     """
     *Import the useradded transient data into the marshall database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``dbConn`` -- the marshall database connection
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``dbConn`` -- the marshall database connection
+    - ``settings`` -- the settings dictionary
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a data object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a data object, use the following:
 
-            from marshallEngine.feeders.useradded.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)   
+    ```python
+    from marshallEngine.feeders.useradded.data import data
+    ingester = data(
+        log=log,
+        settings=settings,
+        dbConn=dbConn
+    ).ingest(withinLastDays=withInLastDay)   
+    ```
+    
     """
     # Initialisation
 
@@ -70,8 +68,10 @@ class data(basedata):
             withinLastDays):
         """*Ingest the data into the marshall feeder survey table*
 
-        **Key Arguments:**
-            - ``withinLastDays`` -- within the last number of days. *Default: 50*
+        **Key Arguments**
+
+        - ``withinLastDays`` -- within the last number of days. *Default: 50*
+        
         """
         self.log.info('starting the ``ingest`` method')
 
@@ -125,22 +125,27 @@ class data(basedata):
             withinLastDays=False):
         """*clean up the list of dictionaries containing the useradded data, pre-ingest*
 
-        **Key Arguments:**
-            - ``surveyName`` -- the useradded survey name
-            -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
+        **Key Arguments**
 
-        **Return:**
-            - ``dictList`` -- the cleaned list of dictionaries ready for ingest
+        - ``surveyName`` -- the useradded survey name
+        -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
+        
 
-        **Usage:**
+        **Return**
 
-            To clean the data from the useradded survey:
+        - ``dictList`` -- the cleaned list of dictionaries ready for ingest
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                dictList = ingesters._clean_data_pre_ingest(surveyName="useradded")
+        To clean the data from the useradded survey:
 
-            Note you will also be able to access the data via ``ingester.dictList``
+        ```python
+        dictList = ingesters._clean_data_pre_ingest(surveyName="useradded")
+        ```
+
+        Note you will also be able to access the data via ``ingester.dictList``
+        
         """
         self.log.info('starting the ``_clean_data_pre_ingest`` method')
 

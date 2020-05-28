@@ -39,7 +39,6 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
 class test_lightcurve(unittest.TestCase):
 
     def test_lightcurve_function(self):

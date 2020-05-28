@@ -39,7 +39,6 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
 class test_update_transient_summaries(unittest.TestCase):
 
     def test_update_transient_summaries_function(self):

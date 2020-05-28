@@ -5,12 +5,12 @@
 
 :Author:
     David Young
-
-:Date Created:
-    June 28, 2019
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
+from builtins import str
+from builtins import zip
+from builtins import range
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -31,33 +31,35 @@ import matplotlib.ticker as mtick
 from matplotlib.backends.backend_pdf import PdfPages
 import math
 
-
-class marshall_lightcurves():
+class marshall_lightcurves(object):
     """
     *The worker class for the marshall_lightcurves module*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``dbConn`` -- the database connection for the mrshall
-        - ``transientBucketIds`` -- the transientBucketId(s) requiring lightcurves to be regenerated. (int or list)
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``dbConn`` -- the database connection for the mrshall
+    - ``transientBucketIds`` -- the transientBucketId(s) requiring lightcurves to be regenerated. (int or list)
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a marshall_lightcurves object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a marshall_lightcurves object, use the following:
 
-            from marshallEngine.lightcurves import marshall_lightcurves
-            lc = marshall_lightcurves(
-                log=log,
-                dbConn=dbConn,
-                settings=settings,
-                transientBucketIds=[28421489, 28121353, 4637952, 27409808]
-            )
-            lc.plot() 
+    ```python
+    from marshallEngine.lightcurves import marshall_lightcurves
+    lc = marshall_lightcurves(
+        log=log,
+        dbConn=dbConn,
+        settings=settings,
+        transientBucketIds=[28421489, 28121353, 4637952, 27409808]
+    )
+    lc.plot() 
+    ```
+    
     """
 
     def __init__(
@@ -85,8 +87,10 @@ class marshall_lightcurves():
             transientBucketId):
         """*get the transient lightcurve data from the marshall database*
 
-        **Key Arguments:**
-            - ``transientBucketId`` -- the transientBucketId of source to get data for
+        **Key Arguments**
+
+        - ``transientBucketId`` -- the transientBucketId of source to get data for
+        
         """
         self.log.debug('starting the ``_select_data_for_transient`` method')
 
@@ -180,7 +184,7 @@ class marshall_lightcurves():
                         limitCatcher[r["limitConstraint"]] = [
                             r["magnitude"], r["observationMJD"]]
 
-            for k, v in limitCatcher.items():
+            for k, v in list(limitCatcher.items()):
                 limit.append(v[0])
                 limitMjd.append(v[1])
                 flatLimits["mag"].append(v[0])
@@ -213,19 +217,23 @@ class marshall_lightcurves():
             saveFileName):
         """*Generate the lightcurve and save to file*
 
-        **Key Arguments:**
-            - ``log`` -- logger
-            - ``dataset`` -- the observational dataset split into filters (and then mags, limits etc)
-            - ``flatdata`` -- a flattened dataset to determine current magnitude
-            - ``flatLimits`` -- a flattened dataset of non-detection limits
-            - ``objectNames`` -- a single name or a list of names
-            - ``saveLocation`` -- the folder to save the plot file to
-            - ``saveFileName`` -- the filename to give the plot file (without extension)
+        **Key Arguments**
 
-        **Return:**
-            - ``filepath`` -- path to the lightcurve file
-            - ``currentMag`` -- a prediction of the current magnitude if there is enough recent data
-            - ``gradient`` -- a prediction of the gradient of recent data (on rise or decline?)
+        - ``log`` -- logger
+        - ``dataset`` -- the observational dataset split into filters (and then mags, limits etc)
+        - ``flatdata`` -- a flattened dataset to determine current magnitude
+        - ``flatLimits`` -- a flattened dataset of non-detection limits
+        - ``objectNames`` -- a single name or a list of names
+        - ``saveLocation`` -- the folder to save the plot file to
+        - ``saveFileName`` -- the filename to give the plot file (without extension)
+        
+
+        **Return**
+
+        - ``filepath`` -- path to the lightcurve file
+        - ``currentMag`` -- a prediction of the current magnitude if there is enough recent data
+        - ``gradient`` -- a prediction of the gradient of recent data (on rise or decline?)
+        
         """
         self.log.debug('starting the ``_create_lightcurve_plot_file`` method')
 
@@ -434,7 +442,7 @@ class marshall_lightcurves():
         i = 0
         handles = []
         handlesAdded = []
-        for k, v in dataset.items():
+        for k, v in list(dataset.items()):
             mag = v["mag"]
             magErr = v["magErr"]
             magMjd = v["magMjd"]
@@ -541,21 +549,24 @@ class marshall_lightcurves():
             self):
         """*generate a batch of lightcurves using multiprocessing given their transientBucketIds*
 
-        **Return:**
-            - ``filepath`` -- path to the last generated plot file
+        **Return**
 
-        **Usage:**
+        - ``filepath`` -- path to the last generated plot file
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                from marshallEngine.lightcurves import marshall_lightcurves
-                lc = marshall_lightcurves(
-                    log=log,
-                    dbConn=dbConn,
-                    settings=settings,
-                    transientBucketIds=[28421489, 28121353, 4637952, 27409808]
-                )
-                lc.plot()
+        ```python
+        from marshallEngine.lightcurves import marshall_lightcurves
+        lc = marshall_lightcurves(
+            log=log,
+            dbConn=dbConn,
+            settings=settings,
+            transientBucketIds=[28421489, 28121353, 4637952, 27409808]
+        )
+        lc.plot()
+        ```
+        
         """
         self.log.debug('starting the ``plot`` method')
 
@@ -602,22 +613,25 @@ class marshall_lightcurves():
 
         return filepath
 
-
 def _plot_one(
         transientBucketId,
         log,
         settings):
     """*plot a single transeint lightcurve*
 
-    **Key Arguments:**
-        - ``transientBucketId`` -- the id of the single transient to plot.
-        - ``settings`` -- dictionary of settings
-        - ``dbConn`` -- marshall database connection
+    **Key Arguments**
 
-    **Return:**
-        - ``filepath`` -- path to the plot file
-        - ``currentMag`` -- an estimate of the current magnitude (from slope of recent LC). -9999 if inaccurate.
-        - ``gradient`` -- gradient of slope of the recent LC. -9999 if inaccurate.
+    - ``transientBucketId`` -- the id of the single transient to plot.
+    - ``settings`` -- dictionary of settings
+    - ``dbConn`` -- marshall database connection
+    
+
+    **Return**
+
+    - ``filepath`` -- path to the plot file
+    - ``currentMag`` -- an estimate of the current magnitude (from slope of recent LC). -9999 if inaccurate.
+    - ``gradient`` -- gradient of slope of the recent LC. -9999 if inaccurate.
+    
     """
     log.debug('starting the ``_plot_one`` method')
 

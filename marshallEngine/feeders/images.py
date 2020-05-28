@@ -5,12 +5,13 @@
 
 :Author:
     David Young
-
-:Date Created:
-    June 26, 2019
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
+from __future__ import division
+from builtins import str
+from builtins import zip
+from builtins import object
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -22,20 +23,20 @@ import codecs
 from fundamentals import fmultiprocess
 from fundamentals.mysql import writequery
 
-
-class images():
+class images(object):
     """
     *The base class for the feeder image cachers*
 
-    **Usage:**
+    **Usage**
 
-        To create a new survey image cacher create a new class using this class as the baseclass:
+    To create a new survey image cacher create a new class using this class as the baseclass:
 
-        .. code-block:: python 
-
-            from ..images import images as baseimages
-            class images(baseimages):
-                ....
+    ```python
+    from ..images import images as baseimages
+    class images(baseimages):
+        ....
+    ```
+    
     """
 
     def cache(
@@ -43,19 +44,22 @@ class images():
             limit=1000):
         """*cache the image for the requested survey*
 
-        **Key Arguments:**
-            - ``limit`` -- limit the number of transients in the list so not to piss-off survey owners by downloading everything in one go.
+        **Key Arguments**
 
-        **Usage:**
+        - ``limit`` -- limit the number of transients in the list so not to piss-off survey owners by downloading everything in one go.
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                from marshallEngine.feeders.panstarrs import images
-                cacher = images(
-                    log=log,
-                    settings=settings,
-                    dbConn=dbConn
-                ).cache(limit=1000)
+        ```python
+        from marshallEngine.feeders.panstarrs import images
+        cacher = images(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).cache(limit=1000)
+        ```
+        
         """
         self.log.debug('starting the ``cache`` method')
 
@@ -111,16 +115,20 @@ class images():
             failedImage=False):
         """*get lists of the transientBucketIds and images needing cached for those transients*
 
-        **Key Arguments:**
-            - ``failedImage`` -- second pass attempt to download alternative image for transients
+        **Key Arguments**
 
-        **Return:**
-            - ``transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls`` -- synced lists of transientBucketIds, subtracted-, target-, reference- and triplet-image urls. All lists are the same size.
+        - ``failedImage`` -- second pass attempt to download alternative image for transients
+        
+
+        **Return**
+
+        - ``transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls`` -- synced lists of transientBucketIds, subtracted-, target-, reference- and triplet-image urls. All lists are the same size.
+        
         """
         self.log.debug('starting the ``_list_images_needing_cached`` method')
 
         subtractedUrls, targetUrls, referenceUrls, tripletUrls = [], [], [], []
-        for imageType, v in self.stampFlagColumns.items():
+        for imageType, v in list(self.stampFlagColumns.items()):
             if not v:
                 continue
             imageUrl = imageType + "ImageUrl"
@@ -215,7 +223,7 @@ class images():
                 if imageType == "triplet":
                     tripletUrls.append(row["tripletImageUrl"])
 
-        for imageType, v in self.stampFlagColumns.items():
+        for imageType, v in list(self.stampFlagColumns.items()):
             if not v:
                 if imageType == "subtracted":
                     subtractedUrls = [None] * len(transientBucketIds)
@@ -239,18 +247,22 @@ class images():
             tripletUrls):
         """*cache the images for the survey under their transientBucketId folders in the web-server cache*
 
-        **Key Arguments:**
-            - ``transientBucketIds`` -- the list of transientBucketId for the transients needing images downloaded.
-            - ``subtractedUrls`` -- the list of subtracted image urls (same length as transientBucketIds list).
-            - ``targetUrls`` -- the list of target image urls (same length as transientBucketIds list).
-            - ``referenceUrls`` -- the list of reference image urls (same length as transientBucketIds list).
-            - ``tripletUrls`` -- the list of triplet image urls (same length as transientBucketIds list).
+        **Key Arguments**
 
-        **Return:**
-            - ``subtractedStatus`` -- status of the subtracted image download (0 = fail, 1 = success, 2 = does not exist)
-            - ``targetStatus`` -- status of the target image download (0 = fail, 1 = success, 2 = does not exist)
-            - ``referenceStatus`` -- status of the reference image download (0 = fail, 1 = success, 2 = does not exist)
-            - ``tripletStatus`` -- status of the triplet image download (0 = fail, 1 = success, 2 = does not exist)
+        - ``transientBucketIds`` -- the list of transientBucketId for the transients needing images downloaded.
+        - ``subtractedUrls`` -- the list of subtracted image urls (same length as transientBucketIds list).
+        - ``targetUrls`` -- the list of target image urls (same length as transientBucketIds list).
+        - ``referenceUrls`` -- the list of reference image urls (same length as transientBucketIds list).
+        - ``tripletUrls`` -- the list of triplet image urls (same length as transientBucketIds list).
+        
+
+        **Return**
+
+        - ``subtractedStatus`` -- status of the subtracted image download (0 = fail, 1 = success, 2 = does not exist)
+        - ``targetStatus`` -- status of the target image download (0 = fail, 1 = success, 2 = does not exist)
+        - ``referenceStatus`` -- status of the reference image download (0 = fail, 1 = success, 2 = does not exist)
+        - ``tripletStatus`` -- status of the triplet image download (0 = fail, 1 = success, 2 = does not exist)
+        
         """
         self.log.debug('starting the ``_download`` method')
 
@@ -272,7 +284,7 @@ class images():
                 # Cursor up one line and clear line
                 sys.stdout.write("\x1b[1A\x1b[2K")
 
-            percent = (float(index) / float(count)) * 100.
+            percent = (old_div(float(index), float(count))) * 100.
             print('%(index)s/%(count)s (%(percent)1.1f%% done): downloading %(survey)s stamps for transientBucketId: %(tid)s' % locals())
 
             statusArray = download_image_array(imageArray=[
@@ -297,7 +309,7 @@ class images():
             return None
 
         # ITERATE OVER 4 STAMP COLUMNS
-        for imageType, column in self.stampFlagColumns.items():
+        for imageType, column in list(self.stampFlagColumns.items()):
             if column:
                 if imageType == "subtracted":
                     status = self.subtractedStatus
@@ -347,7 +359,6 @@ class images():
     # use the tab-trigger below for new method
     # xt-class-method
 
-
 def download_image_array(
         imageArray,
         log,
@@ -355,14 +366,18 @@ def download_image_array(
         downloadPath):
     """*download an array of transient image stamps*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``imageArray`` -- [transientBucketId, subtractedUrl, targetUrl, referenceUrl, tripletUrl]
-        - ``survey`` -- name of the survey to name stamps with
-        - ``downloadPath`` -- directory to download the images into
+    **Key Arguments**
 
-    **Return:**
-        - statusArray -- [subtractedStatus, targetStatus, referenceStatus, tripletStatus]
+    - ``log`` -- logger
+    - ``imageArray`` -- [transientBucketId, subtractedUrl, targetUrl, referenceUrl, tripletUrl]
+    - ``survey`` -- name of the survey to name stamps with
+    - ``downloadPath`` -- directory to download the images into
+    
+
+    **Return**
+
+    - statusArray -- [subtractedStatus, targetStatus, referenceStatus, tripletStatus]
+    
     """
     tid = imageArray[0]
     statusArray = [imageArray[0]]

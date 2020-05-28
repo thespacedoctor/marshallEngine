@@ -5,11 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    August 18, 2019
 """
-################# GLOBAL IMPORTS ####################
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -18,32 +15,34 @@ from fundamentals.mysql import readquery, writequery
 from panstamps.downloader import downloader
 from panstamps.image import image
 
-
-class panstarrs_location_stamps():
+class panstarrs_location_stamps(object):
     """
     *The worker class for the panstarrs_location_stamps module*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``dbConn`` -- dbConn
-        - ``transientId`` -- will download for one transient if single ID given. Default *None*
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``dbConn`` -- dbConn
+    - ``transientId`` -- will download for one transient if single ID given. Default *None*
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a panstarrs_location_stamps object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a panstarrs_location_stamps object, use the following:
 
-            from marshallEngine.services import panstarrs_location_stamps
-            ps_stamp = panstarrs_location_stamps(
-                log=log,
-                settings=settings,
-                dbConn=dbConn,
-                transientId=None
-            ).get()
+    ```python
+    from marshallEngine.services import panstarrs_location_stamps
+    ps_stamp = panstarrs_location_stamps(
+        log=log,
+        settings=settings,
+        dbConn=dbConn,
+        transientId=None
+    ).get()
+    ```
+    
     """
 
     def __init__(
@@ -126,10 +125,10 @@ class panstarrs_location_stamps():
 
             source = colorPath[0]
             destination = downloadPath + "/ps1_map_color.jpeg"
-	    try:
-            	os.rename(source, destination)
+            try:
+                os.rename(source, destination)
 
-            	# DOWNLOAD THE COLOR IMAGE
+                # DOWNLOAD THE COLOR IMAGE
                 myimage = image(
                     log=self.log,
                     settings=self.settings,
@@ -153,8 +152,8 @@ class panstarrs_location_stamps():
                     dbConn=self.dbConn
                 )
             except:
-                self.log.warning("Could not process the image %(destination)s" % locals())
-
+                self.log.warning(
+                    "Could not process the image %(destination)s" % locals())
 
         self.log.debug('completed the ``get`` method')
         return None

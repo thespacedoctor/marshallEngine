@@ -5,11 +5,8 @@
 
 :Author:
     David Young
-
-:Date Created:
-    August 30, 2019
 """
-################# GLOBAL IMPORTS ####################
+from builtins import zip
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -19,30 +16,32 @@ from astrocalc.times import now
 from transientNamer import search
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 
-
 class data(basedata):
     """
     *Import the tns transient data into the marshall database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``dbConn`` -- the marshall database connection
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``dbConn`` -- the marshall database connection
+    - ``settings`` -- the settings dictionary
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a data object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a data object, use the following:
 
-            from marshallEngine.feeders.tns.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest()   
+    ```python
+    from marshallEngine.feeders.tns.data import data
+    ingester = data(
+        log=log,
+        settings=settings,
+        dbConn=dbConn
+    ).ingest()   
+    ```
+    
     """
 
     def __init__(
@@ -67,8 +66,10 @@ class data(basedata):
             withinLastDays=False):
         """*Ingest the data into the marshall feeder survey table*
 
-        **Key Arguments:**
-            - ``withinLastDays`` -- note this will be handle by the transientNamer import to the database
+        **Key Arguments**
+
+        - ``withinLastDays`` -- note this will be handle by the transientNamer import to the database
+        
         """
         self.log.debug('starting the ``ingest`` method')
 

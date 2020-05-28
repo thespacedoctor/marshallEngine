@@ -5,12 +5,11 @@
 
 :Author:
     David Young
-
-:Date Created:
-    June 24, 2019
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
+from builtins import zip
+from builtins import str
+from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -22,35 +21,37 @@ from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from astrocalc.distances import converter
 import numpy as np
 
-
-class update_transient_summaries():
+class update_transient_summaries(object):
     """
     *Update the transient summaries table in the marshall database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``dbConn`` -- the marshall database connection
-        - ``transientBucketId`` -- a single transientBucketId to update transientBucketId. Default *False* (i.e. update all)
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``dbConn`` -- the marshall database connection
+    - ``transientBucketId`` -- a single transientBucketId to update transientBucketId. Default *False* (i.e. update all)
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a update_transient_summaries object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. todo::
+    To initiate a update_transient_summaries object, use the following:
 
-            - add a tutorial about ``update_transient_summaries`` to documentation
+    .. todo::
 
-        .. code-block:: python 
+        - add a tutorial about ``update_transient_summaries`` to documentation
 
-            from marshallEngine.housekeeping import update_transient_summaries
-            updater = update_transient_summaries(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).update()  
+    ```python
+    from marshallEngine.housekeeping import update_transient_summaries
+    updater = update_transient_summaries(
+        log=log,
+        settings=settings,
+        dbConn=dbConn
+    ).update()  
+    ```
+    
     """
     # Initialisation
 
@@ -105,19 +106,23 @@ class update_transient_summaries():
         """
         *Update the transient summaries table in the marshall database*
 
-        **Return:**
-            - ``update_transient_summaries``
+        **Return**
 
-        **Usage:**
+        - ``update_transient_summaries``
+        
 
-        .. code-block:: python 
+        **Usage**
 
-            from marshallEngine.housekeeping import update_transient_summaries
-            updater = update_transient_summaries(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).update()
+        
+
+        ```python
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        ).update()
+        ```
         """
         self.log.debug('starting the ``get`` method')
 
@@ -154,17 +159,18 @@ class update_transient_summaries():
             self):
         """*add galactic coordinates to the summary table*
 
-        **Usage:**
+        **Usage**
 
-            .. code-block:: python 
-
-                from marshallEngine.housekeeping import update_transient_summaries
-                updater = update_transient_summaries(
-                    log=log,
-                    settings=settings,
-                    dbConn=dbConn
-                )
-                updater._add_galactic_coords()
+        ```python
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        )
+        updater._add_galactic_coords()
+        ```
+        
         """
         self.log.debug('starting the ``_add_galactic_coords`` method')
 
@@ -240,17 +246,18 @@ class update_transient_summaries():
             self):
         """*Add a distance measurement from the best redshift if the transient does not already have a distance measurement*
 
-        **Usage:**
+        **Usage**
 
-            .. code-block:: python 
-
-                from marshallEngine.housekeeping import update_transient_summaries
-                updater = update_transient_summaries(
-                    log=log,
-                    settings=settings,
-                    dbConn=dbConn
-                )
-                updater._add_distances()
+        ```python
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        )
+        updater._add_distances()
+        ```
+        
         """
         self.log.debug('starting the ``_add_distances`` method')
 

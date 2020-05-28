@@ -39,7 +39,6 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
 class test_data(unittest.TestCase):
 
     def test_data_function(self):

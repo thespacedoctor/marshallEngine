@@ -39,9 +39,14 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
 utKit("").refresh_database()
 
+import shutil
+try:
+    shutil.rmtree(settings["downloads"]["transient cache directory"])
+    shutil.rmtree(settings["stats cache directory"])
+except:
+    pass
 
 class test_data(unittest.TestCase):
 

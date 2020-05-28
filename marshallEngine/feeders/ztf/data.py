@@ -5,11 +5,7 @@
 
 :Author:
     David Young
-
-:Date Created:
-    August 19, 2019
 """
-################# GLOBAL IMPORTS ####################
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -18,30 +14,32 @@ from ..data import data as basedata
 from astrocalc.times import now
 from fundamentals.mysql import writequery
 
-
 class data(basedata):
     """
     *Import the ZTF transient data into the marshall database*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``dbConn`` -- the marshall database connection
-        - ``settings`` -- the settings dictionary
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``dbConn`` -- the marshall database connection
+    - ``settings`` -- the settings dictionary
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a data object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a data object, use the following:
 
-            from marshallEngine.feeders.ztf.data import data
-            ingester = data(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).ingest(withinLastDays=withInLastDay)   
+    ```python
+    from marshallEngine.feeders.ztf.data import data
+    ingester = data(
+        log=log,
+        settings=settings,
+        dbConn=dbConn
+    ).ingest(withinLastDays=withInLastDay)   
+    ```
+    
     """
     # Initialisation
 
@@ -68,8 +66,10 @@ class data(basedata):
             withinLastDays):
         """*Ingest the data into the marshall feeder survey table*
 
-        **Key Arguments:**
-            - ``withinLastDays`` -- within the last number of days. *Default: 50*
+        **Key Arguments**
+
+        - ``withinLastDays`` -- within the last number of days. *Default: 50*
+        
         """
         self.log.debug('starting the ``ingest`` method')
 

@@ -5,11 +5,7 @@
 
 :Author:
     David Young
-
-:Date Created:
-    August 30, 2019
 """
-################# GLOBAL IMPORTS ####################
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -22,30 +18,32 @@ from fundamentals import fmultiprocess
 from fundamentals.mysql import writequery
 from ..images import images as baseimages
 
-
 class images(baseimages):
     """
     *cacher for the tns image stamps*
 
-    **Key Arguments:**
-        - ``log`` -- logger
-        - ``settings`` -- the settings dictionary
-        - ``dbConn`` -- the marshall database connection.
+    **Key Arguments**
 
-    **Usage:**
+    - ``log`` -- logger
+    - ``settings`` -- the settings dictionary
+    - ``dbConn`` -- the marshall database connection.
+    
 
-        To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    **Usage**
 
-        To initiate a images object, use the following:
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
 
-        .. code-block:: python 
+    To initiate a images object, use the following:
 
-            from marshallEngine.feeders.tns import images
-            cacher = images(
-                log=log,
-                settings=settings,
-                dbConn=dbConn
-            ).cache(limit=1000)  
+    ```python
+    from marshallEngine.feeders.tns import images
+    cacher = images(
+        log=log,
+        settings=settings,
+        dbConn=dbConn
+    ).cache(limit=1000)  
+    ```
+    
     """
 
     def __init__(

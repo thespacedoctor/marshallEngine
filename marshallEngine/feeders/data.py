@@ -5,12 +5,14 @@
 
 :Author:
     David Young
-
-:Date Created:
-    June  6, 2019
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
+from __future__ import division
+from builtins import zip
+from builtins import str
+from builtins import range
+from builtins import object
+from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
@@ -20,24 +22,24 @@ from requests.auth import HTTPBasicAuth
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
 from fundamentals import tools
 
-
-class data():
+class data(object):
     """
     *This baseclass for the feeder survey data imports*
 
-    **Usage:**
+    **Usage**
 
-        .. todo::
+    .. todo::
 
-            - create a frankenstein template for importer
+        - create a frankenstein template for importer
 
-        To create a new survey data ingester create a new class using this class as the baseclass:
+    To create a new survey data ingester create a new class using this class as the baseclass:
 
-        .. code-block:: python 
-
-            from ..data import data as basedata
-            class data(basedata):
-                ....
+    ```python
+    from ..data import data as basedata
+    class data(basedata):
+        ....
+    ```
+    
     """
 
     def get_csv_data(
@@ -47,33 +49,38 @@ class data():
             pwd=False):
         """*collect the CSV data from a URL with option to supply basic auth credentials*
 
-        **Key Arguments:**
-            - ``url`` -- the url to the csv file
-            - ``user`` -- basic auth username
-            - ``pwd`` -- basic auth password
+        **Key Arguments**
 
-        **Return:**
-            - ``csvData`` -- a list of dictionaries from the csv file
+        - ``url`` -- the url to the csv file
+        - ``user`` -- basic auth username
+        - ``pwd`` -- basic auth password
+        
 
-        **Usage:**
+        **Return**
 
-            To get the CSV data for a suvery from a given URL in the marshall settings file run something similar to:
+        - ``csvData`` -- a list of dictionaries from the csv file
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                from marshallEngine.feeders.panstarrs.data import data
-                ingester = data(
-                    log=log,
-                    settings=settings,
-                    dbConn=dbConn
-                )
-                csvDicts = ingester.get_csv_data(
-                    url=settings["panstarrs urls"]["3pi"]["summary csv"],
-                    user=settings["credentials"]["ps1-3pi"]["username"],
-                    pwd=settings["credentials"]["ps1-3pi"]["password"]
-                )
+        To get the CSV data for a suvery from a given URL in the marshall settings file run something similar to:
 
-            Note you will also be able to access the data via ``ingester.csvDicts`` 
+        ```python
+        from marshallEngine.feeders.panstarrs.data import data
+        ingester = data(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        )
+        csvDicts = ingester.get_csv_data(
+            url=settings["panstarrs urls"]["3pi"]["summary csv"],
+            user=settings["credentials"]["ps1-3pi"]["username"],
+            pwd=settings["credentials"]["ps1-3pi"]["password"]
+        )
+        ```
+
+        Note you will also be able to access the data via ``ingester.csvDicts`` 
+        
         """
         self.log.debug('starting the ``get_csv_data`` method')
 
@@ -99,7 +106,7 @@ class data():
 
         # CONVERT THE RESPONSE TO CSV LIST OF DICTIONARIES
         self.csvDicts = csv.DictReader(
-            response.iter_lines(), dialect='excel', delimiter='|', quotechar='"')
+            response.iter_lines(decode_unicode='utf-8'), dialect='excel', delimiter='|', quotechar='"')
 
         self.log.debug('completed the ``get_csv_data`` method')
         return self.csvDicts
@@ -108,14 +115,17 @@ class data():
             self):
         """*import the list of dictionaries (self.dictList) into the marshall feeder survey table*
 
-        **Return:**
-            - None
+        **Return**
 
-        **Usage:**
+        - None
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                self._import_to_feeder_survey_table()
+        ```python
+        self._import_to_feeder_survey_table()
+        ```
+        
         """
         self.log.debug(
             'starting the ``_import_to_feeder_survey_table`` method')
@@ -146,9 +156,11 @@ class data():
             updateTransientSummaries=True):
         """*insert objects/detections from the feeder survey table into the transientbucket*
 
-        **Key Arguments:**
-            - ``importUnmatched`` -- import unmatched (new) transients into the marshall (not wanted in some circumstances)
-            - ``updateTransientSummaries`` -- update the transient summaries and lightcurves? Can be True or False, or alternatively a specific transientBucketId
+        **Key Arguments**
+
+        - ``importUnmatched`` -- import unmatched (new) transients into the marshall (not wanted in some circumstances)
+        - ``updateTransientSummaries`` -- update the transient summaries and lightcurves? Can be True or False, or alternatively a specific transientBucketId
+        
 
         This method aims to reduce crossmatching and load on the database by:
 
@@ -156,14 +168,17 @@ class data():
         2. crossmatch remaining unique, unmatched sources in feeder survey with sources in the transientbucket. Add associated transientBucketIds to matched feeder survey sources. Copy matched feeder survey rows to the transientbucket.
         3. assign a new transientbucketid to any feeder survey source not matched in steps 1 & 2. Copy these unmatched feeder survey rows to the transientbucket as new transient detections.
 
-        **Return:**
-            - None
+        **Return**
 
-        **Usage:**
+        - None
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                ingester.insert_into_transientBucket()
+        ```python
+        ingester.insert_into_transientBucket()
+        ```
+        
         """
         self.log.debug(
             'starting the ``crossmatch_with_transientBucket`` method')
@@ -230,14 +245,17 @@ class data():
             self):
         """*automatically assign the transientbucket id to feeder survey detections where the object name is found in the transientbukcet (no spatial crossmatch required). Copy feeder survey rows to the transientbucket.*
 
-        **Return:**
-            - None
+        **Return**
 
-        **Usage:**
+        - None
+        
 
-            .. code-block:: python 
+        **Usage**
 
-                self._feeder_survey_transientbucket_name_match_and_import()
+        ```python
+        self._feeder_survey_transientbucket_name_match_and_import()
+        ```
+        
         """
         self.log.debug(
             'starting the ``_feeder_survey_transientbucket_name_match_and_import`` method')
@@ -263,8 +281,10 @@ class data():
             self):
         """*crossmatch remaining unique, unmatched sources in feeder survey with sources in the transientbucket & copy matched feeder survey rows to the transientbucket*
 
-        **Return:**
-            - ``unmatched`` -- a list of the unmatched (i.e. new to the marshall) feeder survey surveys
+        **Return**
+
+        - ``unmatched`` -- a list of the unmatched (i.e. new to the marshall) feeder survey surveys
+        
         """
         self.log.debug(
             'starting the ``_feeder_survey_transientbucket_crossmatch`` method')
@@ -314,7 +334,7 @@ class data():
         # SPLIT INTO BATCHES SO NOT TO OVERWHELM MEMORY
         batchSize = 200
         total = len(rows[1:])
-        batches = int(total / batchSize)
+        batches = int(old_div(total, batchSize))
         start = 0
         end = 0
         theseBatches = []
@@ -391,8 +411,10 @@ class data():
             unmatched):
         """*assign a new transientbucketid to any feeder survey source not yet matched in steps. Copy these unmatched feeder survey rows to the transientbucket as new transient detections.*
 
-        **Key Arguments:**
-            - ``unmatched`` -- the remaining unmatched feeder survey object names.
+        **Key Arguments**
+
+        - ``unmatched`` -- the remaining unmatched feeder survey object names.
+        
         """
         self.log.debug(
             'starting the ``_import_unmatched_feeder_survey_sources_to_transientbucket`` method')

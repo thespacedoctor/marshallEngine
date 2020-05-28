@@ -39,20 +39,18 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
-
-from fundamentals.mysql import writequery
-sqlQuery = """update pesstoObjects set ps1_map = 1;
-update pesstoObjects set ps1_map = null limit 10;""" % locals()
-writequery(
-    log=log,
-    sqlQuery=sqlQuery,
-    dbConn=dbConn,
-)
-
-
 class test_panstarrs_location_stamps(unittest.TestCase):
 
     def test_panstarrs_location_stamps_function(self):
+
+        from fundamentals.mysql import writequery
+        sqlQuery = """update pesstoObjects set ps1_map = 1;
+        update pesstoObjects set ps1_map = null limit 10;""" % locals()
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn,
+        )
 
         from marshallEngine.services import panstarrs_location_stamps
         ps_stamp = panstarrs_location_stamps(

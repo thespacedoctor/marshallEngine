@@ -5,12 +5,12 @@
 
 :Author:
     David Young
-
-:Date Created:
-    September  9, 2016
 """
 from __future__ import print_function
-################# GLOBAL IMPORTS ####################
+from __future__ import division
+from builtins import zip
+from builtins import str
+from past.utils import old_div
 import sys
 import os
 # SUPPRESS MATPLOTLIB WARNINGS
@@ -26,31 +26,35 @@ from fundamentals import tools
 from fundamentals.mysql import readquery, writequery
 from datetime import datetime
 
-
 def create_lc(
         log,
         cacheDirectory,
         epochs):
     """*create the atlas lc for one transient*
 
-    **Key Arguments:**
-        - ``cacheDirectory`` -- the directory to add the lightcurve to
-        - ``log`` -- logger
-        - ``epochs`` -- dictionary of lightcurve data-points
+    **Key Arguments**
 
+    - ``cacheDirectory`` -- the directory to add the lightcurve to
+    - ``log`` -- logger
+    - ``epochs`` -- dictionary of lightcurve data-points
+    
 
-    **Return:**
-        - None
+    **Return**
 
-    **Usage:**
-        .. todo::
+    - None
+    
 
-            add usage info
-            create a sublime snippet for usage
+    **Usage**
 
-        .. code-block:: python
+    .. todo::
 
-            usage code
+        add usage info
+        create a sublime snippet for usage
+
+    ```python
+    usage code
+    ```
+    
     """
     log.debug('starting the ``create_lc`` function')
 
@@ -100,7 +104,7 @@ def create_lc(
             magnitudes[epoch["filter"]]["mags"].append(epoch["fnu"])
             magnitudes[epoch["filter"]]["magErrs"].append(epoch["fnu_error"])
 
-    for fil, d in magnitudes.items():
+    for fil, d in list(magnitudes.items()):
         distinctMjds = {}
         for m, f, e in zip(d["mjds"], d["mags"], d["magErrs"]):
             key = str(int(math.floor(m)))
@@ -115,11 +119,11 @@ def create_lc(
                 distinctMjds[key]["mags"].append(f)
                 distinctMjds[key]["magErrs"].append(e)
 
-        for k, v in distinctMjds.items():
+        for k, v in list(distinctMjds.items()):
             summedMagnitudes[fil]["mjds"].append(
-                sum(v["mjds"]) / len(v["mjds"]))
+                old_div(sum(v["mjds"]), len(v["mjds"])))
             summedMagnitudes[fil]["mags"].append(
-                sum(v["mags"]) / len(v["mags"]))
+                old_div(sum(v["mags"]), len(v["mags"])))
             summedMagnitudes[fil]["magErrs"].append(sum(v["magErrs"]) / len(v["magErrs"]
                                                                             ) / math.sqrt(len(v["magErrs"])))
 
@@ -209,7 +213,7 @@ def create_lc(
                 lowerMJDLimit = l - 2
 
     if not priorLimitsFlavour:
-        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\sigma$",
+        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\\sigma$",
                  ha="left", fontsize=16)
 
     postLimitsFlavour = None
@@ -252,7 +256,7 @@ def create_lc(
 
     if len(limits['o']['mjds']):
         limitLeg = ax.errorbar(limits['o']['mjds'], limits['o']['mags'], yerr=limits[
-            'o']['magErrs'], color='#FFA500', fmt='o', mfc='white', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=0.4,  label='<3$\sigma$ ', capsize=10, markeredgewidth=1.2)
+            'o']['magErrs'], color='#FFA500', fmt='o', mfc='white', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=0.4,  label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
 
         # ERROBAR CAP THICKNESS
         handles.append(limitLeg)
@@ -263,7 +267,7 @@ def create_lc(
         #     lowerMag = min(limits['o']['mags'])
     if len(limits['c']['mjds']):
         limitLeg = ax.errorbar(limits['c']['mjds'], limits['c']['mags'], yerr=limits[
-            'c']['magErrs'], color='#2aa198', fmt='o', mfc='white', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\sigma$ ', capsize=10, markeredgewidth=1.2)
+            'c']['magErrs'], color='#2aa198', fmt='o', mfc='white', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
         # ERROBAR CAP THICKNESS
         limitLeg[1][0].set_markeredgewidth('0.4')
         limitLeg[1][1].set_markeredgewidth('0.4')
@@ -272,7 +276,7 @@ def create_lc(
 
     if len(limits['I']['mjds']):
         limitLeg = ax.errorbar(limits['I']['mjds'], limits['I']['mags'], yerr=limits[
-            'I']['magErrs'], color='#dc322f', fmt='o', mfc='white', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\sigma$ ', capsize=10, markeredgewidth=1.2)
+            'I']['magErrs'], color='#dc322f', fmt='o', mfc='white', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
         # ERROBAR CAP THICKNESS
         limitLeg[1][0].set_markeredgewidth('0.4')
         limitLeg[1][1].set_markeredgewidth('0.4')
@@ -362,7 +366,7 @@ def create_lc(
 
     magLabels = [20., 19.5, 19.0, 18.5,
                  18.0, 17.5, 17.0, 16.5, 16.0, 15.5, 15.0]
-    magFluxes = [pow(10, -(m + 48.6) / 2.5) * 1e27 for m in magLabels]
+    magFluxes = [pow(10, old_div(-(m + 48.6), 2.5)) * 1e27 for m in magLabels]
 
     ax.yaxis.set_major_locator(ticker.FixedLocator((magFluxes)))
     ax.yaxis.set_major_formatter(ticker.FixedFormatter((magLabels)))
@@ -429,30 +433,35 @@ def create_lc(
     log.debug('completed the ``create_lc`` function')
     return None
 
-
 def generate_atlas_lightcurves(
         dbConn,
         log,
         settings):
     """generate atlas lightcurves
 
-    **Key Arguments:**
-        - ``dbConn`` -- mysql database connection
-        - ``log`` -- logger
-        - ``settings`` -- settings for the marshall.
+    **Key Arguments**
 
-    **Return:**
-        - None
+    - ``dbConn`` -- mysql database connection
+    - ``log`` -- logger
+    - ``settings`` -- settings for the marshall.
+    
 
-    **Usage:**
-        ..todo::
+    **Return**
 
-            add usage info
-            create a sublime snippet for usage
+    - None
+    
 
-        .. code-block:: python
+    **Usage**
 
-            usage code
+    ..todo::
+
+        add usage info
+        create a sublime snippet for usage
+
+    ```python
+    usage code
+    ```
+    
 
     ..todo::
 
@@ -498,7 +507,7 @@ def generate_atlas_lightcurves(
             # Cursor up one line and clear line
             sys.stdout.write("\x1b[1A\x1b[2K")
 
-        percent = (float(index) / float(total)) * 100.
+        percent = (old_div(float(index), float(total))) * 100.
         print('%(index)s/%(total)s (%(percent)1.1f%% done): generating ATLAS LC for transientBucketId: %(transientBucketId)s' % locals())
         index += 1
 
@@ -555,31 +564,35 @@ def generate_atlas_lightcurves(
     log.debug('completed the ``generate_atlas_lightcurves`` function')
     return None
 
-
 def create_lc_depreciated(
         log,
         cacheDirectory,
         epochs):
     """*create the atlas lc for one transient*
 
-    **Key Arguments:**
-        - ``cacheDirectory`` -- the directory to add the lightcurve to
-        - ``log`` -- logger
-        - ``epochs`` -- dictionary of lightcurve data-points
+    **Key Arguments**
 
+    - ``cacheDirectory`` -- the directory to add the lightcurve to
+    - ``log`` -- logger
+    - ``epochs`` -- dictionary of lightcurve data-points
+    
 
-    **Return:**
-        - None
+    **Return**
 
-    **Usage:**
-        .. todo::
+    - None
+    
 
-            add usage info
-            create a sublime snippet for usage
+    **Usage**
 
-        .. code-block:: python
+    .. todo::
 
-            usage code
+        add usage info
+        create a sublime snippet for usage
+
+    ```python
+    usage code
+    ```
+    
     """
     log.debug('starting the ``create_lc`` function')
 
@@ -606,8 +619,8 @@ def create_lc_depreciated(
             limits[epoch["filter"]]["mags"].append(epoch["mag"])
             limits[epoch["filter"]]["magErrs"].append(epoch["dm"])
             limits[epoch["filter"]]["zp"].append(epoch["zp"])
-            flux = 10**((float(epoch["zp"]) -
-                         float(epoch["mag"])) / 2.5)
+            flux = 10**(old_div((float(epoch["zp"]) -
+                                 float(epoch["mag"])), 2.5))
             limits[epoch["filter"]]["flux"].append(flux)
         else:
             if not discoveryMjd or discoveryMjd > epoch["mjd_obs"]:
@@ -616,8 +629,8 @@ def create_lc_depreciated(
             magnitudes[epoch["filter"]]["mags"].append(epoch["mag"])
             magnitudes[epoch["filter"]]["magErrs"].append(epoch["dm"])
             magnitudes[epoch["filter"]]["zp"].append(epoch["zp"])
-            flux = 10**((float(epoch["zp"]) -
-                         float(epoch["mag"])) / 2.5)
+            flux = 10**(old_div((float(epoch["zp"]) -
+                                 float(epoch["mag"])), 2.5))
             magnitudes[epoch["filter"]]["flux"].append(flux)
 
     # GENERATE THE FIGURE FOR THE PLOT
@@ -683,7 +696,7 @@ def create_lc_depreciated(
                 lowerMJDLimit = l - 2
 
     if not priorLimitsFlavour:
-        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\sigma$",
+        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\\sigma$",
                  ha="left", fontsize=16)
 
     postLimitsFlavour = None
@@ -710,8 +723,8 @@ def create_lc_depreciated(
                 limits[epoch["filter"]]["mags"].append(epoch["mag"])
                 limits[epoch["filter"]]["magErrs"].append(epoch["dm"])
                 limits[epoch["filter"]]["zp"].append(epoch["zp"])
-                flux = 10**((float(epoch["zp"]) -
-                             float(epoch["mag"])) / 2.5)
+                flux = 10**(old_div((float(epoch["zp"]) -
+                                     float(epoch["mag"])), 2.5))
                 limits[epoch["filter"]]["flux"].append(flux)
 
     allMags = limits['o']['mags'] + limits['c']['mags'] + \
@@ -724,20 +737,20 @@ def create_lc_depreciated(
 
     if len(limits['o']['mjds']):
         limitLeg = plt.scatter(limits['o']['mjds'], limits['o']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#FFA500', linewidth=1.0, facecolors='none', label="$5\sigma$ limit  ")
+                               edgecolors='#FFA500', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
         handles.append(limitLeg)
         if max(limits['o']['mags']) > upperMag:
             upperMag = max(limits['o']['mags'])
             upperMagIndex = np.argmax(limits['o']['mags'])
             # MAG PADDING
             upperFlux = limits['o']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
 
         # if min(limits['o']['mags']) < lowerMag:
         #     lowerMag = min(limits['o']['mags'])
     if len(limits['c']['mjds']):
         limitLeg = plt.scatter(limits['c']['mjds'], limits['c']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#2aa198', linewidth=1.0, facecolors='none', label="$5\sigma$ limit  ")
+                               edgecolors='#2aa198', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
         if len(handles) == 0:
             handles.append(limitLeg)
         if max(limits['c']['mags']) > upperMag:
@@ -745,13 +758,13 @@ def create_lc_depreciated(
             upperMagIndex = np.argmax(limits['c']['mags'])
             # MAG PADDING
             upperFlux = limits['c']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
         # if min(limits['c']['mags']) < lowerMag:
         #     lowerMag = min(limits['c']['mags'])
 
     if len(limits['I']['mjds']):
         limitLeg = plt.scatter(limits['I']['mjds'], limits['I']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#dc322f', linewidth=1.0, facecolors='none', label="$5\sigma$ limit  ")
+                               edgecolors='#dc322f', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
         if len(handles) == 0:
             handles.append(limitLeg)
         if max(limits['I']['mags']) > upperMag:
@@ -759,7 +772,7 @@ def create_lc_depreciated(
             upperMagIndex = np.argmax(limits['I']['mags'])
             # MAG PADDING
             upperFlux = limits['I']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
     if len(magnitudes['o']['mjds']):
         orangeMag = plt.errorbar(magnitudes['o']['mjds'], magnitudes['o']['mags'], yerr=magnitudes[
             'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2,  label='o-band mag ', capsize=10)
@@ -777,7 +790,7 @@ def create_lc_depreciated(
                 magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs']))
             # MAG PADDING
             upperFlux = magnitudes['o']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
 
         if min(np.array(magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs'])) < lowerMag:
             lowerMag = min(
@@ -786,7 +799,7 @@ def create_lc_depreciated(
                 magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs']))
             # MAG PADDING
             lowerFlux = magnitudes['o']['flux'][
-                lowerMagIndex] + 10**(deltaMag / 2.5)
+                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
     if len(magnitudes['c']['mjds']):
         cyanMag = plt.errorbar(magnitudes['c']['mjds'], magnitudes['c']['mags'], yerr=magnitudes[
             'c']['magErrs'], color='#2aa198', fmt='o', mfc='#2aa198', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='c-band mag ', capsize=10)
@@ -803,7 +816,7 @@ def create_lc_depreciated(
                 magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs']))
             # MAG PADDING
             upperFlux = magnitudes['c']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
         if min(np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs'])) < lowerMag:
             lowerMag = min(
                 np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
@@ -811,7 +824,7 @@ def create_lc_depreciated(
                 (magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
             # MAG PADDING
             lowerFlux = magnitudes['c']['flux'][
-                lowerMagIndex] + 10**(deltaMag / 2.5)
+                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
     if len(magnitudes['I']['mjds']):
         cyanMag = plt.errorbar(magnitudes['I']['mjds'], magnitudes['I']['mags'], yerr=magnitudes[
             'I']['magErrs'], color='#dc322f', fmt='o', mfc='#dc322f', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='I-band mag ', capsize=10)
@@ -828,7 +841,7 @@ def create_lc_depreciated(
                 magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs']))
             # MAG PADDING
             upperFlux = magnitudes['I']['flux'][
-                upperMagIndex] - 10**(deltaMag / 2.5)
+                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
         if min(np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs'])) < lowerMag:
             lowerMag = min(
                 np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
@@ -836,7 +849,7 @@ def create_lc_depreciated(
                 (magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
             # MAG PADDING
             lowerFlux = magnitudes['I']['flux'][
-                lowerMagIndex] + 10**(deltaMag / 2.5)
+                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
 
     plt.legend(handles=handles, prop={
                'size': 13.5}, bbox_to_anchor=(1., 1.2), loc=0, borderaxespad=0., ncol=4, scatterpoints=1)
