@@ -44,6 +44,7 @@ if not os.path.exists(pathToOutputDir):
 
     # marshall lightcurve < transientBucketId > [-s < pathToSettingsFile > ]
 
+
 class test_cl_utils(unittest.TestCase):
 
     def test_cl(self):
@@ -56,35 +57,35 @@ class test_cl_utils(unittest.TestCase):
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
-        command = "marshallEngine clean -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshallEngine clean -s %(pathToSettingsFile)s" % locals()
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall import atlas 3 -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall import atlas 3 -s %(pathToSettingsFile)s" % locals()
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall import panstarrs 3 -s %(pathToSettingsFile)s" % locals(
-        )
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall import panstarrs 3 -s %(pathToSettingsFile)s" % locals(
+        # )
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall import tns 3 -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall import tns 3 -s %(pathToSettingsFile)s" % locals()
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall import useradded 3 -s %(pathToSettingsFile)s" % locals(
-        )
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall import useradded 3 -s %(pathToSettingsFile)s" % locals(
+        # )
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall import ztf 3 -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall import ztf 3 -s %(pathToSettingsFile)s" % locals()
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
-        command = "marshall lightcurve 1 -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+        # command = "marshall lightcurve 1 -s %(pathToSettingsFile)s" % locals()
+        # args = docopt(doc, command.split(" ")[1:])
+        # cl_utils.main(args)
 
         return
 
