@@ -39,6 +39,7 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
+
 class test_data(unittest.TestCase):
 
     def test_data_function(self):
@@ -58,7 +59,7 @@ class test_data(unittest.TestCase):
             log=log,
             settings=settings,
             dbConn=dbConn
-        ).ingest(withinLastDays=300)
+        ).ingest(withinLastDays=3)
 
     def test_data_function2(self):
 
@@ -67,7 +68,7 @@ class test_data(unittest.TestCase):
             log=log,
             settings=settings,
             dbConn=dbConn
-        ).ingest(withinLastDays=300)
+        ).ingest(withinLastDays=3)
 
     def test_update_summaries_function(self):
 

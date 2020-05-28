@@ -53,11 +53,11 @@ class test_cl_utils(unittest.TestCase):
 
         pathToSettingsFile = settingsFile
         # TEST CL-OPTIONS
-        command = "marshallEngine init"
+        command = "marshall init"
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
-        command = "marshallEngine clean -s %(pathToSettingsFile)s" % locals()
+        command = "marshall clean -s %(pathToSettingsFile)s" % locals()
         args = docopt(doc, command.split(" ")[1:])
         cl_utils.main(args)
 
