@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for marshallEngine/services/panstarrs_location_stamps.py: 67%</title>
+    <title>Coverage for marshallEngine/services/panstarrs_location_stamps.py: 91%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
@@ -17,13 +17,13 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>marshallEngine/services/panstarrs_location_stamps.py</b> :
-            <span class="pc_cov">67%</span>
+            <span class="pc_cov">91%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             46 statements &nbsp;
-            <span class="run shortkey_r button_toggle_run">31 run</span>
-            <span class="mis show_mis shortkey_m button_toggle_mis">15 missing</span>
+            <span class="run shortkey_r button_toggle_run">42 run</span>
+            <span class="mis show_mis shortkey_m button_toggle_mis">4 missing</span>
             <span class="exc show_exc shortkey_x button_toggle_exc">0 excluded</span>
         </h2>
     </div>
@@ -165,24 +165,24 @@
     <p id="t112" class="pln"><span class="n"><a href="#t112">112</a></span><span class="t">            <span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t113" class="pln"><span class="n"><a href="#t113">113</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t114" class="pln"><span class="n"><a href="#t114">114</a></span><span class="t">            <span class="com"># CHECK FOR FAILED IMAGES AND FLAG IN DATABASE</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t115" class="mis show_mis"><span class="n"><a href="#t115">115</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">colorPath</span><span class="op">)</span> <span class="op">==</span> <span class="num">0</span> <span class="key">or</span> <span class="key">not</span> <span class="nam">colorPath</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t116" class="mis show_mis"><span class="n"><a href="#t116">116</a></span><span class="t">                <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">u"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t115" class="run"><span class="n"><a href="#t115">115</a></span><span class="t">            <span class="key">if</span> <span class="nam">len</span><span class="op">(</span><span class="nam">colorPath</span><span class="op">)</span> <span class="op">==</span> <span class="num">0</span> <span class="key">or</span> <span class="key">not</span> <span class="nam">colorPath</span><span class="op">[</span><span class="num">0</span><span class="op">]</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t116" class="run"><span class="n"><a href="#t116">116</a></span><span class="t">                <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">u"""</span>&nbsp;</span><span class="r"></span></p>
     <p id="t117" class="pln"><span class="n"><a href="#t117">117</a></span><span class="t"><span class="str">                    update pesstoObjects set ps1_map = 0 where transientBucketId = %(transientBucketId)s</span>&nbsp;</span><span class="r"></span></p>
     <p id="t118" class="pln"><span class="n"><a href="#t118">118</a></span><span class="t"><span class="str">                """</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t119" class="mis show_mis"><span class="n"><a href="#t119">119</a></span><span class="t">                <span class="nam">writequery</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t119" class="run"><span class="n"><a href="#t119">119</a></span><span class="t">                <span class="nam">writequery</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t120" class="pln"><span class="n"><a href="#t120">120</a></span><span class="t">                    <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t121" class="pln"><span class="n"><a href="#t121">121</a></span><span class="t">                    <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t122" class="pln"><span class="n"><a href="#t122">122</a></span><span class="t">                    <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">dbConn</span>&nbsp;</span><span class="r"></span></p>
     <p id="t123" class="pln"><span class="n"><a href="#t123">123</a></span><span class="t">                <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t124" class="mis show_mis"><span class="n"><a href="#t124">124</a></span><span class="t">                <span class="key">continue</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t124" class="run"><span class="n"><a href="#t124">124</a></span><span class="t">                <span class="key">continue</span>&nbsp;</span><span class="r"></span></p>
     <p id="t125" class="pln"><span class="n"><a href="#t125">125</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t126" class="mis show_mis"><span class="n"><a href="#t126">126</a></span><span class="t">            <span class="nam">source</span> <span class="op">=</span> <span class="nam">colorPath</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t127" class="mis show_mis"><span class="n"><a href="#t127">127</a></span><span class="t">            <span class="nam">destination</span> <span class="op">=</span> <span class="nam">downloadPath</span> <span class="op">+</span> <span class="str">"/ps1_map_color.jpeg"</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t128" class="mis show_mis"><span class="n"><a href="#t128">128</a></span><span class="t">            <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t129" class="mis show_mis"><span class="n"><a href="#t129">129</a></span><span class="t">                <span class="nam">os</span><span class="op">.</span><span class="nam">rename</span><span class="op">(</span><span class="nam">source</span><span class="op">,</span> <span class="nam">destination</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t126" class="run"><span class="n"><a href="#t126">126</a></span><span class="t">            <span class="nam">source</span> <span class="op">=</span> <span class="nam">colorPath</span><span class="op">[</span><span class="num">0</span><span class="op">]</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t127" class="run"><span class="n"><a href="#t127">127</a></span><span class="t">            <span class="nam">destination</span> <span class="op">=</span> <span class="nam">downloadPath</span> <span class="op">+</span> <span class="str">"/ps1_map_color.jpeg"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t128" class="run"><span class="n"><a href="#t128">128</a></span><span class="t">            <span class="key">try</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t129" class="run"><span class="n"><a href="#t129">129</a></span><span class="t">                <span class="nam">os</span><span class="op">.</span><span class="nam">rename</span><span class="op">(</span><span class="nam">source</span><span class="op">,</span> <span class="nam">destination</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t130" class="pln"><span class="n"><a href="#t130">130</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t131" class="pln"><span class="n"><a href="#t131">131</a></span><span class="t">                <span class="com"># DOWNLOAD THE COLOR IMAGE</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t132" class="mis show_mis"><span class="n"><a href="#t132">132</a></span><span class="t">                <span class="nam">myimage</span> <span class="op">=</span> <span class="nam">image</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t132" class="run"><span class="n"><a href="#t132">132</a></span><span class="t">                <span class="nam">myimage</span> <span class="op">=</span> <span class="nam">image</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t133" class="pln"><span class="n"><a href="#t133">133</a></span><span class="t">                    <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t134" class="pln"><span class="n"><a href="#t134">134</a></span><span class="t">                    <span class="nam">settings</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">settings</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t135" class="pln"><span class="n"><a href="#t135">135</a></span><span class="t">                    <span class="nam">imagePath</span><span class="op">=</span><span class="nam">destination</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -195,11 +195,11 @@
     <p id="t142" class="pln"><span class="n"><a href="#t142">142</a></span><span class="t">                <span class="op">)</span><span class="op">.</span><span class="nam">get</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t143" class="pln"><span class="n"><a href="#t143">143</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t144" class="pln"><span class="n"><a href="#t144">144</a></span><span class="t">                <span class="com"># UPDATE DATABASE FLAG</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t145" class="mis show_mis"><span class="n"><a href="#t145">145</a></span><span class="t">                <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">u"""</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t145" class="run"><span class="n"><a href="#t145">145</a></span><span class="t">                <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">u"""</span>&nbsp;</span><span class="r"></span></p>
     <p id="t146" class="pln"><span class="n"><a href="#t146">146</a></span><span class="t"><span class="str">                    update pesstoObjects set ps1_map = 1 where transientBucketId = %(transientBucketId)s</span>&nbsp;</span><span class="r"></span></p>
     <p id="t147" class="pln"><span class="n"><a href="#t147">147</a></span><span class="t"><span class="str">                """</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t148" class="pln"><span class="n"><a href="#t148">148</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t149" class="mis show_mis"><span class="n"><a href="#t149">149</a></span><span class="t">                <span class="nam">writequery</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t149" class="run"><span class="n"><a href="#t149">149</a></span><span class="t">                <span class="nam">writequery</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t150" class="pln"><span class="n"><a href="#t150">150</a></span><span class="t">                    <span class="nam">log</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">                    <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t152" class="pln"><span class="n"><a href="#t152">152</a></span><span class="t">                    <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">dbConn</span>&nbsp;</span><span class="r"></span></p>
@@ -215,7 +215,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.0</a>,
-            created at 2020-05-28 19:20
+            created at 2020-05-29 07:04
         </p>
     </div>
 </div>
