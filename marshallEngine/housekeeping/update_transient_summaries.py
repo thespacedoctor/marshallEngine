@@ -21,6 +21,7 @@ from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from astrocalc.distances import converter
 import numpy as np
 
+
 class update_transient_summaries(object):
     """
     *Update the transient summaries table in the marshall database*
@@ -31,11 +32,11 @@ class update_transient_summaries(object):
     - ``settings`` -- the settings dictionary
     - ``dbConn`` -- the marshall database connection
     - ``transientBucketId`` -- a single transientBucketId to update transientBucketId. Default *False* (i.e. update all)
-    
+
 
     **Usage**
 
-    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
 
     To initiate a update_transient_summaries object, use the following:
 
@@ -49,9 +50,9 @@ class update_transient_summaries(object):
         log=log,
         settings=settings,
         dbConn=dbConn
-    ).update()  
+    ).update()
     ```
-    
+
     """
     # Initialisation
 
@@ -73,7 +74,8 @@ class update_transient_summaries(object):
         self.dbConn = dbConn
 
         if self.transientBucketId:
-            print("updating transient summaries table for %(transientBucketId)s" % locals())
+            print(
+                "updating transient summaries table for %(transientBucketId)s" % locals())
             # UPDATE TRANSIENT BUCKET SUMMARIES (IN MYSQL)
             sqlQuery = "call update_single_transientbucket_summary(%(transientBucketId)s)" % locals(
             )
@@ -109,11 +111,11 @@ class update_transient_summaries(object):
         **Return**
 
         - ``update_transient_summaries``
-        
+
 
         **Usage**
 
-        
+
 
         ```python
         from marshallEngine.housekeeping import update_transient_summaries
@@ -170,7 +172,7 @@ class update_transient_summaries(object):
         )
         updater._add_galactic_coords()
         ```
-        
+
         """
         self.log.debug('starting the ``_add_galactic_coords`` method')
 
@@ -196,7 +198,8 @@ class update_transient_summaries(object):
             return
 
         if total > 1000:
-            print("""%(total)s transients need updated - updating the next 1000""" % locals())
+            print(
+                """%(total)s transients need updated - updating the next 1000""" % locals())
             rows = np.random.choice(rows, size=1000, replace=False, p=None)
 
         # CREATE 3 LISTS - RA, DEC, ID
@@ -257,7 +260,7 @@ class update_transient_summaries(object):
         )
         updater._add_distances()
         ```
-        
+
         """
         self.log.debug('starting the ``_add_distances`` method')
 
@@ -268,7 +271,7 @@ class update_transient_summaries(object):
 
         # SELECT THE TRANSIENTS NEEDING UPDATED
         sqlQuery = u"""
-            select best_redshift, transientBucketId from transientBucketSummaries where best_redshift is not null and distanceMpc is null and best_redshift > 0.001 %(extra)s 
+            select best_redshift, transientBucketId from transientBucketSummaries where best_redshift is not null and distanceMpc is null and best_redshift > 0.001 %(extra)s
         """ % locals()
         rows = readquery(
             log=self.log,

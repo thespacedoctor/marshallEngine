@@ -59,6 +59,6 @@ setup(name="marshallEngine",
       test_suite='nose2.collector.collector',
       tests_require=['nose2', 'cov-core'],
       entry_points={
-          'console_scripts': ['marshallEngine=marshallEngine.cl_utils:main'],
+          'console_scripts': ['marshall=marshallEngine.cl_utils:main'],
       },
       zip_safe=False)

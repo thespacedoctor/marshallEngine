@@ -31,6 +31,7 @@ import matplotlib.ticker as mtick
 from matplotlib.backends.backend_pdf import PdfPages
 import math
 
+
 class marshall_lightcurves(object):
     """
     *The worker class for the marshall_lightcurves module*
@@ -41,11 +42,11 @@ class marshall_lightcurves(object):
     - ``settings`` -- the settings dictionary
     - ``dbConn`` -- the database connection for the mrshall
     - ``transientBucketIds`` -- the transientBucketId(s) requiring lightcurves to be regenerated. (int or list)
-    
+
 
     **Usage**
 
-    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
 
     To initiate a marshall_lightcurves object, use the following:
 
@@ -57,9 +58,9 @@ class marshall_lightcurves(object):
         settings=settings,
         transientBucketIds=[28421489, 28121353, 4637952, 27409808]
     )
-    lc.plot() 
+    lc.plot()
     ```
-    
+
     """
 
     def __init__(
@@ -90,7 +91,7 @@ class marshall_lightcurves(object):
         **Key Arguments**
 
         - ``transientBucketId`` -- the transientBucketId of source to get data for
-        
+
         """
         self.log.debug('starting the ``_select_data_for_transient`` method')
 
@@ -226,14 +227,14 @@ class marshall_lightcurves(object):
         - ``objectNames`` -- a single name or a list of names
         - ``saveLocation`` -- the folder to save the plot file to
         - ``saveFileName`` -- the filename to give the plot file (without extension)
-        
+
 
         **Return**
 
         - ``filepath`` -- path to the lightcurve file
         - ``currentMag`` -- a prediction of the current magnitude if there is enough recent data
         - ``gradient`` -- a prediction of the gradient of recent data (on rise or decline?)
-        
+
         """
         self.log.debug('starting the ``_create_lightcurve_plot_file`` method')
 
@@ -552,7 +553,7 @@ class marshall_lightcurves(object):
         **Return**
 
         - ``filepath`` -- path to the last generated plot file
-        
+
 
         **Usage**
 
@@ -566,7 +567,7 @@ class marshall_lightcurves(object):
         )
         lc.plot()
         ```
-        
+
         """
         self.log.debug('starting the ``plot`` method')
 
@@ -613,6 +614,7 @@ class marshall_lightcurves(object):
 
         return filepath
 
+
 def _plot_one(
         transientBucketId,
         log,
@@ -624,14 +626,14 @@ def _plot_one(
     - ``transientBucketId`` -- the id of the single transient to plot.
     - ``settings`` -- dictionary of settings
     - ``dbConn`` -- marshall database connection
-    
+
 
     **Return**
 
     - ``filepath`` -- path to the plot file
     - ``currentMag`` -- an estimate of the current magnitude (from slope of recent LC). -9999 if inaccurate.
     - ``gradient`` -- gradient of slope of the recent LC. -9999 if inaccurate.
-    
+
     """
     log.debug('starting the ``_plot_one`` method')
 

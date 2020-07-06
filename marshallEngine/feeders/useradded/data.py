@@ -16,6 +16,7 @@ from astrocalc.times import now
 from fundamentals.mysql import readquery
 from marshallEngine.housekeeping import update_transient_summaries
 
+
 class data(basedata):
     """
     *Import the useradded transient data into the marshall database*
@@ -25,11 +26,11 @@ class data(basedata):
     - ``log`` -- logger
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
-    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 
+    To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_).
 
     To initiate a data object, use the following:
 
@@ -39,9 +40,9 @@ class data(basedata):
         log=log,
         settings=settings,
         dbConn=dbConn
-    ).ingest(withinLastDays=withInLastDay)   
+    ).ingest(withinLastDays=withInLastDay)
     ```
-    
+
     """
     # Initialisation
 
@@ -71,7 +72,7 @@ class data(basedata):
         **Key Arguments**
 
         - ``withinLastDays`` -- within the last number of days. *Default: 50*
-        
+
         """
         self.log.info('starting the ``ingest`` method')
 
@@ -129,12 +130,12 @@ class data(basedata):
 
         - ``surveyName`` -- the useradded survey name
         -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
-        
+
 
         **Return**
 
         - ``dictList`` -- the cleaned list of dictionaries ready for ingest
-        
+
 
         **Usage**
 
@@ -145,7 +146,7 @@ class data(basedata):
         ```
 
         Note you will also be able to access the data via ``ingester.dictList``
-        
+
         """
         self.log.info('starting the ``_clean_data_pre_ingest`` method')
 

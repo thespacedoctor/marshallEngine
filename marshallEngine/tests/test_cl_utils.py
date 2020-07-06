@@ -49,8 +49,6 @@ class test_cl_utils(unittest.TestCase):
 
     def test_01_cl(self):
 
-        # utKit("").refresh_database()
-
         pathToSettingsFile = settingsFile
         # TEST CL-OPTIONS
         command = "marshall init"
