@@ -1,5 +1,4 @@
 # USE THJS SCRIPT TO BACKUP THE MARSHALL SCHEME FROM THE DATABASE CURRENTLY LIVING ON MY MAC
-
 cd ~/git_repos/_packages_/python/marshallEngine/marshallEngine/tests/input
 /usr/local/mysql/bin/mysql -u marshall --password=mar5ha11 marshall -e "update meta_workflow_lists_counts set count = 0"
 echo "please give password for the marshall user"

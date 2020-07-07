@@ -231,7 +231,7 @@ class data(object):
 
         # UPDATE THE TRANSIENT BUCKET SUMMARY TABLE IN THE MARSHALL DATABASE
         if updateTransientSummaries:
-            if isinstance(updateTransientSummaries, int):
+            if isinstance(updateTransientSummaries, int) and not isinstance(updateTransientSummaries, bool):
                 transientBucketId = updateTransientSummaries
             else:
                 transientBucketId = False

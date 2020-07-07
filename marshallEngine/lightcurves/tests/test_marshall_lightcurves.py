@@ -39,6 +39,7 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
+
 class test_marshall_lightcurves(unittest.TestCase):
 
     def test_marshall_lightcurves_function(self):
