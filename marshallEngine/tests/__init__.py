@@ -7,7 +7,6 @@ import yaml
 from marshallEngine.utKit import utKit
 from fundamentals import tools
 from os.path import expanduser
-from dryxPyramid.utKit import BaseTest
 home = expanduser("~")
 
 packageDirectory = utKit("").get_project_root()
