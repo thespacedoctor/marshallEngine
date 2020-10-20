@@ -15,6 +15,7 @@ from fundamentals.mysql import readquery, writequery
 from panstamps.downloader import downloader
 from panstamps.image import image
 
+
 class panstarrs_location_stamps(object):
     """
     *The worker class for the panstarrs_location_stamps module*
@@ -25,7 +26,7 @@ class panstarrs_location_stamps(object):
     - ``settings`` -- the settings dictionary
     - ``dbConn`` -- dbConn
     - ``transientId`` -- will download for one transient if single ID given. Default *None*
-    
+
 
     **Usage**
 
@@ -42,7 +43,7 @@ class panstarrs_location_stamps(object):
         transientId=None
     ).get()
     ```
-    
+
     """
 
     def __init__(
@@ -78,7 +79,7 @@ class panstarrs_location_stamps(object):
         else:
             # GET NEXT 200 TRANSIENTS NEEDING PANSTARRS STAMPS
             sqlQuery = u"""
-                select t.transientBucketId, t.raDeg,t.decDeg from pesstoObjects p, transientBucketSummaries t where ps1_map is null and p.transientBucketId = t.transientBucketId order by t.transientBucketId desc limit 200;
+                select * from pesstoObjects p, transientBucketSummaries t where (ps1_map is null or ps1_map not in (0,1)) and p.transientBucketId = t.transientBucketId order by t.transientBucketId desc limit 200;
             """ % locals()
         rows = readquery(
             log=self.log,
@@ -114,7 +115,9 @@ class panstarrs_location_stamps(object):
             # CHECK FOR FAILED IMAGES AND FLAG IN DATABASE
             if len(colorPath) == 0 or not colorPath[0]:
                 sqlQuery = u"""
-                    update pesstoObjects set ps1_map = 0 where transientBucketId = %(transientBucketId)s
+                    update pesstoObjects set ps1_map = 2 where transientBucketId = %(transientBucketId)s and ps1_map is null;
+                    update pesstoObjects set ps1_map = 2+ps1_map where transientBucketId = %(transientBucketId)s and ps1_map is not null;
+                    update pesstoObjects set ps1_map = 0 where transientBucketId = %(transientBucketId)s and ps1_map > 10;
                 """ % locals()
                 writequery(
                     log=self.log,
