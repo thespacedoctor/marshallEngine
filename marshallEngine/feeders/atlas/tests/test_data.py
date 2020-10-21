@@ -59,8 +59,12 @@ class test_data(unittest.TestCase):
             dbConn=dbConn
         )
 
+        from datetime import datetime, date, time, timedelta
+        timelimit = datetime.now() - timedelta(days=1)
+        timelimit = timelimit.strftime("%Y-%m-%d")
+
         csvDicts = ingester.get_csv_data(
-            url=settings["atlas urls"]["summary csv"]
+            url=settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
         )
         ingester._clean_data_pre_ingest(
             surveyName="ATLAS", withinLastDays=1)

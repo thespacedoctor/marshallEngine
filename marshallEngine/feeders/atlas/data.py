@@ -16,6 +16,8 @@ from astrocalc.times import now
 from astrocalc.times import conversions
 from fundamentals.mysql import writequery
 from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
+from datetime import datetime, date, time, timedelta
+
 
 class data(basedata):
     """
@@ -26,7 +28,7 @@ class data(basedata):
     - ``log`` -- logger
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
@@ -42,7 +44,7 @@ class data(basedata):
         dbConn=dbConn
     ).ingest(withinLastDays=withInLastDay)   
     ```
-    
+
     """
     # Initialisation
 
@@ -72,9 +74,16 @@ class data(basedata):
         **Key Arguments**
 
         - ``withinLastDays`` -- within the last number of days. *Default: 50*
-        
+
         """
         self.log.debug('starting the ``ingest`` method')
+
+        timelimit = datetime.now() - timedelta(days=withinLastDays)
+        timelimit = timelimit.strftime("%Y-%m-%d")
+
+        csvDicts = ingester.get_csv_data(
+            url=settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
+        )
 
         csvDicts = self.get_csv_data(
             url=self.settings["atlas urls"]["summary csv"]
@@ -124,12 +133,12 @@ class data(basedata):
 
         - ``surveyName`` -- the ATLAS survey name
         -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
-        
+
 
         **Return**
 
         - ``dictList`` -- the cleaned list of dictionaries ready for ingest
-        
+
 
         **Usage**
 
@@ -140,7 +149,7 @@ class data(basedata):
         ```
 
         Note you will also be able to access the data via ``ingester.dictList``
-        
+
         """
         self.log.debug('starting the ``_clean_data_pre_ingest`` method')
 
