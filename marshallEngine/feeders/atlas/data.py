@@ -78,16 +78,13 @@ class data(basedata):
         """
         self.log.debug('starting the ``ingest`` method')
 
-        timelimit = datetime.now() - timedelta(days=withinLastDays)
+        timelimit = datetime.now() - timedelta(days=int(withinLastDays))
         timelimit = timelimit.strftime("%Y-%m-%d")
 
-        csvDicts = ingester.get_csv_data(
-            url=settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
+        csvDicts = self.get_csv_data(
+            url=self.settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
         )
 
-        csvDicts = self.get_csv_data(
-            url=self.settings["atlas urls"]["summary csv"]
-        )
         self._clean_data_pre_ingest(
             surveyName="ATLAS", withinLastDays=withinLastDays)
 
