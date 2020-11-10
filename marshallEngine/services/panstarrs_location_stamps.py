@@ -115,6 +115,7 @@ class panstarrs_location_stamps(object):
             # CHECK FOR FAILED IMAGES AND FLAG IN DATABASE
             if len(colorPath) == 0 or not colorPath[0]:
                 sqlQuery = u"""
+                    update pesstoObjects p, transientBucketSummaries t set p.ps1_map = 0 where p.transientBucketId=t.transientBucketId and (ps1_map is null or ps1_map != 0) and t.decDeg < -40;
                     update pesstoObjects set ps1_map = 2 where transientBucketId = %(transientBucketId)s and ps1_map is null;
                     update pesstoObjects set ps1_map = 2+ps1_map where transientBucketId = %(transientBucketId)s and ps1_map is not null;
                     update pesstoObjects set ps1_map = 0 where transientBucketId = %(transientBucketId)s and ps1_map > 10;
