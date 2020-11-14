@@ -15,6 +15,7 @@ from ..data import data as basedata
 from astrocalc.times import now
 from fundamentals.mysql import writequery
 
+
 class data(basedata):
     """
     *Import the PanSTARRS transient data into the marshall database*
@@ -24,7 +25,7 @@ class data(basedata):
     - ``log`` -- logger
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
@@ -40,7 +41,7 @@ class data(basedata):
         dbConn=dbConn
     ).ingest(withinLastDays=withInLastDay)   
     ```
-    
+
     """
     # Initialisation
 
@@ -70,7 +71,7 @@ class data(basedata):
         **Key Arguments**
 
         - ``withinLastDays`` -- within the last number of days. *Default: 50*
-        
+
         """
         self.log.debug('starting the ``ingest`` method')
 
@@ -90,6 +91,22 @@ class data(basedata):
         )
         allLists.extend(self._clean_data_pre_ingest(
             surveyName="ps13pi", withinLastDays=withinLastDays))
+
+        csvDicts = self.get_csv_data(
+            url=self.settings["panstarrs urls"]["ps23pi"]["summary csv"],
+            user=self.settings["credentials"]["ps23pi"]["username"],
+            pwd=self.settings["credentials"]["ps23pi"]["password"]
+        )
+        allLists.extend(self._clean_data_pre_ingest(
+            surveyName="ps23pi", withinLastDays=withinLastDays))
+
+        csvDicts = self.get_csv_data(
+            url=self.settings["panstarrs urls"]["ps23pi"]["recurrence csv"],
+            user=self.settings["credentials"]["ps23pi"]["username"],
+            pwd=self.settings["credentials"]["ps23pi"]["password"]
+        )
+        allLists.extend(self._clean_data_pre_ingest(
+            surveyName="ps23pi", withinLastDays=withinLastDays))
 
         csvDicts = self.get_csv_data(
             url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
@@ -132,12 +149,12 @@ class data(basedata):
 
         - ``surveyName`` -- the PS survey name
         -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
-        
+
 
         **Return**
 
         - ``dictList`` -- the cleaned list of dictionaries ready for ingest
-        
+
 
         **Usage**
 
@@ -148,7 +165,7 @@ class data(basedata):
         ```
 
         Note you will also be able to access the data via ``ingester.dictList``
-        
+
         """
         self.log.debug('starting the ``_clean_data_pre_ingest`` method')
 

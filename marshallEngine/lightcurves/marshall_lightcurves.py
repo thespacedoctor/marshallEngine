@@ -580,6 +580,14 @@ class marshall_lightcurves(object):
             print("updating lightcurves for %(total)s transients" % locals())
             print()
 
+        # USE IF ISSUES IN _plot_one FUNCTION
+        # for transientBucketId in self.transientBucketIds:
+        #     _plot_one(
+        #         transientBucketId=transientBucketId,
+        #         log=self.log,
+        #         settings=self.settings
+        #     )
+
         results = fmultiprocess(log=self.log, function=_plot_one,
                                 inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
 
