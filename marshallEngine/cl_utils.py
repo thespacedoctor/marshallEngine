@@ -48,7 +48,7 @@ def main(arguments=None):
         docString=__doc__,
         logLevel="WARNING",
         options_first=False,
-        projectName="marshallEngine",
+        projectName="marshall",
         defaultSettingsFile=True
     )
     arguments, settings, log, dbConn = su.setup()
