@@ -26,6 +26,7 @@ from fundamentals import tools
 from fundamentals.mysql import readquery, writequery
 from datetime import datetime
 
+
 def create_lc(
         log,
         cacheDirectory,
@@ -37,12 +38,12 @@ def create_lc(
     - ``cacheDirectory`` -- the directory to add the lightcurve to
     - ``log`` -- logger
     - ``epochs`` -- dictionary of lightcurve data-points
-    
+
 
     **Return**
 
     - None
-    
+
 
     **Usage**
 
@@ -54,7 +55,7 @@ def create_lc(
     ```python
     usage code
     ```
-    
+
     """
     log.debug('starting the ``create_lc`` function')
 
@@ -433,6 +434,7 @@ def create_lc(
     log.debug('completed the ``create_lc`` function')
     return None
 
+
 def generate_atlas_lightcurves(
         dbConn,
         log,
@@ -444,12 +446,12 @@ def generate_atlas_lightcurves(
     - ``dbConn`` -- mysql database connection
     - ``log`` -- logger
     - ``settings`` -- settings for the marshall.
-    
+
 
     **Return**
 
     - None
-    
+
 
     **Usage**
 
@@ -461,7 +463,7 @@ def generate_atlas_lightcurves(
     ```python
     usage code
     ```
-    
+
 
     ..todo::
 
@@ -543,8 +545,8 @@ def generate_atlas_lightcurves(
         )
 
         # FIND THE CACHE DIR FOR THE SOURCE
-        cacheDirectory = settings["downloads"][
-            "transient cache directory"] + "/" + str(transientBucketId)
+        cacheDirectory = settings[
+            "cache-directory"] + "/transients/" + str(transientBucketId)
 
         # CREATE THE PLOT FOR THIS ONE ATLAS SOURCE
         create_lc(
@@ -564,6 +566,7 @@ def generate_atlas_lightcurves(
     log.debug('completed the ``generate_atlas_lightcurves`` function')
     return None
 
+
 def create_lc_depreciated(
         log,
         cacheDirectory,
@@ -575,12 +578,12 @@ def create_lc_depreciated(
     - ``cacheDirectory`` -- the directory to add the lightcurve to
     - ``log`` -- logger
     - ``epochs`` -- dictionary of lightcurve data-points
-    
+
 
     **Return**
 
     - None
-    
+
 
     **Usage**
 
@@ -592,7 +595,7 @@ def create_lc_depreciated(
     ```python
     usage code
     ```
-    
+
     """
     log.debug('starting the ``create_lc`` function')
 

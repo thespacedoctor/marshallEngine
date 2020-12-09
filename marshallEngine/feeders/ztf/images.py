@@ -18,6 +18,7 @@ from fundamentals import fmultiprocess
 from fundamentals.mysql import writequery
 from ..images import images as baseimages
 
+
 class images(baseimages):
     """
     *cacher for the ZTF image stamps*
@@ -27,7 +28,7 @@ class images(baseimages):
     - ``log`` -- logger
     - ``settings`` -- the settings dictionary
     - ``dbConn`` -- the marshall database connection.
-    
+
 
     **Usage**
 
@@ -43,7 +44,7 @@ class images(baseimages):
         dbConn=dbConn
     ).cache(limit=1000)  
     ```
-    
+
     """
 
     def __init__(
@@ -57,7 +58,7 @@ class images(baseimages):
         self.settings = settings
         self.dbConn = dbConn
         self.downloadDirectoryPath = settings[
-            "downloads"]["transient cache directory"]
+            "cache-directory"] + "/transients/"
 
         self.dbSurveyNames = [
             "ztf", "ZTF"]
