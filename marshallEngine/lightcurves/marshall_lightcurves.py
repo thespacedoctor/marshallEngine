@@ -661,8 +661,8 @@ def _plot_one(
         transientBucketIds=transientBucketId
     )
 
-    cacheFolder = settings["downloads"]["transient cache directory"]
-    saveLocation = """%(cacheFolder)s%(transientBucketId)s/""" % locals()
+    cacheFolder = settings["cache-directory"]
+    saveLocation = """%(cacheFolder)s/transients/%(transientBucketId)s/""" % locals()
 
     # SELECT DATA AND PLOT THE SOURCE
     dataset, flatdata, flatLimits = lc._select_data_for_transient(

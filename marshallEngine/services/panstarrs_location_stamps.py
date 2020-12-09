@@ -88,12 +88,12 @@ class panstarrs_location_stamps(object):
         )
 
         # FOR EACH TRANSIENT DOWNLOAD STAMP TO CACHE DIRECTORY
-        downloadDirectoryPath = self.settings[
-            "downloads"]["transient cache directory"]
+        cache = self.settings[
+            "cache-directory"]
 
         for row in rows:
             transientBucketId = row["transientBucketId"]
-            downloadPath = "%s/%s" % (downloadDirectoryPath, transientBucketId)
+            downloadPath = "%s/transients/%s" % (cache, transientBucketId)
             ra = row["raDeg"]
             dec = row["decDeg"]
 
