@@ -41,8 +41,10 @@ if not os.path.exists(pathToOutputDir):
 
 import shutil
 try:
-    shutil.rmtree(settings["downloads"]["transient cache directory"])
-    shutil.rmtree(settings["stats cache directory"])
+    shutil.rmtree(settings[
+        "cache-directory"] + "/transients/")
+    shutil.rmtree(settings[
+        "cache-directory"] + "/stats/")
 except:
     pass
 

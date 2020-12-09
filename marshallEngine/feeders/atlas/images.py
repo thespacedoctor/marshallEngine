@@ -58,7 +58,7 @@ class images(baseimages):
         self.settings = settings
         self.dbConn = dbConn
         self.downloadDirectoryPath = settings[
-            "downloads"]["transient cache directory"]
+            "cache-directory"] + "/transients/"
 
         self.dbSurveyNames = [
             "atlas", "ATLAS"]
