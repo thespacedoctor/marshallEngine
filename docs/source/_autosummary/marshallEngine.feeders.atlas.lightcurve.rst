@@ -1,4 +1,4 @@
-lightcurve *(module)*
+﻿lightcurve *(module)*
 ==================================================
 
 
@@ -12,6 +12,15 @@ lightcurve *(module)*
     
     
     
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~datetime
+      ~str
+      ~tools
+      ~zip
+    
     
 
     
@@ -23,6 +32,9 @@ lightcurve *(module)*
       ~create_lc
       ~create_lc_depreciated
       ~generate_atlas_lightcurves
+      ~old_div
+      ~readquery
+      ~writequery
     
     
 
