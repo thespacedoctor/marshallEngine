@@ -93,7 +93,7 @@ class panstarrs_location_stamps(object):
 
         for row in rows:
             transientBucketId = row["transientBucketId"]
-            downloadPath = "%s/transients/%s" % (cache, transientBucketId)
+            downloadPath = f"{downloadDirectoryPath}/{transientBucketId}"
             ra = row["raDeg"]
             dec = row["decDeg"]
 
