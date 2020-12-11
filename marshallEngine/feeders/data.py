@@ -365,7 +365,6 @@ class data(object):
             ticker += len(fs_name_list)
             print("Matching %(ticker)s/%(total)s sources in the %(fsTableName)s against the transientBucket table" % locals())
 
-            print(fs_ra_list)
             # CONESEARCH TRANSIENT BUCKET FOR PRE-KNOWN SOURCES FROM OTHER
             # SURVEYS
             from HMpTy.mysql import conesearch
