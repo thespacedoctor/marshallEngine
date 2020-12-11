@@ -273,7 +273,7 @@ class data(object):
         # COPY ROWS TO TRANSIENTBUCKET USING COLUMN MATCH TABLE IN DATABASE
         sqlQuery = """CALL `sync_marshall_feeder_survey_transientBucketId`('%(fsTableName)s');""" % locals(
         )
-
+        
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
