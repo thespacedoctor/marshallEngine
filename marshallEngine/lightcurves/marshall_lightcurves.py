@@ -581,12 +581,12 @@ class marshall_lightcurves(object):
             print()
 
         # USE IF ISSUES IN _plot_one FUNCTION
-        # for transientBucketId in self.transientBucketIds:
-        #     _plot_one(
-        #         transientBucketId=transientBucketId,
-        #         log=self.log,
-        #         settings=self.settings
-        #     )
+        for transientBucketId in self.transientBucketIds:
+            _plot_one(
+                transientBucketId=transientBucketId,
+                log=self.log,
+                settings=self.settings
+            )
 
         results = fmultiprocess(log=self.log, function=_plot_one,
                                 inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
@@ -661,7 +661,8 @@ def _plot_one(
         transientBucketIds=transientBucketId
     )
 
-    cacheFolder = settings["downloads"]["transient cache directory"]
+    cacheFolder = settings[
+        "cache-directory"] + "/transients/"
     saveLocation = """%(cacheFolder)s/%(transientBucketId)s/""" % locals()
 
     # SELECT DATA AND PLOT THE SOURCE

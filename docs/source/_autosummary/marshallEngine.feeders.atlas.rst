@@ -1,4 +1,4 @@
-atlas *(module)*
+﻿atlas *(module)*
 =======================================
 
 
@@ -11,6 +11,13 @@ atlas *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~data
+      ~images
     
     
 

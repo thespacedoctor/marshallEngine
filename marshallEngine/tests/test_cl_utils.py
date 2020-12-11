@@ -47,32 +47,32 @@ if not os.path.exists(pathToOutputDir):
 
 class test_cl_utils(unittest.TestCase):
 
-    def test_01_cl(self):
+    # def test_01_cl(self):
 
-        pathToSettingsFile = settingsFile
-        # TEST CL-OPTIONS
-        command = "marshall init"
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+    #     pathToSettingsFile = settingsFile
+    #     # TEST CL-OPTIONS
+    #     command = "marshall init"
+    #     args = docopt(doc, command.split(" ")[1:])
+    #     cl_utils.main(args)
 
-        command = "marshall clean -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+    #     command = "marshall clean -s %(pathToSettingsFile)s" % locals()
+    #     args = docopt(doc, command.split(" ")[1:])
+    #     cl_utils.main(args)
 
-    def test_02_cl(self):
+    # def test_02_cl(self):
 
-        pathToSettingsFile = settingsFile
-        command = "marshall import atlas 1 -s %(pathToSettingsFile)s" % locals()
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+    #     pathToSettingsFile = settingsFile
+    #     command = "marshall import atlas 1 -s %(pathToSettingsFile)s" % locals()
+    #     args = docopt(doc, command.split(" ")[1:])
+    #     cl_utils.main(args)
 
-    def test_03_cl(self):
+    # def test_03_cl(self):
 
-        pathToSettingsFile = settingsFile
-        command = "marshall import panstarrs 1 -s %(pathToSettingsFile)s" % locals(
-        )
-        args = docopt(doc, command.split(" ")[1:])
-        cl_utils.main(args)
+    #     pathToSettingsFile = settingsFile
+    #     command = "marshall import panstarrs 1 -s %(pathToSettingsFile)s" % locals(
+    #     )
+    #     args = docopt(doc, command.split(" ")[1:])
+    #     cl_utils.main(args)
 
     def test_04_cl(self):
 

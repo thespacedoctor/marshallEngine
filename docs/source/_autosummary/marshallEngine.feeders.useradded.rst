@@ -1,4 +1,4 @@
-useradded *(module)*
+﻿useradded *(module)*
 ===========================================
 
 
@@ -11,6 +11,13 @@ useradded *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~data
+      ~images
     
     
 

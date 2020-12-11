@@ -1,4 +1,4 @@
-panstarrs *(module)*
+﻿panstarrs *(module)*
 ===========================================
 
 
@@ -11,6 +11,13 @@ panstarrs *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~data
+      ~images
     
     
 

@@ -1,4 +1,4 @@
-feeders *(module)*
+﻿feeders *(module)*
 =================================
 
 
@@ -11,6 +11,13 @@ feeders *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~data
+      ~images
     
     
 

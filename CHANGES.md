@@ -1,7 +1,10 @@
 
 ## Release Notes
 
-fixed: the save location of lightcurve files was resulting in files not being found in webapp
+**v1.0.3 - December 10, 2020**
+
+**REFACTORING**: reading settings from marshall config folder instead of marshallEngine
+**FIXED**: the save location of lightcurve files was resulting in files not being found in webapp
 
 **v1.0.2 - November 14, 2020**
 
