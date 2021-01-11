@@ -497,7 +497,12 @@ def generate_atlas_lightcurves(
     )
 
     total = len(rows)
-    print("Generating ATLAS lightcurves for %(total)s sources" % locals())
+    if total > 300:
+        print("ATLAS lightcurves need generated for %(total)s sources - generating next 300" % locals())
+        rows = rows[:300]
+        total = len(rows)
+    else:
+        print("Generating ATLAS lightcurves for %(total)s sources" % locals())
 
     index = 1
     for row in rows:
