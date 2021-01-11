@@ -3,9 +3,9 @@
 
 **v1.0.4 - January 11, 2021**
 
-**REFACTORING**: some database schema changes for latest version of Sherlock to run.
-**FIXED**: added a function to recalculate sherlock original radii for merged sources. Fixes webapp visualisation.
-**FIXED**: reduced number of ATLAS LC to be generated in a single batch
+**REFACTORING**: some database schema changes for latest version of Sherlock to run.  
+**FIXED**: added a function to recalculate sherlock original radii for merged sources. Fixes webapp visualisation.  
+**FIXED**: reduced number of ATLAS LC to be generated in a single batch.  
 
 **v1.0.3 - December 10, 2020**
 
