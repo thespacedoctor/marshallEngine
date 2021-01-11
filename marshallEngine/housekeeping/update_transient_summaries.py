@@ -102,6 +102,14 @@ class update_transient_summaries(object):
                 dbConn=self.dbConn
             )
 
+            print("updating sherlock crossmatches table")
+            sqlQuery = "call update_sherlock_crossmatches()"
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
+
         return None
 
     def update(self):
