@@ -324,7 +324,7 @@ class data(object):
         else:
             limitClause = ""
         sqlQuery = u"""
-            select %(fs_name)s, avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from %(fsTableName)s where ingested = 0 %(limitClause)s group by %(fs_name)s 
+            select %(fs_name)s, avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from %(fsTableName)s where ingested = 0 %(limitClause)s and %(fs_ra)s is not null and %(fs_dec)s is not null group by %(fs_name)s 
         """ % locals()
 
         rows = readquery(
@@ -340,7 +340,7 @@ class data(object):
 
         # SPLIT INTO BATCHES SO NOT TO OVERWHELM MEMORY
         batchSize = 200
-        total = len(rows[1:])
+        total = len(rows)
         batches = int(old_div(total, batchSize))
         start = 0
         end = 0
@@ -358,9 +358,9 @@ class data(object):
             fs_name_list = []
             fs_ra_list = []
             fs_dec_list = []
-            fs_name_list = [row[fs_name] for row in batch]
-            fs_ra_list = [row[fs_ra] for row in batch]
-            fs_dec_list = [row[fs_dec] for row in batch]
+            fs_name_list = [row[fs_name] for row in batch if row[fs_ra]]
+            fs_ra_list = [row[fs_ra] for row in batch if row[fs_ra]]
+            fs_dec_list = [row[fs_dec] for row in batch if row[fs_ra]]
 
             ticker += len(fs_name_list)
             print("Matching %(ticker)s/%(total)s sources in the %(fsTableName)s against the transientBucket table" % locals())

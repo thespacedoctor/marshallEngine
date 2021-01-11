@@ -1,4 +1,4 @@
-marshall_lightcurves *(class)*
+﻿marshall_lightcurves *(class)*
 =========================================================
 
 .. currentmodule:: marshallEngine.lightcurves

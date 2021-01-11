@@ -1,4 +1,4 @@
-update_transient_summaries *(class)*
+﻿update_transient_summaries *(class)*
 ================================================================
 
 .. currentmodule:: marshallEngine.housekeeping

@@ -1,4 +1,4 @@
-services *(module)*
+﻿services *(module)*
 ==================================
 
 
@@ -11,6 +11,12 @@ services *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~panstarrs_location_stamps
     
     
 

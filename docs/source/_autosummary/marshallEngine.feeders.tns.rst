@@ -1,4 +1,4 @@
-tns *(module)*
+﻿tns *(module)*
 =====================================
 
 
@@ -11,6 +11,13 @@ tns *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~data
+      ~images
     
     
 

@@ -1,4 +1,4 @@
-housekeeping *(module)*
+﻿housekeeping *(module)*
 ======================================
 
 
@@ -11,6 +11,12 @@ housekeeping *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~update_transient_summaries
     
     
 

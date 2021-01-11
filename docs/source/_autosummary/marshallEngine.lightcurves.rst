@@ -1,4 +1,4 @@
-lightcurves *(module)*
+﻿lightcurves *(module)*
 =====================================
 
 
@@ -11,6 +11,12 @@ lightcurves *(module)*
     :member-order: groupwise
     
     
+    
+    .. rubric:: Classes
+
+    .. autosummary::
+    
+      ~marshall_lightcurves
     
     
 
