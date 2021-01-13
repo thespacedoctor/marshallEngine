@@ -20,7 +20,9 @@ install_requires = [
     'panstamps',
     'transientNamer',
     'tornado',
-    'numpy'
+    'numpy',
+    'gitpython',
+    'atelParser'
 ]
 
 # READ THE DOCS SERVERS
