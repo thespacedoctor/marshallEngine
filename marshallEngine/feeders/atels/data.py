@@ -91,53 +91,6 @@ class data(basedata):
         self.log.debug('completed the ``ingest`` method')
         return None
 
-    def _clean_data_pre_ingest(
-            self,
-            surveyName,
-            withinLastDays=False):
-        """*clean up the list of dictionaries containing the atels data, pre-ingest*
-
-        **Key Arguments:**
-            - ``surveyName`` -- the atels survey name
-            -  ``withinLastDays`` -- the lower limit of observations to include (within the last N days from now). Default *False*, i.e. no limit
-
-        **Return:**
-            - ``dictList`` -- the cleaned list of dictionaries ready for ingest
-
-        **Usage:**
-
-            To clean the data from the atels survey:
-
-            .. code-block:: python 
-
-                dictList = ingesters._clean_data_pre_ingest(surveyName="atels")
-
-            Note you will also be able to access the data via ``ingester.dictList``
-        """
-        self.log.debug('starting the ``_clean_data_pre_ingest`` method')
-
-        # CALC MJD LIMIT
-        if withinLastDays:
-            mjdLimit = now(
-                log=self.log
-            ).get_mjd() - float(withinLastDays)
-
-        for row in self.csvDicts:
-            # IF NOW IN THE LAST N DAYS - SKIP
-            if withinLastDays and float(row["mjd_obs"]) < mjdLimit:
-                continue
-
-            # MASSAGE THE DATA IN THE INPT FORMAT TO WHAT IS NEEDED IN THE
-            # FEEDER SURVEY TABLE IN THE DATABASE
-            thisDictionary = {}
-            # thisDictionary["candidateID"] = row["ps1_designation"]
-            # ...
-
-            self.dictList.append(thisDictionary)
-
-        self.log.debug('completed the ``_clean_data_pre_ingest`` method')
-        return self.dictList
-
     def update_git_repo(
             self):
         """*update the atel data git repo (if it exists)*

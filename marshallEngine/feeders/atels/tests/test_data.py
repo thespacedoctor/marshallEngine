@@ -65,7 +65,6 @@ class test_data(unittest.TestCase):
         )
 
         # ADD DATA IMPORTING CODE HERE
-
         ingester._import_to_feeder_survey_table()
         ingester.insert_into_transientBucket()
 
