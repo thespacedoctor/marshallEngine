@@ -1,9 +1,9 @@
-﻿feeders *(module)*
-=================================
+﻿atels *(module)*
+=======================================
 
 
 
-.. automodule:: marshallEngine.feeders
+.. automodule:: marshallEngine.feeders.atels
     :members:
     :undoc-members:
     :show-inheritance:
@@ -47,16 +47,6 @@
     
     
         
-            ~atels (nice)
-       
-    
-    
-        
-            ~atlas (nice)
-       
-    
-    
-        
             ~data (nice)
        
     
@@ -67,26 +57,6 @@
     
     
         
-            ~panstarrs (nice)
-       
-    
-    
-        
-    
-    
-        
-            ~tns (nice)
-       
-    
-    
-        
-            ~useradded (nice)
-       
-    
-    
-        
-            ~ztf (nice)
-       
     
     
     
