@@ -1,6 +1,10 @@
 
 ## Marshall Engine Release Notes
 
+**v1.0.5 - January 13, 2021**
+
+**REFACTORING**: atel parsing and matching within the marshall database now upgraded
+
 **v1.0.4 - January 11, 2021**
 
 **REFACTORING**: some database schema changes for latest version of Sherlock to run.  
