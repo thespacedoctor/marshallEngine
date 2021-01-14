@@ -1,4 +1,4 @@
-﻿images *(class)*
+images *(class)*
 =================================================
 
 .. currentmodule:: marshallEngine.feeders.panstarrs
