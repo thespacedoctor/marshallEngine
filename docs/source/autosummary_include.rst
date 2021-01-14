@@ -6,7 +6,6 @@
 
    marshallEngine.commonutils
    marshallEngine.feeders
-   marshallEngine.feeders.atels
    marshallEngine.feeders.atlas
    marshallEngine.feeders.panstarrs
    marshallEngine.feeders.tns
@@ -23,8 +22,6 @@
 .. autosummary::
    :nosignatures:
 
-   marshallEngine.feeders.atels.data
-   marshallEngine.feeders.atels.images
    marshallEngine.feeders.atlas.data
    marshallEngine.feeders.atlas.images
    marshallEngine.feeders.data
@@ -39,8 +36,7 @@
    marshallEngine.feeders.ztf.images
    marshallEngine.housekeeping.update_transient_summaries
    marshallEngine.lightcurves.marshall_lightcurves
-   marshallEngine.services.panstarrs_location_stamps
- 
+   marshallEngine.services.panstarrs_location_stamps 
 
 **Functions**
 

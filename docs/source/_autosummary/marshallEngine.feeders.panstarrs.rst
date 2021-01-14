@@ -1,4 +1,4 @@
-﻿panstarrs *(module)*
+panstarrs *(module)*
 ===========================================
 
 

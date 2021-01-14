@@ -1,4 +1,4 @@
-﻿create_lc (*function*)
+create_lc (*function*)
 ==============================================================
 
 .. currentmodule:: marshallEngine.feeders.atlas.lightcurve
