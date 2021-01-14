@@ -273,7 +273,7 @@ class data(object):
         # COPY ROWS TO TRANSIENTBUCKET USING COLUMN MATCH TABLE IN DATABASE
         sqlQuery = """CALL `sync_marshall_feeder_survey_transientBucketId`('%(fsTableName)s');""" % locals(
         )
-        
+
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -312,6 +312,10 @@ class data(object):
         columns = {}
         for row in rows:
             columns[row["transientBucket_column"]] = row["fs_table_column"]
+
+        if "raDeg" not in columns:
+            print(f"No coordinates to match in the {fsTableName} table")
+            return []
 
         # BUILD QUERY TO GET UNIQUE UN-MATCHED SOURCES
         fs_name = columns["name"]

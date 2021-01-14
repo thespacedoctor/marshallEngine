@@ -15,6 +15,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   marshallEngine.feeders.atels
    marshallEngine.feeders.atlas
    marshallEngine.feeders.panstarrs
    marshallEngine.feeders.tns

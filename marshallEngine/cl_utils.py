@@ -184,6 +184,9 @@ def main(arguments=None):
         if survey.lower() == "ztf":
             from marshallEngine.feeders.ztf.data import data
             from marshallEngine.feeders.ztf import images
+        if survey.lower() == "atels" or survey.lower() == "atel":
+            from marshallEngine.feeders.atels.data import data
+            from marshallEngine.feeders.atels import images
         ingester = data(
             log=log,
             settings=settings,

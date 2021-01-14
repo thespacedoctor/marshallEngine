@@ -23,6 +23,7 @@ import codecs
 from fundamentals import fmultiprocess
 from fundamentals.mysql import writequery
 
+
 class images(object):
     """
     *The base class for the feeder image cachers*
@@ -36,7 +37,7 @@ class images(object):
     class images(baseimages):
         ....
     ```
-    
+
     """
 
     def cache(
@@ -47,7 +48,7 @@ class images(object):
         **Key Arguments**
 
         - ``limit`` -- limit the number of transients in the list so not to piss-off survey owners by downloading everything in one go.
-        
+
 
         **Usage**
 
@@ -59,12 +60,12 @@ class images(object):
             dbConn=dbConn
         ).cache(limit=1000)
         ```
-        
+
         """
         self.log.debug('starting the ``cache`` method')
 
         # THESE SURVEY DON'T HAVE IMAGES - PASS
-        if self.survey in ["tns"]:
+        if self.survey in ["tns", "atel", "atels"]:
             return
 
         transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls = self._list_images_needing_cached()
@@ -77,9 +78,11 @@ class images(object):
         else:
 
             if leng > limit:
-                print("Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s" % locals())
+                print(
+                    "Downloading image stamps for the next %(limit)s transients of %(leng)s remaining for %(survey)s" % locals())
             else:
-                print("Downloading image stamps for the remaining %(leng)s transients for %(survey)s" % locals())
+                print(
+                    "Downloading image stamps for the remaining %(leng)s transients for %(survey)s" % locals())
             subtractedStatus, targetStatus, referenceStatus, tripletStatus = self._download(
                 transientBucketIds=transientBucketIds[:limit],
                 subtractedUrls=subtractedUrls[:limit],
@@ -118,12 +121,12 @@ class images(object):
         **Key Arguments**
 
         - ``failedImage`` -- second pass attempt to download alternative image for transients
-        
+
 
         **Return**
 
         - ``transientBucketIds, subtractedUrls, targetUrls, referenceUrls, tripletUrls`` -- synced lists of transientBucketIds, subtracted-, target-, reference- and triplet-image urls. All lists are the same size.
-        
+
         """
         self.log.debug('starting the ``_list_images_needing_cached`` method')
 
@@ -254,7 +257,7 @@ class images(object):
         - ``targetUrls`` -- the list of target image urls (same length as transientBucketIds list).
         - ``referenceUrls`` -- the list of reference image urls (same length as transientBucketIds list).
         - ``tripletUrls`` -- the list of triplet image urls (same length as transientBucketIds list).
-        
+
 
         **Return**
 
@@ -262,7 +265,7 @@ class images(object):
         - ``targetStatus`` -- status of the target image download (0 = fail, 1 = success, 2 = does not exist)
         - ``referenceStatus`` -- status of the reference image download (0 = fail, 1 = success, 2 = does not exist)
         - ``tripletStatus`` -- status of the triplet image download (0 = fail, 1 = success, 2 = does not exist)
-        
+
         """
         self.log.debug('starting the ``_download`` method')
 
@@ -359,6 +362,7 @@ class images(object):
     # use the tab-trigger below for new method
     # xt-class-method
 
+
 def download_image_array(
         imageArray,
         log,
@@ -372,12 +376,12 @@ def download_image_array(
     - ``imageArray`` -- [transientBucketId, subtractedUrl, targetUrl, referenceUrl, tripletUrl]
     - ``survey`` -- name of the survey to name stamps with
     - ``downloadPath`` -- directory to download the images into
-    
+
 
     **Return**
 
     - statusArray -- [subtractedStatus, targetStatus, referenceStatus, tripletStatus]
-    
+
     """
     tid = imageArray[0]
     statusArray = [imageArray[0]]
