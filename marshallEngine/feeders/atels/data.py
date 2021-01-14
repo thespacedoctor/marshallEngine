@@ -17,6 +17,7 @@ from fundamentals import tools
 from ..data import data as basedata
 from astrocalc.times import now
 import git
+from fundamentals.mysql import writequery
 
 
 class data(basedata):
@@ -87,6 +88,13 @@ class data(basedata):
         self.insert_into_transientBucket(
             importUnmatched=False,
             updateTransientSummaries=True)
+
+        sqlQuery = f"""CALL insert_atel_titles_to_comments();"""
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
         self.log.debug('completed the ``ingest`` method')
         return None

@@ -1,4 +1,4 @@
-﻿lightcurves *(module)*
+lightcurves *(module)*
 =====================================
 
 

@@ -1,4 +1,4 @@
-﻿create_lc_depreciated (*function*)
+create_lc_depreciated (*function*)
 ==========================================================================
 
 .. currentmodule:: marshallEngine.feeders.atlas.lightcurve

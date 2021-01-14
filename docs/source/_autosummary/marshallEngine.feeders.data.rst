@@ -1,4 +1,4 @@
-﻿data *(class)*
+data *(class)*
 =====================================
 
 .. currentmodule:: marshallEngine.feeders
