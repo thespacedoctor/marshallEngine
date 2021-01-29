@@ -1,7 +1,10 @@
 
 ## Marshall Engine Release Notes
 
-match transients to astronotes (not yet visualised in the webapp)
+**v1.0.6 - January 13, 2021**
+
+**FEATURE**: match transients to astronotes (not yet visualised in the webapp)  
+**ENHANCEMENT**: HTM indexing added the transientBucketSummaries table so we can spatially crossmatch   
 
 **v1.0.5 - January 13, 2021**
 

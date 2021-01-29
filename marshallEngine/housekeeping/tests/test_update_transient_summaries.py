@@ -39,6 +39,7 @@ shutil.copytree(pathToInputDir, pathToOutputDir)
 if not os.path.exists(pathToOutputDir):
     os.makedirs(pathToOutputDir)
 
+
 class test_update_transient_summaries(unittest.TestCase):
 
     def test_update_transient_summaries_function(self):
@@ -60,6 +61,16 @@ class test_update_transient_summaries(unittest.TestCase):
             dbConn=dbConn
         )
         updater._add_distances()
+
+    def test_update_transient_summaries_function4(self):
+
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        )
+        updater._update_htm_columns()
 
     def test_update_transient_summaries_function3(self):
 

@@ -20,6 +20,7 @@ from astropy.coordinates import SkyCoord
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 from astrocalc.distances import converter
 import numpy as np
+from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
 
 class update_transient_summaries(object):
@@ -161,6 +162,9 @@ class update_transient_summaries(object):
             sqlQuery=sqlQuery,
             dbConn=self.dbConn
         )
+
+        # ADD HTM IDs
+        self._update_htm_columns()
 
         self.log.debug('completed the ``get`` method')
         return None
@@ -326,6 +330,25 @@ class update_transient_summaries(object):
         )
 
         self.log.debug('completed the ``_add_distances`` method')
+        return None
+
+    def _update_htm_columns(
+            self):
+        """*update the htm columns in the transientSummaries table so we can crossmatch if needed*
+        """
+        self.log.debug('starting the ``_update_htm_columns`` method')
+
+        add_htm_ids_to_mysql_database_table(
+            raColName="raDeg",
+            declColName="decDeg",
+            tableName="transientBucketSummaries",
+            dbConn=self.dbConn,
+            log=self.log,
+            primaryIdColumnName="transientBucketId",
+            dbSettings=self.settings["database settings"]
+        )
+
+        self.log.debug('completed the ``_update_htm_columns`` method')
         return None
 
     # use the tab-trigger below for new method
