@@ -16,6 +16,7 @@ from astrocalc.times import now
 from transientNamer import search
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 
+
 class data(basedata):
     """
     *Import the tns transient data into the marshall database*
@@ -25,7 +26,7 @@ class data(basedata):
     - ``log`` -- logger
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
@@ -41,7 +42,7 @@ class data(basedata):
         dbConn=dbConn
     ).ingest()   
     ```
-    
+
     """
 
     def __init__(
@@ -69,7 +70,7 @@ class data(basedata):
         **Key Arguments**
 
         - ``withinLastDays`` -- note this will be handle by the transientNamer import to the database
-        
+
         """
         self.log.debug('starting the ``ingest`` method')
 
@@ -119,6 +120,15 @@ class data(basedata):
         self.fsTableName = "tns_photometry"
         self.survey = "tns"
         self.insert_into_transientBucket(importUnmatched=False)
+
+        # ALSO MATCH NEW ASTRONOTES
+        sqlQuery = """CALL sync_marshall_feeder_survey_transientBucketId('astronotes_transients');""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
         self.log.debug('completed the ``ingest`` method')
         return None
