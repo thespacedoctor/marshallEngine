@@ -1,6 +1,8 @@
 
 ## Marshall Engine Release Notes
 
+match transients to astronotes (not yet visualised in the webapp)
+
 **v1.0.5 - January 13, 2021**
 
 **REFACTORING**: atel parsing and matching within the marshall database now upgraded
