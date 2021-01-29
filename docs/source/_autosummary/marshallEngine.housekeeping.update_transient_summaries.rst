@@ -1,4 +1,4 @@
-update_transient_summaries *(class)*
+﻿update_transient_summaries *(class)*
 ================================================================
 
 .. currentmodule:: marshallEngine.housekeeping
@@ -81,6 +81,10 @@ update_transient_summaries *(class)*
    .. 
    ..     
    ..          ~update_transient_summaries._add_galactic_coords
+   ..      
+   .. 
+   ..     
+   ..          ~update_transient_summaries._update_htm_columns
    ..      
    .. 
    ..     

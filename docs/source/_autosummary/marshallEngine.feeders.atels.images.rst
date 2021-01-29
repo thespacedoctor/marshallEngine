@@ -1,7 +1,7 @@
 ﻿images *(class)*
-=======================================
+=============================================
 
-.. currentmodule:: marshallEngine.feeders
+.. currentmodule:: marshallEngine.feeders.atels
 
 .. autoclass:: images
    :members:

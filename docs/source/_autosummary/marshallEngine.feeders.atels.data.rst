@@ -1,9 +1,9 @@
-﻿images *(class)*
+﻿data *(class)*
 ===========================================
 
-.. currentmodule:: marshallEngine.feeders.tns
+.. currentmodule:: marshallEngine.feeders.atels
 
-.. autoclass:: images
+.. autoclass:: data
    :members:
    :show-inheritance:
    :inherited-members:
@@ -19,7 +19,27 @@
         
    
         
-            ~images.cache
+            ~data.download_new_atels
+       
+   
+        
+            ~data.get_csv_data
+       
+   
+        
+            ~data.ingest
+       
+   
+        
+            ~data.insert_into_transientBucket
+       
+   
+        
+            ~data.parse_atels_to_database
+       
+   
+        
+            ~data.update_git_repo
        
    
    .. 
@@ -76,16 +96,30 @@
    ..     
    .. 
    ..     
-   ..          ~images._download
+   ..          ~data._feeder_survey_transientbucket_crossmatch
    ..      
    .. 
    ..     
-   ..          ~images._list_images_needing_cached
+   ..          ~data._feeder_survey_transientbucket_name_match_and_import
    ..      
    .. 
    ..     
-   ..          ~images._update_database
+   ..          ~data._import_to_feeder_survey_table
    ..      
+   .. 
+   ..     
+   ..          ~data._import_unmatched_feeder_survey_sources_to_transientbucket
+   ..      
+   .. 
+   ..     
+   .. 
+   ..     
+   .. 
+   ..     
+   .. 
+   ..     
+   .. 
+   ..     
    .. 
    ..     
    .. 
