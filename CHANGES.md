@@ -1,6 +1,8 @@
 
 ## Marshall Engine Release Notes
 
+Reduced the crossmatch radius from 7 to 4 arcsec (it is easier to merge than split transients later on)
+
 **v1.0.6 - January 29, 2021**
 
 **FEATURE**: match transients to astronotes (not yet visualised in the webapp)  

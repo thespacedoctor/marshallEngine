@@ -379,7 +379,7 @@ class data(object):
                 columns="transientBucketId, name",
                 ra=fs_ra_list,
                 dec=fs_dec_list,
-                radiusArcsec=7,
+                radiusArcsec=3.5,
                 separations=True,
                 distinct=True,
                 sqlWhere="masterIDFlag=1",

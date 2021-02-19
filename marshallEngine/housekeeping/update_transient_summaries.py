@@ -50,7 +50,8 @@ class update_transient_summaries(object):
     updater = update_transient_summaries(
         log=log,
         settings=settings,
-        dbConn=dbConn
+        dbConn=dbConn,
+        transientBucketId=False
     ).update()
     ```
 

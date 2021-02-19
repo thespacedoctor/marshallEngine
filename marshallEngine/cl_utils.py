@@ -8,11 +8,13 @@ Usage:
     marshall clean [-s <pathToSettingsFile>]
     marshall import <survey> [<withInLastDay>] [-s <pathToSettingsFile>]
     marshall lightcurve <transientBucketId> [-s <pathToSettingsFile>]
+    marshall refresh <transientBucketId>  [-s <pathToSettingsFile>]
 
 Options:
     init                  setup the marshallEngine settings file for the first time
     clean                 preform cleanup tasks like updating transient summaries table
     import                import data, images, lightcurves from a feeder survey
+    refresh               update the cached metadata for a given transient
     lightcurve            generate a lightcurve for a transient in the marshall database
     transientBucketId     the transient ID from the database
     survey                name of survey to import [panstarrs|atlas|useradded]
@@ -215,6 +217,15 @@ def main(arguments=None):
         )
         filepath = lc.plot()
         print("The lightcurve plot for transient %(transientBucketId)s can be found here: %(filepath)s" % locals())
+
+    if a["refresh"]:
+        from marshallEngine.housekeeping import update_transient_summaries
+        updater = update_transient_summaries(
+            log=log,
+            settings=settings,
+            dbConn=dbConn,
+            transientBucketId=transientBucketId
+        ).update()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
