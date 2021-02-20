@@ -22,8 +22,8 @@
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
-            40 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">40 run</button>
+            41 statements &nbsp;
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">41 run</button>
             <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">0 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
@@ -184,14 +184,17 @@
     <p id="t130" class="pln"><span class="n"><a href="#t130">130</a></span><span class="t">            <span class="nam">dbConn</span><span class="op">=</span><span class="nam">self</span><span class="op">.</span><span class="nam">dbConn</span>&nbsp;</span><span class="r"></span></p>
     <p id="t131" class="pln"><span class="n"><a href="#t131">131</a></span><span class="t">        <span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t132" class="pln"><span class="n"><a href="#t132">132</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
-    <p id="t133" class="run"><span class="n"><a href="#t133">133</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``ingest`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t134" class="run"><span class="n"><a href="#t134">134</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t133" class="pln"><span class="n"><a href="#t133">133</a></span><span class="t">        <span class="com"># CLEAN UP TASKS TO MAKE THE TICKET UPDATE</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t134" class="run"><span class="n"><a href="#t134">134</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">clean_up</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t135" class="pln"><span class="n"><a href="#t135">135</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
+    <p id="t136" class="run"><span class="n"><a href="#t136">136</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">log</span><span class="op">.</span><span class="nam">debug</span><span class="op">(</span><span class="str">'completed the ``ingest`` method'</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t137" class="run"><span class="n"><a href="#t137">137</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
 </div>
 <div id="footer">
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.4</a>,
-            created at 2021-01-29 13:48 +0000
+            created at 2021-02-20 17:38 +0000
         </p>
     </div>
 </div>
