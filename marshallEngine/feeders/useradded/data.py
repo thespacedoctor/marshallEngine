@@ -78,15 +78,6 @@ class data(basedata):
 
         allLists = []
 
-        # MIGHT NEED SOMETHING LIKE THIS ... OTHERWISE DELETE AND ADD ANOTHER IMPORT METHOD
-        # csvDicts = self.get_csv_data(
-        #     url=self.settings["panstarrs urls"]["ps13pi"]["summary csv"],
-        #     user=self.settings["credentials"]["ps13pi"]["username"],
-        #     pwd=self.settings["credentials"]["ps13pi"]["password"]
-        # )
-        # allLists.extend(self._clean_data_pre_ingest(
-        #     surveyName="ps13pi", withinLastDays=withinLastDays))
-
         self.dictList = allLists
         self._import_to_feeder_survey_table()
 
@@ -116,6 +107,9 @@ class data(basedata):
             transientBucketId=transientBucketId
         )
         updater.update()
+
+        # CLEAN UP TASKS TO MAKE THE TICKET UPDATE
+        self.clean_up()
 
         self.log.info('completed the ``ingest`` method')
         return None

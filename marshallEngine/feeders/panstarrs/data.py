@@ -136,6 +136,9 @@ class data(basedata):
             dbConn=self.dbConn
         )
 
+        # CLEAN UP TASKS TO MAKE THE TICKET UPDATE
+        self.clean_up()
+
         self.log.debug('completed the ``ingest`` method')
         return None
 

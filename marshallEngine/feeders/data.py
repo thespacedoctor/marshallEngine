@@ -491,4 +491,49 @@ GROUP BY transientBucketId) as a )""" % locals()
         return None
 
     # use the tab-trigger below for new method
+    def clean_up(
+            self):
+        """*A few tasks to finish off the ingest*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+
+        ```python
+        usage code 
+        ```
+
+        ---
+
+        ```eval_rst
+        .. todo::
+
+            - add usage info
+            - create a sublime snippet for usage
+            - write a command-line tool for this method
+            - update package tutorial with command-line tool info if needed
+        ```
+        """
+        self.log.debug('starting the ``clean_up`` method')
+
+        sqlQueries = [
+            "insert into sherlock_classifications (transient_object_id) select distinct transientBucketId from transientBucketSummaries ON DUPLICATE KEY UPDATE  transient_object_id = transientBucketId;",
+            "CALL update_transient_akas(); "
+        ]
+
+        for sqlQuery in sqlQueries:
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
+
+        self.log.debug('completed the ``clean_up`` method')
+        return None
+
+    # use the tab-trigger below for new method
     # xt-class-method

@@ -14,6 +14,7 @@ from ..data import data as basedata
 from astrocalc.times import now
 from fundamentals.mysql import writequery
 
+
 class data(basedata):
     """
     *Import the ZTF transient data into the marshall database*
@@ -23,7 +24,7 @@ class data(basedata):
     - ``log`` -- logger
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
-    
+
 
     **Usage**
 
@@ -39,7 +40,7 @@ class data(basedata):
         dbConn=dbConn
     ).ingest(withinLastDays=withInLastDay)   
     ```
-    
+
     """
     # Initialisation
 
@@ -69,7 +70,7 @@ class data(basedata):
         **Key Arguments**
 
         - ``withinLastDays`` -- within the last number of days. *Default: 50*
-        
+
         """
         self.log.debug('starting the ``ingest`` method')
 
@@ -84,6 +85,9 @@ class data(basedata):
 
         # self._import_to_feeder_survey_table()
         self.insert_into_transientBucket()
+
+        # CLEAN UP TASKS TO MAKE THE TICKET UPDATE
+        self.clean_up()
 
         self.log.debug('completed the ``ingest`` method')
         return None
