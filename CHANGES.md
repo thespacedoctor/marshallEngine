@@ -1,8 +1,10 @@
 
 ## Marshall Engine Release Notes
 
-Added cleanup function at end of ingests so objects appear in inbox quicker and akas are updated more frequently
-Reduced the crossmatch radius from 7 to 4 arcsec (it is easier to merge than split transients later on)
+**v1.0.7 - February 20, 2021**
+
+**ENHANCEMENT**: Added cleanup function at end of ingests so objects appear in inbox quicker and akas are updated more frequently
+**REFACTORING**: Reduced the crossmatch radius from 7 to 4 arcsec (it is easier to merge than split transients later on)
 
 **v1.0.6 - January 29, 2021**
 
