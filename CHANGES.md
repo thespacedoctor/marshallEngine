@@ -1,6 +1,9 @@
 
 ## Marshall Engine Release Notes
 
+**REFACTOR**: Occasional check to make sure all akas are set (i.e. more than just for transients discovered in the last 3 weeks).
+**FIXED**: ATel comments where getting added correctly to associated object but ticket "ATel" drop-up menu was missing some ATel links occasionally.
+
 **v1.0.7 - February 20, 2021**
 
 **ENHANCEMENT**: Added cleanup function at end of ingests so objects appear in inbox quicker and akas are updated more frequently

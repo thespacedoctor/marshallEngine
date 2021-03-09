@@ -150,7 +150,7 @@ def main(arguments=None):
             "resurrect_objects",
             "update_sherlock_xmatch_counts",
             "update_inbox_auto_archiver",
-            "update_transient_akas"
+            "update_transient_akas(0)"
         ]
 
         # CALL EACH PROCEDURE
