@@ -522,7 +522,7 @@ GROUP BY transientBucketId) as a )""" % locals()
 
         sqlQueries = [
             "insert into sherlock_classifications (transient_object_id) select distinct transientBucketId from transientBucketSummaries ON DUPLICATE KEY UPDATE  transient_object_id = transientBucketId;",
-            "CALL update_transient_akas(); "
+            "CALL update_transient_akas(1); "
         ]
 
         for sqlQuery in sqlQueries:
