@@ -472,14 +472,17 @@ class data(object):
 
         # SET THE MASTER ID FLAG FOR ALL NEW TRANSIENTS IN THE TRANSIENTBUCKET
         newTransientBucketIds = (",").join(newTransientBucketIds)
-        sqlQuery = """update transientBucket set masterIDFlag = 1 where primaryKeyId in (select * from (
-SELECT 
-    primaryKeyId
-FROM
-    transientBucket
-WHERE
-    transientBucketId IN (%(newTransientBucketIds)s)
-GROUP BY transientBucketId) as a )""" % locals()
+        sqlQuery = """UPDATE transientBucket t
+                            JOIN
+                        (SELECT 
+                            transientBucketId, MIN(primaryKeyId) AS minpk
+                        FROM
+                            transientBucket
+                        WHERE
+                            transientBucketId IN (%(newTransientBucketIds)s)
+                        GROUP BY transientBucketId) tmin ON t.primaryKeyId = tmin.minpk 
+                    SET 
+                        masterIDFlag = 1;""" % locals()
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
