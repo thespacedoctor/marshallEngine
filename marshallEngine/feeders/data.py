@@ -471,6 +471,7 @@ class data(object):
         self._feeder_survey_transientbucket_name_match_and_import()
 
         # SET THE MASTER ID FLAG FOR ALL NEW TRANSIENTS IN THE TRANSIENTBUCKET
+        self.log.error("NEW CODE")
         newTransientBucketIds = (",").join(newTransientBucketIds)
         sqlQuery = """UPDATE transientBucket t
                             JOIN
