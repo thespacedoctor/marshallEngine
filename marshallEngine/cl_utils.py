@@ -145,17 +145,17 @@ def main(arguments=None):
         from fundamentals.mysql import writequery
 
         procedureNames = [
-            "update_transients_with_no_masteridflag",
-            "insert_new_transients_into_transientbucketsummaries",
-            "resurrect_objects",
-            "update_sherlock_xmatch_counts",
-            "update_inbox_auto_archiver",
+            "update_transients_with_no_masteridflag()",
+            "insert_new_transients_into_transientbucketsummaries()",
+            "resurrect_objects()",
+            "update_sherlock_xmatch_counts()",
+            "update_inbox_auto_archiver()",
             "update_transient_akas(0)"
         ]
 
         # CALL EACH PROCEDURE
         for p in procedureNames:
-            sqlQuery = "CALL `%(p)s`();" % locals()
+            sqlQuery = "CALL %(p)s;" % locals()
             writequery(
                 log=log,
                 sqlQuery=sqlQuery,
