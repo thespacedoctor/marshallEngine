@@ -1,6 +1,7 @@
 
 ## Marshall Engine Release Notes
 
+**FIXED**: Links to the ASASSN Sky Patrol
 **REFACTOR**: Occasional check to make sure all akas are set (i.e. more than just for transients discovered in the last 3 weeks).
 **FIXED**: ATel comments where getting added correctly to associated object but ticket "ATel" drop-up menu was missing some ATel links occasionally.
 
