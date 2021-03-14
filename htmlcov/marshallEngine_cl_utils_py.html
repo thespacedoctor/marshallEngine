@@ -199,17 +199,17 @@
     <p id="t145" class="mis show_mis"><span class="n"><a href="#t145">145</a></span><span class="t">        <span class="key">from</span> <span class="nam">fundamentals</span><span class="op">.</span><span class="nam">mysql</span> <span class="key">import</span> <span class="nam">writequery</span>&nbsp;</span><span class="r"></span></p>
     <p id="t146" class="pln"><span class="n"><a href="#t146">146</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t147" class="mis show_mis"><span class="n"><a href="#t147">147</a></span><span class="t">        <span class="nam">procedureNames</span> <span class="op">=</span> <span class="op">[</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t148" class="pln"><span class="n"><a href="#t148">148</a></span><span class="t">            <span class="str">"update_transients_with_no_masteridflag"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t149" class="pln"><span class="n"><a href="#t149">149</a></span><span class="t">            <span class="str">"insert_new_transients_into_transientbucketsummaries"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t150" class="pln"><span class="n"><a href="#t150">150</a></span><span class="t">            <span class="str">"resurrect_objects"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">            <span class="str">"update_sherlock_xmatch_counts"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t152" class="pln"><span class="n"><a href="#t152">152</a></span><span class="t">            <span class="str">"update_inbox_auto_archiver"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t153" class="pln"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="str">"update_transient_akas"</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t148" class="pln"><span class="n"><a href="#t148">148</a></span><span class="t">            <span class="str">"update_transients_with_no_masteridflag()"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t149" class="pln"><span class="n"><a href="#t149">149</a></span><span class="t">            <span class="str">"insert_new_transients_into_transientbucketsummaries()"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t150" class="pln"><span class="n"><a href="#t150">150</a></span><span class="t">            <span class="str">"resurrect_objects()"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t151" class="pln"><span class="n"><a href="#t151">151</a></span><span class="t">            <span class="str">"update_sherlock_xmatch_counts()"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t152" class="pln"><span class="n"><a href="#t152">152</a></span><span class="t">            <span class="str">"update_inbox_auto_archiver()"</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t153" class="pln"><span class="n"><a href="#t153">153</a></span><span class="t">            <span class="str">"update_transient_akas(0)"</span>&nbsp;</span><span class="r"></span></p>
     <p id="t154" class="pln"><span class="n"><a href="#t154">154</a></span><span class="t">        <span class="op">]</span>&nbsp;</span><span class="r"></span></p>
     <p id="t155" class="pln"><span class="n"><a href="#t155">155</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t156" class="pln"><span class="n"><a href="#t156">156</a></span><span class="t">        <span class="com"># CALL EACH PROCEDURE</span>&nbsp;</span><span class="r"></span></p>
     <p id="t157" class="mis show_mis"><span class="n"><a href="#t157">157</a></span><span class="t">        <span class="key">for</span> <span class="nam">p</span> <span class="key">in</span> <span class="nam">procedureNames</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t158" class="mis show_mis"><span class="n"><a href="#t158">158</a></span><span class="t">            <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">"CALL `%(p)s`();"</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t158" class="mis show_mis"><span class="n"><a href="#t158">158</a></span><span class="t">            <span class="nam">sqlQuery</span> <span class="op">=</span> <span class="str">"CALL %(p)s;"</span> <span class="op">%</span> <span class="nam">locals</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t159" class="mis show_mis"><span class="n"><a href="#t159">159</a></span><span class="t">            <span class="nam">writequery</span><span class="op">(</span>&nbsp;</span><span class="r"></span></p>
     <p id="t160" class="pln"><span class="n"><a href="#t160">160</a></span><span class="t">                <span class="nam">log</span><span class="op">=</span><span class="nam">log</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
     <p id="t161" class="pln"><span class="n"><a href="#t161">161</a></span><span class="t">                <span class="nam">sqlQuery</span><span class="op">=</span><span class="nam">sqlQuery</span><span class="op">,</span>&nbsp;</span><span class="r"></span></p>
@@ -298,8 +298,8 @@
 <div id="footer">
     <div class="content">
         <p>
-            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.4</a>,
-            created at 2021-02-20 17:38 +0000
+            <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
+            created at 2021-03-14 17:39 +0000
         </p>
     </div>
 </div>
