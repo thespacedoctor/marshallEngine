@@ -1,8 +1,10 @@
 
 ## Marshall Engine Release Notes
 
-**FIXED**: Links to the ASASSN Sky Patrol
+**v1.0.8 - March 14, 2021**
+
 **REFACTOR**: Occasional check to make sure all akas are set (i.e. more than just for transients discovered in the last 3 weeks).
+**FIXED**: Links to the ASASSN Sky Patrol now added to all TNS reported ASASSN transient names (credentials discoverable in hover-over tool-tip)
 **FIXED**: ATel comments where getting added correctly to associated object but ticket "ATel" drop-up menu was missing some ATel links occasionally.
 
 **v1.0.7 - February 20, 2021**
