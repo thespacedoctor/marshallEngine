@@ -1,4 +1,4 @@
-﻿panstarrs_location_stamps *(class)*
+panstarrs_location_stamps *(class)*
 ===========================================================
 
 .. currentmodule:: marshallEngine.services

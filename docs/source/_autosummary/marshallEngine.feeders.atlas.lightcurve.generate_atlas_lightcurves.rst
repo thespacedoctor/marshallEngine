@@ -1,4 +1,4 @@
-﻿generate_atlas_lightcurves (*function*)
+generate_atlas_lightcurves (*function*)
 ===============================================================================
 
 .. currentmodule:: marshallEngine.feeders.atlas.lightcurve

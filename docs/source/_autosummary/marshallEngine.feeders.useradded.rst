@@ -1,63 +1,39 @@
-﻿useradded *(module)*
+useradded *(module)*
 ===========================================
 
 
 
 .. automodule:: marshallEngine.feeders.useradded
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    :inherited-members:
-    :member-order: groupwise
+
+
     
     
+
+    
+
+
+    
+
     
     .. rubric:: Classes
 
     .. autosummary::
-    
-      ~data
-      ~images
-    
-    
+
+        
+          ~data
+          ~images
+        
+
+        
+
+
 
     
-    
-    
 
-    
-    
-    
 
-    
-    
-    .. rubric:: Sub-modules
-
-    .. autosummary::
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
         
-            ~data (nice)
-       
-    
-    
-        
-            ~images (nice)
-       
-    
-    
-        
-    
-    
+
+
     
     
