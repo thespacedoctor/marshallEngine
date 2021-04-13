@@ -116,7 +116,7 @@ class marshall_lightcurves(object):
                     AND transientBucketId = %(transientBucketId)s
                     AND magnitude IS NOT NULL
                     -- AND filter is not null
-            ORDER BY uniqueConstraint DESC, magnitudeError desc, magnitude asc
+            ORDER BY uniqueConstraint ASC, magnitudeError desc, magnitude asc
         """ % locals()
         transientData = readquery(
             sqlQuery=sqlQuery,
