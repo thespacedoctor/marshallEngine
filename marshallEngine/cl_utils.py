@@ -152,6 +152,7 @@ def main(arguments=None):
             "update_inbox_auto_archiver()",
             "update_transient_akas(0)"
         ]
+        procedureNames = []
 
         # CALL EACH PROCEDURE
         for p in procedureNames:

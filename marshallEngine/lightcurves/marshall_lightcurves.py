@@ -31,6 +31,8 @@ import matplotlib.ticker as mtick
 from matplotlib.backends.backend_pdf import PdfPages
 import math
 
+from numpy.polynomial.chebyshev import chebfit, chebval
+
 
 class marshall_lightcurves(object):
     """
@@ -116,7 +118,7 @@ class marshall_lightcurves(object):
                     AND transientBucketId = %(transientBucketId)s
                     AND magnitude IS NOT NULL
                     -- AND filter is not null
-            ORDER BY uniqueConstraint DESC, magnitudeError desc, magnitude asc
+            ORDER BY uniqueConstraint ASC, magnitudeError desc, magnitude asc
         """ % locals()
         transientData = readquery(
             sqlQuery=sqlQuery,
@@ -262,21 +264,60 @@ class marshall_lightcurves(object):
         currentMag = -9999
         gradient = -9999
 
-        # WORK OUT RELATIVE DATES - NEEDED FOR CURRENT MAG ESTIMATES
-        fixedTimeDataList = flatdata["mjd"]
-
+        # WHAT IS TODAY MJD (FIR CURRENT MAG ESTIMATE)
         todayMjd = now(
             log=self.log
         ).get_mjd()
 
-        timeList = []
-        timeList[:] = [t - todayMjd for t in flatdata["mjd"]]
-
-        # DETERMINE SENSIBLE AXIS LIMITS FROM FLATTENED DATA
+        # MAKE ARRAYS OF TIME AND MAG FOR PLOTS
         bigTimeArray, bigMagArray = np.array(
             flatdata["mjd"]), np.array(flatdata["mag"])
-        xLowerLimit = min(bigTimeArray)
-        xUpperLimit = max(bigTimeArray)
+        # SORT TWO LIST BASED ON FIRST
+        bigTimeArray, bigMagArray = zip(
+            *[(x, y) for x, y in sorted(zip(bigTimeArray, bigMagArray))])
+
+        # BIN DATA FOR POLYNOMIALS
+        binData = True
+        if binData is True:
+            distinctMjds = {}
+            for mjd, mag in zip(bigTimeArray, bigMagArray):
+                # DICT KEY IS THE UNIQUE INTEGER MJD
+                key = str(int(math.floor(mjd / 1.0)))
+                # FIRST DATA POINT OF THE NIGHTS? CREATE NEW DATA SET
+                if key not in distinctMjds:
+                    distinctMjds[key] = {
+                        "mjds": [mjd],
+                        "mags": [mag]
+                    }
+                # OR NOT THE FIRST? APPEND TO ALREADY CREATED LIST
+                else:
+                    distinctMjds[key]["mjds"].append(mjd)
+                    distinctMjds[key]["mags"].append(mag)
+
+            # ALL DATA NOW IN MJD SUBSETS. SO FOR EACH SUBSET (I.E. INDIVIDUAL
+            # NIGHTS) ...
+            summedMagnitudes = {
+                'mjds': [],
+                'mags': []
+            }
+            for k, v in list(distinctMjds.items()):
+                # GIVE ME THE MEAN MJD
+                meanMjd = sum(v["mjds"]) / len(v["mjds"])
+                summedMagnitudes["mjds"].append(meanMjd)
+                # GIVE ME THE MEAN MAG
+                meanMag = sum(v["mags"]) / len(v["mags"])
+                summedMagnitudes["mags"].append(meanMag)
+
+            bigTimeArray = summedMagnitudes["mjds"]
+            bigMagArray = summedMagnitudes["mags"]
+
+        bigTimeArray = np.array(bigTimeArray)
+        bigMagArray = np.array(bigMagArray)
+
+        # DETERMINE SENSIBLE AXIS LIMITS FROM FLATTENED DATA
+        # LIMITS HERE ARE LOWER AND UPPER MJDS FOR X-AXIS
+        xLowerLimit = bigTimeArray.min()
+        xUpperLimit = bigTimeArray.max()
         latestTime = xUpperLimit
         xBorder = math.fabs((xUpperLimit - xLowerLimit)) * 0.1
         if xBorder < 5:
@@ -284,96 +325,52 @@ class marshall_lightcurves(object):
         xLowerLimit -= xBorder
         xUpperLimit += xBorder
         fixedXUpperLimit = xUpperLimit
-
-        # REALTIVE TIMES - TO PREDICT CURRENT MAG
-        relativeTimeArray = []
-        relativeTimeArray[:] = [r - todayMjd for r in bigTimeArray]
-        rxLowerLimit = min(relativeTimeArray)
-        rxUpperLimit = max(relativeTimeArray)
-        rlatestTime = xUpperLimit
+        timeRange = xUpperLimit - xLowerLimit
 
         # POLYNOMIAL CONSTAINTS USING COMBINED DATASETS
         # POLYNOMIAL/LINEAR SETTINGS
         # SETTINGS FILE
-        polyOrder = 3
+        polyOrder = 5
         # EITHER USE DATA IN THESE LAST NUMBER OF DAYS OR ...
         lastNumDays = 10.
         # ... IF NOT ENOUGH DATA USE THE LAST NUMBER OF DATA POINTS
         predictCurrentMag = True
         lastNumDataPoints = 3
-        numAnchors = 2
-        anchorSeparation = 30
+        numAnchors = 3
+        anchorSeparation = 70
         latestMag = bigMagArray[0]
-        anchorPointMag = latestMag + 20.
+        anchorPointMag = latestMag + 0.5
         polyTimeArray, polyMagArray = [], []
-        newArray = np.array([])
 
         # QUIT IF NOT ENOUGH DATA FOR POLYNOMIAL
-        if len(bigTimeArray) <= lastNumDataPoints:
+        if len(bigTimeArray) <= lastNumDataPoints or timeRange < 3.:
             predictCurrentMag = False
-        while predictCurrentMag and lastNumDataPoints < 6:
-            if len(bigTimeArray) <= lastNumDataPoints:
-                predictCurrentMag = False
-            elif predictCurrentMag and bigTimeArray[-1] - bigTimeArray[-lastNumDataPoints] < 5:
-                lastNumDataPoints += 1
-            else:
-                break
-        if predictCurrentMag and bigTimeArray[-1] - bigTimeArray[-lastNumDataPoints] < 5:
-            predictCurrentMag = False
-
-        # FIND THE MOST RECENT OBSERVATION TAKEN > LASTNUMDAYS DAYS BEFORE THE LAST
-        # OBSERVATION
-        breakpoint = 0
-        for thisIndex, v in enumerate(relativeTimeArray):
-            if breakpoint:
-                break
-            if v < max(relativeTimeArray) - lastNumDays:
-                breakpoint = 1
-        else:
-            if breakpoint == 0:
-                predictCurrentMag = False
 
         if predictCurrentMag:
+            # USE ONLY THE LAST N DAYS OF DATA FOR LINEAR FIT
+            mask = np.where(bigTimeArray -
+                            bigTimeArray.max() < -lastNumDays, False, True)
+
             # DETERMINE GRADIENT OF SLOPE FROM LAST `LASTNUMDAYS` DAYS
-            linearTimeArray = relativeTimeArray[0:thisIndex]
-            linearMagArray = bigMagArray[0:thisIndex].tolist()
+            linearTimeArray = bigTimeArray[mask]
+            linearMagArray = bigMagArray[mask]
             # FIT AND PLOT THE POLYNOMIAL ASSOCSIATED WITH ALL DATA SETS
-            thisLinear = np.polyfit(linearTimeArray, linearMagArray, 1)
-            gradient = thisLinear[0]
+            thisLinear = chebfit(linearTimeArray, linearMagArray, 1)
+            gradient = thisLinear[1]
 
-            # FROM GRADIENT DETERMINE WHERE ANCHOR POINTS ARE PLACED
-            if gradient > 0.1:
-                firstAnchorPointTime = 120.
-            elif gradient < -0.5:
-                firstAnchorPointTime = 50
-            elif gradient > -0.5:
-                firstAnchorPointTime = 120 - (np.abs(gradient) - 0.1) * 300.
-            else:
-                firstAnchorPointTime = 120
-
-            if firstAnchorPointTime > 120.:
-                firstAnchorPointTime = 120.
-
-            firstAnchorPointTime = firstAnchorPointTime + latestTime
-            if firstAnchorPointTime < 30.:
-                firstAnchorPointTime = 30.
+            firstAnchorPointTime = anchorSeparation + latestTime
 
             # CREATE THE ARRAY OF DATA USED TO GERNERATE THE POLYNOMIAL
-            polyTimeArray = relativeTimeArray[0:thisIndex]
-            polyMagArray = bigMagArray[0:thisIndex].tolist()
-
-            printArray = []
-            printArray[:] = [float("%(i)0.1f" % locals())
-                             for i in polyTimeArray]
-            infoText = "time array : %(printArray)s" % locals()
-            warningColor = "#dc322f"
+            polyTimeArray = bigTimeArray
+            polyMagArray = bigMagArray
 
             # ANCHOR THE POLYNOMIAL IN THE FUTURE SO THAT ALL PREDICTED LIGHTCURVES
             # EVENTUALLY FADE TO NOTHING
-            for i in range(numAnchors):
-                polyTimeArray.insert(0, firstAnchorPointTime + i *
-                                     anchorSeparation)
-                polyMagArray.insert(0, anchorPointMag)
+            extraTimes = np.arange(0, numAnchors) * \
+                anchorSeparation + firstAnchorPointTime
+            extraMags = np.ones(numAnchors) * anchorPointMag
+            polyTimeArray = np.append(polyTimeArray, extraTimes)
+            polyMagArray = np.append(polyMagArray, extraMags)
 
             # POLYNOMIAL LIMTIS
             xPolyLowerLimit = min(polyTimeArray) - 2.0
@@ -395,18 +392,16 @@ class marshall_lightcurves(object):
         xLowerLimit = xLowerTmp
 
         if predictCurrentMag:
-            thisPoly = np.polyfit(polyTimeArray, polyMagArray, polyOrder)
+            thisPoly = chebfit(polyTimeArray, polyMagArray, polyOrder)
             # FLATTEN INTO A FUNCTION TO MAKE PLOTTING EASIER
-            flatLinear = np.poly1d(thisLinear)
-            flatPoly = np.poly1d(thisPoly)
-            xData = np.arange(xPolyLowerLimit, xPolyUpperLimit, 1)
-            plt.plot(xData, flatPoly(xData), label="poly")
-            plt.plot(xData, flatLinear(xData), label="linear")
+            xData = np.arange(xPolyLowerLimit, todayMjd + 50, 1)
+            flatLinear = chebval(xData, thisLinear)
+            flatPoly = chebval(xData, thisPoly)
+            plt.plot(xData, flatPoly, label="poly")
+            plt.plot(xData, flatLinear, label="linear")
 
             # PREDICT A CURRENT MAGNITUDE FROM THE PLOT
-            currentMag = flatPoly(0.)
-            if currentMag < latestMag:
-                currentMag = currentMag + 0.2
+            currentMag = chebval(todayMjd, thisPoly)
             self.log.debug(
                 'currentMag: %(currentMag)0.2f, m=%(gradient)s' % locals())
 
@@ -416,13 +411,14 @@ class marshall_lightcurves(object):
             line = ax.plot(nowArray, currentMagArray,
                            ls, label="current estimate")
 
+            lineExtras = ax.plot(extraTimes, extraMags, "+")
+
             # SET THE AXES / VIEWPORT FOR THE PLOT
             if currentMag < yLowerLimit:
                 yLowerLimit = currentMag - 0.4
 
         plt.clf()
         plt.cla()
-        ax = fig.add_subplot(1, 1, 1)
 
         # PLOT DATA VIA FILTER. MAGS AND LIMITS
         filterColor = {
@@ -515,7 +511,7 @@ class marshall_lightcurves(object):
         ax.yaxis.set_major_formatter(y_formatter)
 
         # PRINT CURRENT MAG AS SANITY CHECK
-        # fig.text(0.1, 1.02, currentMag, ha="left", fontsize=40)
+        fig.text(0.1, 1.02, currentMag, ha="left", fontsize=40)
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists(saveLocation):
