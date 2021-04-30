@@ -156,6 +156,7 @@ def main(arguments=None):
         # CALL EACH PROCEDURE
         for p in procedureNames:
             sqlQuery = "CALL %(p)s;" % locals()
+            print(f'Calling the `{p}` MySQL procedure')
             writequery(
                 log=log,
                 sqlQuery=sqlQuery,
