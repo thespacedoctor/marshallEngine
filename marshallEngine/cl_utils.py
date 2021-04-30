@@ -152,11 +152,11 @@ def main(arguments=None):
             "update_inbox_auto_archiver()",
             "update_transient_akas(0)"
         ]
-        procedureNames = []
 
         # CALL EACH PROCEDURE
         for p in procedureNames:
             sqlQuery = "CALL %(p)s;" % locals()
+            print(f'Calling the `{p}` MySQL procedure')
             writequery(
                 log=log,
                 sqlQuery=sqlQuery,

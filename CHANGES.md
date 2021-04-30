@@ -1,7 +1,7 @@
 
 ## Marshall Engine Release Notes  
 
-fixed bug in resurrection code
+* refactoring resurrection code
 
 **v1.0.8 - March 17, 2021**  
   
