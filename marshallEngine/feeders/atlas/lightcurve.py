@@ -549,6 +549,8 @@ def generate_atlas_lightcurves(
             dbConn=dbConn
         )
 
+        epochs = sigma_clip_data(epochs)
+
         # FIND THE CACHE DIR FOR THE SOURCE
         cacheDirectory = settings[
             "cache-directory"] + "/transients/" + str(transientBucketId)
@@ -572,366 +574,80 @@ def generate_atlas_lightcurves(
     return None
 
 
-def create_lc_depreciated(
-        log,
-        cacheDirectory,
-        epochs):
-    """*create the atlas lc for one transient*
+def sigma_clip_data(
+        fpData,
+        clippingSigma=2.2):
+    """*clean up rouge data from the files by performing some basic clipping*
 
-    **Key Arguments**
+    **Key Arguments:**
 
-    - ``cacheDirectory`` -- the directory to add the lightcurve to
-    - ``log`` -- logger
-    - ``epochs`` -- dictionary of lightcurve data-points
+    - `fpFile` -- path to single force photometry file
+    - `clippingSigma` -- the level at which to clip flux data
 
+    **Return:**
 
-    **Return**
-
-    - None
-
-
-    **Usage**
-
-    .. todo::
-
-        add usage info
-        create a sublime snippet for usage
-
-    ```python
-    usage code
-    ```
-
+    - `epochs` -- sigma clipped and cleaned epoch data
     """
-    log.debug('starting the ``create_lc`` function')
+    log.info('starting the ``read_and_sigma_clip_data`` function')
 
-    # c = cyan, o = arange
-    magnitudes = {
-        'c': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-        'o': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-        'I': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-    }
+    mjdMin = False
+    mjdMax = False
 
-    limits = {
-        'c': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-        'o': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-        'I': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-    }
+    print(fpData)
 
-    discoveryMjd = False
-    for epoch in epochs:
-        if epoch["filter"] not in ["c", "o", "I"]:
+    # PARSE DATA WITH SOME FIXED CLIPPING
+    oepochs = []
+    cepochs = []
+    csvReader = csv.DictReader(
+        fpData, dialect='excel', delimiter=',', quotechar='"')
+
+    for row in csvReader:
+        for k, v in row.items():
+            try:
+                row[k] = float(v)
+            except:
+                pass
+        # REMOVE VERY HIGH ERROR DATA POINTS & POOR CHI SQUARED
+        if row["duJy"] > 4000 or row["chi/N"] > 100:
             continue
-        objectName = epoch["atlas_designation"]
-        if epoch["limiting_mag"] == 1:
-            limits[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-            limits[epoch["filter"]]["mags"].append(epoch["mag"])
-            limits[epoch["filter"]]["magErrs"].append(epoch["dm"])
-            limits[epoch["filter"]]["zp"].append(epoch["zp"])
-            flux = 10**(old_div((float(epoch["zp"]) -
-                                 float(epoch["mag"])), 2.5))
-            limits[epoch["filter"]]["flux"].append(flux)
-        else:
-            if not discoveryMjd or discoveryMjd > epoch["mjd_obs"]:
-                discoveryMjd = epoch["mjd_obs"]
-            magnitudes[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-            magnitudes[epoch["filter"]]["mags"].append(epoch["mag"])
-            magnitudes[epoch["filter"]]["magErrs"].append(epoch["dm"])
-            magnitudes[epoch["filter"]]["zp"].append(epoch["zp"])
-            flux = 10**(old_div((float(epoch["zp"]) -
-                                 float(epoch["mag"])), 2.5))
-            magnitudes[epoch["filter"]]["flux"].append(flux)
+        if mjdMin and mjdMax:
+            if row["MJD"] < mjdMin or row["MJD"] > mjdMax:
+                continue
+        if row["F"] == "c":
+            cepochs.append(row)
+        if row["F"] == "o":
+            oepochs.append(row)
 
-    # GENERATE THE FIGURE FOR THE PLOT
-    fig = plt.figure(
-        num=None,
-        figsize=(10, 10),
-        dpi=100,
-        facecolor=None,
-        edgecolor=None,
-        frameon=True)
+    # SORT BY MJD
+    cepochs = sorted(cepochs, key=itemgetter('MJD'), reverse=False)
+    oepochs = sorted(oepochs, key=itemgetter('MJD'), reverse=False)
 
-    mpl.rc('ytick', labelsize=20)
-    mpl.rc('xtick', labelsize=20)
-    mpl.rcParams.update({'font.size': 22})
+    # SIGMA-CLIP THE DATA WITH A ROLLING WINDOW
+    cdataFlux = []
+    cdataFlux[:] = [row["uJy"] for row in cepochs]
+    odataFlux = []
+    odataFlux[:] = [row["uJy"] for row in oepochs]
 
-    # FORMAT THE AXES
-    ax = fig.add_axes(
-        [0.1, 0.1, 0.8, 0.8],
-        polar=False,
-        frameon=True)
-    ax.set_xlabel('MJD', labelpad=20)
-    ax.set_ylabel('Apparent Magnitude', labelpad=15)
+    maskList = []
+    for flux in [cdataFlux, odataFlux]:
+        fullMask = rolling_window_sigma_clip(
+            log=log,
+            array=flux,
+            clippingSigma=clippingSigma,
+            windowSize=11)
+        maskList.append(fullMask)
 
-    # fig.text(0.1, 1.0, "ATLAS", ha="left", color="#2aa198", fontsize=40)
-    # fig.text(0.275, 1.0, objectName.replace("ATLAS", ""),
-    #          color="#FFA500", ha="left", fontsize=40)
-    fig.text(0.1, 1.02, objectName, ha="left", fontsize=40)
+    try:
+        cepochs = [e for e, m in zip(
+            cepochs, maskList[0]) if m == False]
+    except:
+        cepochs = []
 
-    # ax.set_title(objectName, y=1.10, ha='left', position=(0, 1.11))
-    plt.setp(ax.xaxis.get_majorticklabels(),
-             rotation=45, horizontalalignment='right')
-    import matplotlib.ticker as mtick
-    ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%5.0f'))
+    try:
+        oepochs = [e for e, m in zip(
+            oepochs, maskList[1]) if m == False]
+    except:
+        oepochs = []
 
-    # ADD MAGNITUDES AND LIMITS FOR EACH FILTER
-    # plt.scatter(magnitudes['o']['mjds'], magnitudes['o']['mags'], s=20., c=None, alpha=0.9,
-    # edgecolors='#FFA500', linewidth=1.0, facecolors='#FFA500')
-    handles = []
-
-    # SET AXIS LIMITS FOR MAGNTIUDES
-    upperMag = -99
-    lowerMag = 99
-
-    # DETERMINE THE TIME-RANGE OF DETECTION FOR THE SOURCE
-    mjdList = magnitudes['o']['mjds'] + \
-        magnitudes['c']['mjds'] + magnitudes['I']['mjds']
-
-    if len(mjdList) == 0:
-        return
-
-    lowerDetectionMjd = min(mjdList)
-    upperDetectionMjd = max(mjdList)
-    mjdLimitList = limits['o']['mjds'] + \
-        limits['c']['mjds'] + limits['I']['mjds']
-    priorLimitsFlavour = None
-    for l in sorted(mjdLimitList):
-        if l < lowerDetectionMjd and l > lowerDetectionMjd - 30.:
-            priorLimitsFlavour = 1
-    if not priorLimitsFlavour:
-        for l in mjdLimitList:
-            if l < lowerDetectionMjd - 30.:
-                priorLimitsFlavour = 2
-                lowerMJDLimit = l - 2
-
-    if not priorLimitsFlavour:
-        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\\sigma$",
-                 ha="left", fontsize=16)
-
-    postLimitsFlavour = None
-
-    for l in sorted(mjdLimitList):
-        if l > upperDetectionMjd and l < upperDetectionMjd + 10.:
-            postLimitsFlavour = 1
-    if not postLimitsFlavour:
-        for l in reversed(mjdLimitList):
-            if l > upperDetectionMjd + 10.:
-                postLimitsFlavour = 2
-                upperMJDLimit = l + 2
-
-    if priorLimitsFlavour or postLimitsFlavour:
-        limits = {
-            'c': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-            'o': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-            'I': {'mjds': [], 'mags': [], 'magErrs': [], 'flux': [], 'zp': []},
-        }
-        for epoch in epochs:
-            objectName = epoch["atlas_designation"]
-            if (epoch["limiting_mag"] == 1 and ((priorLimitsFlavour == 1 and epoch["mjd_obs"] > lowerDetectionMjd - 30.) or (priorLimitsFlavour == 2 and epoch["mjd_obs"] > lowerMJDLimit) or priorLimitsFlavour == None) and ((postLimitsFlavour == 1 and epoch["mjd_obs"] < upperDetectionMjd + 10.) or (postLimitsFlavour == 2 and epoch["mjd_obs"] < upperMJDLimit) or postLimitsFlavour == None)):
-                limits[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-                limits[epoch["filter"]]["mags"].append(epoch["mag"])
-                limits[epoch["filter"]]["magErrs"].append(epoch["dm"])
-                limits[epoch["filter"]]["zp"].append(epoch["zp"])
-                flux = 10**(old_div((float(epoch["zp"]) -
-                                     float(epoch["mag"])), 2.5))
-                limits[epoch["filter"]]["flux"].append(flux)
-
-    allMags = limits['o']['mags'] + limits['c']['mags'] + \
-        magnitudes['o']['mags'] + magnitudes['c']['mags']
-    magRange = max(allMags) - min(allMags)
-    if magRange < 4.:
-        deltaMag = 0.1
-    else:
-        deltaMag = magRange * 0.08
-
-    if len(limits['o']['mjds']):
-        limitLeg = plt.scatter(limits['o']['mjds'], limits['o']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#FFA500', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
-        handles.append(limitLeg)
-        if max(limits['o']['mags']) > upperMag:
-            upperMag = max(limits['o']['mags'])
-            upperMagIndex = np.argmax(limits['o']['mags'])
-            # MAG PADDING
-            upperFlux = limits['o']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-
-        # if min(limits['o']['mags']) < lowerMag:
-        #     lowerMag = min(limits['o']['mags'])
-    if len(limits['c']['mjds']):
-        limitLeg = plt.scatter(limits['c']['mjds'], limits['c']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#2aa198', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
-        if len(handles) == 0:
-            handles.append(limitLeg)
-        if max(limits['c']['mags']) > upperMag:
-            upperMag = max(limits['c']['mags'])
-            upperMagIndex = np.argmax(limits['c']['mags'])
-            # MAG PADDING
-            upperFlux = limits['c']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-        # if min(limits['c']['mags']) < lowerMag:
-        #     lowerMag = min(limits['c']['mags'])
-
-    if len(limits['I']['mjds']):
-        limitLeg = plt.scatter(limits['I']['mjds'], limits['I']['mags'], s=170., c=None, alpha=0.8,
-                               edgecolors='#dc322f', linewidth=1.0, facecolors='none', label="$5\\sigma$ limit  ")
-        if len(handles) == 0:
-            handles.append(limitLeg)
-        if max(limits['I']['mags']) > upperMag:
-            upperMag = max(limits['I']['mags'])
-            upperMagIndex = np.argmax(limits['I']['mags'])
-            # MAG PADDING
-            upperFlux = limits['I']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-    if len(magnitudes['o']['mjds']):
-        orangeMag = plt.errorbar(magnitudes['o']['mjds'], magnitudes['o']['mags'], yerr=magnitudes[
-            'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2,  label='o-band mag ', capsize=10)
-
-        # ERROBAR STYLE
-        orangeMag[-1][0].set_linestyle('--')
-        # ERROBAR CAP THICKNESS
-        orangeMag[1][0].set_markeredgewidth('0.7')
-        orangeMag[1][1].set_markeredgewidth('0.7')
-        handles.append(orangeMag)
-        if max(np.array(magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs']))
-            # MAG PADDING
-            upperFlux = magnitudes['o']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-
-        if min(np.array(magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs']))
-            lowerMagIndex = np.argmin((
-                magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs']))
-            # MAG PADDING
-            lowerFlux = magnitudes['o']['flux'][
-                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
-    if len(magnitudes['c']['mjds']):
-        cyanMag = plt.errorbar(magnitudes['c']['mjds'], magnitudes['c']['mags'], yerr=magnitudes[
-            'c']['magErrs'], color='#2aa198', fmt='o', mfc='#2aa198', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='c-band mag ', capsize=10)
-        # ERROBAR STYLE
-        cyanMag[-1][0].set_linestyle('--')
-        # ERROBAR CAP THICKNESS
-        cyanMag[1][0].set_markeredgewidth('0.7')
-        cyanMag[1][1].set_markeredgewidth('0.7')
-        handles.append(cyanMag)
-        if max(np.array(magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs']))
-            # MAG PADDING
-            upperFlux = magnitudes['c']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-        if min(np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
-            lowerMagIndex = np.argmin(
-                (magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
-            # MAG PADDING
-            lowerFlux = magnitudes['c']['flux'][
-                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
-    if len(magnitudes['I']['mjds']):
-        cyanMag = plt.errorbar(magnitudes['I']['mjds'], magnitudes['I']['mags'], yerr=magnitudes[
-            'I']['magErrs'], color='#dc322f', fmt='o', mfc='#dc322f', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='I-band mag ', capsize=10)
-        # ERROBAR STYLE
-        cyanMag[-1][0].set_linestyle('--')
-        # ERROBAR CAP THICKNESS
-        cyanMag[1][0].set_markeredgewidth('0.7')
-        cyanMag[1][1].set_markeredgewidth('0.7')
-        handles.append(cyanMag)
-        if max(np.array(magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs']))
-            # MAG PADDING
-            upperFlux = magnitudes['I']['flux'][
-                upperMagIndex] - 10**(old_div(deltaMag, 2.5))
-        if min(np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
-            lowerMagIndex = np.argmin(
-                (magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
-            # MAG PADDING
-            lowerFlux = magnitudes['I']['flux'][
-                lowerMagIndex] + 10**(old_div(deltaMag, 2.5))
-
-    plt.legend(handles=handles, prop={
-               'size': 13.5}, bbox_to_anchor=(1., 1.2), loc=0, borderaxespad=0., ncol=4, scatterpoints=1)
-
-    # SET THE TEMPORAL X-RANGE
-    allMjd = limits['o']['mjds'] + limits['c']['mjds'] + \
-        magnitudes['o']['mjds'] + magnitudes['c']['mjds']
-    xmin = min(allMjd) - 2.
-    xmax = max(allMjd) + 2.
-    ax.set_xlim([xmin, xmax])
-
-    ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
-    # FLIP THE MAGNITUDE AXIS
-    plt.gca().invert_yaxis()
-
-    # ADD SECOND Y-AXIS
-    ax2 = ax.twinx()
-    ax2.set_yscale('log')
-    ax2.set_ylim([upperFlux, lowerFlux])
-    y_formatter = mpl.ticker.FormatStrFormatter("%d")
-    ax2.yaxis.set_major_formatter(y_formatter)
-
-    # RELATIVE TIME SINCE DISCOVERY
-    lower, upper = ax.get_xlim()
-    from astrocalc.times import conversions
-    # CONVERTER TO CONVERT MJD TO DATE
-    converter = conversions(
-        log=log
-    )
-    utLower = converter.mjd_to_ut_datetime(mjd=lower, datetimeObject=True)
-    utUpper = converter.mjd_to_ut_datetime(mjd=upper, datetimeObject=True)
-
-    # ADD SECOND X-AXIS
-    ax3 = ax.twiny()
-    ax3.set_xlim([utLower, utUpper])
-    ax3.grid(True)
-    ax.xaxis.grid(False)
-    plt.setp(ax3.xaxis.get_majorticklabels(),
-             rotation=45, horizontalalignment='left')
-    ax3.xaxis.set_major_formatter(dates.DateFormatter('%b %d'))
-    # ax3.set_xlabel('Since Discovery (d)',  labelpad=10,)
-
-    # # Put a legend on plot
-    # box = ax.get_position()
-    # ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    # ax.legend(loc='top right', bbox_to_anchor=(1.1, 0.5), prop={'size': 8})
-
-    from matplotlib.ticker import LogLocator
-    minorLocator = LogLocator(base=10, subs=[2.0, 5.0])
-    if magRange < 1.5:
-        minorLocator = LogLocator(
-            base=10, subs=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
-    ax2.yaxis.set_minor_locator(minorLocator)
-    ax2.yaxis.set_minor_formatter(y_formatter)
-    ax2.tick_params(axis='y', which='major', pad=5)
-    ax2.tick_params(axis='y', which='minor', pad=5)
-    ax2.set_ylabel('Approx. Counts', rotation=-90.,  labelpad=27)
-
-    ax2.grid(False)
-    # SAVE PLOT TO FILE
-    pathToOutputPlotFolder = ""
-    title = objectName + " forced photometry lc"
-    # Recursively create missing directories
-    if not os.path.exists(cacheDirectory):
-        os.makedirs(cacheDirectory)
-    fileName = cacheDirectory + "/atlas_fp_lightcurve.png"
-    plt.savefig(fileName, bbox_inches='tight', transparent=False,
-                pad_inches=0.1)
-
-    # CLEAR FIGURE
-    plt.clf()
-
-    log.debug('completed the ``create_lc`` function')
-    return None
-
-    # use the tab-trigger below for new function
-    # xt-def-function
+    log.debug('completed the ``read_and_sigma_clip_data`` function')
+    return cepochs + oepochs
