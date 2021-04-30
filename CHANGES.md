@@ -1,6 +1,8 @@
 
 ## Marshall Engine Release Notes  
 
+* refactoring resurrection code
+
 **v1.0.8 - March 17, 2021**  
   
 * **REFACTOR**: Occasional check to make sure all akas are set (i.e. more than just for transients discovered in the last 3 weeks).
