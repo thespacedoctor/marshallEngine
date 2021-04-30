@@ -346,6 +346,9 @@ class marshall_lightcurves(object):
         if len(bigTimeArray) <= lastNumDataPoints or timeRange < 3.:
             predictCurrentMag = False
 
+        if max(bigTimeArray) < todayMjd - 120:
+            predictCurrentMag = False
+
         if predictCurrentMag:
             # USE ONLY THE LAST N DAYS OF DATA FOR LINEAR FIT
             mask = np.where(bigTimeArray -
@@ -401,6 +404,7 @@ class marshall_lightcurves(object):
             plt.plot(xData, flatLinear, label="linear")
 
             # PREDICT A CURRENT MAGNITUDE FROM THE PLOT
+
             currentMag = chebval(todayMjd, thisPoly)
             self.log.debug(
                 'currentMag: %(currentMag)0.2f, m=%(gradient)s' % locals())
@@ -414,11 +418,18 @@ class marshall_lightcurves(object):
             lineExtras = ax.plot(extraTimes, extraMags, "+")
 
             # SET THE AXES / VIEWPORT FOR THE PLOT
-            if currentMag < yLowerLimit:
-                yLowerLimit = currentMag - 0.4
+            # if currentMag < yLowerLimit:
+            #     yLowerLimit = currentMag - 0.4
 
-        plt.clf()
+        if currentMag > 23:
+            currentMag = -9999.
+
+        # plt.clf()
         plt.cla()
+        # ax = fig.add_subplot(1, 1, 1)
+        # print(currentMag)
+        # print(bigTimeArray)
+        # print(bigMagArray)
 
         # PLOT DATA VIA FILTER. MAGS AND LIMITS
         filterColor = {
@@ -487,8 +498,8 @@ class marshall_lightcurves(object):
         # CHANGE PLOT TO FIXED TIME
         # SETUP THE AXES
         xUpperLimit = fixedXUpperLimit
-        ax.set_xlabel('MJD',  labelpad=20)
-        ax.set_ylabel('Magnitude',  labelpad=20)
+        ax.set_xlabel('MJD',  labelpad=20, fontsize=30)
+        ax.set_ylabel('Magnitude',  labelpad=20, fontsize=30)
         ax.set_title('')
         ax.set_xlim([xLowerLimit, xUpperLimit])
         ax.set_ylim([yUpperLimit, yLowerLimit])
@@ -511,7 +522,7 @@ class marshall_lightcurves(object):
         ax.yaxis.set_major_formatter(y_formatter)
 
         # PRINT CURRENT MAG AS SANITY CHECK
-        fig.text(0.1, 1.02, currentMag, ha="left", fontsize=40)
+        # fig.text(0.1, 1.02, currentMag, ha="left", fontsize=40)
 
         # RECURSIVELY CREATE MISSING DIRECTORIES
         if not os.path.exists(saveLocation):

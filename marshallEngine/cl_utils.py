@@ -141,7 +141,7 @@ def main(arguments=None):
     # CALL FUNCTIONS/OBJECTS
     if clean:
         # RESCUE ORPHANED TRANSIENTS - NO MASTER ID FLAG
-        print("rescuing orphaned transients")
+        print("running stored procedures ...")
         from fundamentals.mysql import writequery
 
         procedureNames = [
