@@ -23,137 +23,66 @@ import numpy as np
 from matplotlib import dates
 os.environ['TERM'] = 'vt100'
 from fundamentals import tools
-from fundamentals.mysql import readquery, writequery
 from datetime import datetime
+from operator import itemgetter
+from fundamentals.stats import rolling_window_sigma_clip
+import matplotlib.ticker as mtick
+from astrocalc.times import conversions
+from fundamentals import fmultiprocess
+from fundamentals.mysql import database, readquery, writequery
 
 
-def create_lc(
+def generate_atlas_lightcurves(
+        dbConn,
         log,
-        cacheDirectory,
-        epochs):
-    """*create the atlas lc for one transient*
+        settings):
+    """generate all atlas FP lightcurves (clipped and stacked)
 
     **Key Arguments**
 
-    - ``cacheDirectory`` -- the directory to add the lightcurve to
+    - ``dbConn`` -- mysql database connection
     - ``log`` -- logger
-    - ``epochs`` -- dictionary of lightcurve data-points
-
-
-    **Return**
-
-    - None
-
-
-    **Usage**
-
-    .. todo::
-
-        add usage info
-        create a sublime snippet for usage
+    - ``settings`` -- settings for the marshall.
 
     ```python
-    usage code
-    ```
-
-    """
-    log.debug('starting the ``create_lc`` function')
-
-    from astrocalc.times import conversions
-    # CONVERTER TO CONVERT MJD TO DATE
-    converter = conversions(
-        log=log
+    from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
+    generate_atlas_lightcurves(
+        log=log,
+        dbConn=dbConn,
+        settings=settings
     )
+    ```
+    """
+    log.debug('starting the ``generate_atlas_lightcurves`` function')
 
-    # c = cyan, o = arange
-    magnitudes = {
-        'c': {'mjds': [], 'mags': [], 'magErrs': []},
-        'o': {'mjds': [], 'mags': [], 'magErrs': []},
-        'I': {'mjds': [], 'mags': [], 'magErrs': []},
-    }
+    # SELECT SOURCES THAT NEED THEIR ATLAS FP LIGHTCURVES CREATED/UPDATED
+    sqlQuery = u"""
+        SELECT
+                t.transientBucketId
+            FROM
+                transientBucket t ,pesstoObjects p
+            WHERE
+                p.transientBucketId=t.transientBucketId
+                and t.survey = 'ATLAS FP' and t.limitingMag = 0
+                and ((p.atlas_fp_lightcurve < t.dateCreated) or p.atlas_fp_lightcurve is null)
+            GROUP BY t.transientBucketId;
+    """
+    rows = readquery(
+        log=log,
+        sqlQuery=sqlQuery,
+        dbConn=dbConn
+    )
+    transientIds = [r["transientBucketId"] for r in rows]
 
-    summedMagnitudes = {
-        'c': {'mjds': [], 'mags': [], 'magErrs': []},
-        'o': {'mjds': [], 'mags': [], 'magErrs': []},
-        'I': {'mjds': [], 'mags': [], 'magErrs': []},
-    }
+    total = len(transientIds)
+    if total > 1000:
+        print("ATLAS lightcurves need generated for %(total)s sources - generating next 1000" % locals())
+        transientIds = transientIds[:100]
+        total = len(transientIds)
+    else:
+        print("Generating ATLAS lightcurves for %(total)s sources" % locals())
 
-    limits = {
-        'c': {'mjds': [], 'mags': [], 'magErrs': []},
-        'o': {'mjds': [], 'mags': [], 'magErrs': []},
-        'I': {'mjds': [], 'mags': [], 'magErrs': []},
-    }
-
-    discoveryMjd = False
-    for epoch in epochs:
-        objectName = epoch["atlas_designation"]
-        if not epoch["fnu"]:
-            continue
-
-        if epoch["mjd_obs"] < 50000.:
-            continue
-
-        if not epoch["snr"] <= 5 and (not discoveryMjd or discoveryMjd > epoch["mjd_obs"]):
-            discoveryMjd = epoch["mjd_obs"]
-
-        if epoch["snr"] <= 3 and epoch["filter"] in ["c", "o", "I"]:
-            limits[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-            limits[epoch["filter"]]["mags"].append(epoch["fnu"])
-            limits[epoch["filter"]]["magErrs"].append(epoch["fnu_error"])
-        elif epoch["filter"] in ["c", "o", "I"]:
-            magnitudes[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-            magnitudes[epoch["filter"]]["mags"].append(epoch["fnu"])
-            magnitudes[epoch["filter"]]["magErrs"].append(epoch["fnu_error"])
-
-    for fil, d in list(magnitudes.items()):
-        distinctMjds = {}
-        for m, f, e in zip(d["mjds"], d["mags"], d["magErrs"]):
-            key = str(int(math.floor(m)))
-            if key not in distinctMjds:
-                distinctMjds[key] = {
-                    "mjds": [m],
-                    "mags": [f],
-                    "magErrs": [e]
-                }
-            else:
-                distinctMjds[key]["mjds"].append(m)
-                distinctMjds[key]["mags"].append(f)
-                distinctMjds[key]["magErrs"].append(e)
-
-        for k, v in list(distinctMjds.items()):
-            summedMagnitudes[fil]["mjds"].append(
-                old_div(sum(v["mjds"]), len(v["mjds"])))
-            summedMagnitudes[fil]["mags"].append(
-                old_div(sum(v["mags"]), len(v["mags"])))
-            summedMagnitudes[fil]["magErrs"].append(sum(v["magErrs"]) / len(v["magErrs"]
-                                                                            ) / math.sqrt(len(v["magErrs"])))
-
-    if not discoveryMjd:
-        return
-
-    # COMMENT THIS LINE OUT TO PLOT ALL MAGNITUDE MEASUREMENTS INSTEAD OF
-    # SUMMED
-    magnitudes = summedMagnitudes
-
-    # DUMP OUT SUMMED ATLAS MAGNITUDE
-    # for m, l, e in zip(limits['o']["mjds"], limits['o']["mags"], limits['o']["magErrs"]):
-    #     print "%(m)s, o, %(l)s, %(e)s, <3" % locals()
-    # for m, l, e in zip(limits['c']["mjds"], limits['c']["mags"], limits['c']["magErrs"]):
-    #     print "%(m)s, c, %(l)s, %(e)s, <3" % locals()
-
-    # for m, l, e in zip(magnitudes['o']["mjds"], magnitudes['o']["mags"], magnitudes['o']["magErrs"]):
-    #     print "%(m)s, o, %(l)s, %(e)s," % locals()
-    # for m, l, e in zip(magnitudes['c']["mjds"], magnitudes['c']["mags"], magnitudes['c']["magErrs"]):
-    #     print "%(m)s, c, %(l)s, %(e)s," % locals()
-
-    discoveryUT = converter.mjd_to_ut_datetime(
-        mjd=discoveryMjd, datetimeObject=True)
-
-    discoveryUT = discoveryUT.strftime("%Y %m %d %H:%M")
-
-    summedMagnitudes = {}
-
-    # GENERATE THE FIGURE FOR THE PLOT
+    # SETUP THE INITIAL FIGURE FOR THE PLOT (ONLY ONCE)
     fig = plt.figure(
         num=None,
         figsize=(10, 10),
@@ -161,9 +90,8 @@ def create_lc(
         facecolor=None,
         edgecolor=None,
         frameon=True)
-
-    mpl.rc('ytick', labelsize=20)
-    mpl.rc('xtick', labelsize=20)
+    mpl.rc('ytick', labelsize=18)
+    mpl.rc('xtick', labelsize=18)
     mpl.rcParams.update({'font.size': 22})
 
     # FORMAT THE AXES
@@ -172,398 +100,66 @@ def create_lc(
         polar=False,
         frameon=True)
     ax.set_xlabel('MJD', labelpad=20)
-    ax.set_ylabel('Apparent Magnitude', labelpad=15)
-
-    # ax.set_yscale('log')
-
-    # ATLAS OBJECT NAME LABEL AS TITLE
-    fig.text(0.1, 1.02, objectName, ha="left", fontsize=40)
+    ax.set_yticks([2.2])
 
     # RHS AXIS TICKS
     plt.setp(ax.xaxis.get_majorticklabels(),
              rotation=45, horizontalalignment='right')
-    import matplotlib.ticker as mtick
     ax.xaxis.set_major_formatter(mtick.FormatStrFormatter('%5.0f'))
 
-    # ADD MAGNITUDES AND LIMITS FOR EACH FILTER
-    handles = []
-
-    # SET AXIS LIMITS FOR MAGNTIUDES
-    upperMag = -99
-    lowerMag = 99
-
-    # DETERMINE THE TIME-RANGE OF DETECTION FOR THE SOURCE
-    mjdList = magnitudes['o']['mjds'] + \
-        magnitudes['c']['mjds'] + magnitudes['I']['mjds']
-
-    if len(mjdList) == 0:
-        return
-
-    lowerDetectionMjd = min(mjdList)
-    upperDetectionMjd = max(mjdList)
-    mjdLimitList = limits['o']['mjds'] + \
-        limits['c']['mjds'] + limits['I']['mjds']
-    priorLimitsFlavour = None
-    for l in sorted(mjdLimitList):
-        if l < lowerDetectionMjd and l > lowerDetectionMjd - 30.:
-            priorLimitsFlavour = 1
-    if not priorLimitsFlavour:
-        for l in mjdLimitList:
-            if l < lowerDetectionMjd - 30.:
-                priorLimitsFlavour = 2
-                lowerMJDLimit = l - 2
-
-    if not priorLimitsFlavour:
-        fig.text(0.1, -0.08, "* no recent pre-discovery detection limit > $5\\sigma$",
-                 ha="left", fontsize=16)
-
-    postLimitsFlavour = None
-
-    for l in sorted(mjdLimitList):
-        if l > upperDetectionMjd and l < upperDetectionMjd + 10.:
-            postLimitsFlavour = 1
-    if not postLimitsFlavour:
-        for l in reversed(mjdLimitList):
-            if l > upperDetectionMjd + 10.:
-                postLimitsFlavour = 2
-                upperMJDLimit = l + 2
-
-    if priorLimitsFlavour or postLimitsFlavour:
-        limits = {
-            'c': {'mjds': [], 'mags': [], 'magErrs': []},
-            'o': {'mjds': [], 'mags': [], 'magErrs': []},
-            'I': {'mjds': [], 'mags': [], 'magErrs': []},
-        }
-        for epoch in epochs:
-            if epoch["filter"] not in ["c", "o", "I"]:
-                continue
-            objectName = epoch["atlas_designation"]
-            if not epoch["fnu"]:
-                continue
-
-            if epoch["mjd_obs"] < 50000.:
-                continue
-
-            if (epoch["snr"] <= 3 and ((priorLimitsFlavour == 1 and epoch["mjd_obs"] > lowerDetectionMjd - 30.) or (priorLimitsFlavour == 2 and epoch["mjd_obs"] > lowerMJDLimit) or priorLimitsFlavour == None) and ((postLimitsFlavour == 1 and epoch["mjd_obs"] < upperDetectionMjd + 10.) or (postLimitsFlavour == 2 and epoch["mjd_obs"] < upperMJDLimit) or postLimitsFlavour == None)):
-                limits[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
-                limits[epoch["filter"]]["mags"].append(epoch["fnu"])
-                # 000 limits[epoch["filter"]]["magErrs"].append(epoch["dm"])
-                limits[epoch["filter"]]["magErrs"].append(epoch["fnu_error"])
-
-    allMags = magnitudes['o']['mags'] + magnitudes['c']['mags']
-    magRange = max(allMags) - min(allMags)
-
-    deltaMag = magRange * 0.1
-
-    if len(limits['o']['mjds']):
-        limitLeg = ax.errorbar(limits['o']['mjds'], limits['o']['mags'], yerr=limits[
-            'o']['magErrs'], color='#FFA500', fmt='o', mfc='white', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=0.4,  label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
-
-        # ERROBAR CAP THICKNESS
-        handles.append(limitLeg)
-        limitLeg[1][0].set_markeredgewidth('0.4')
-        limitLeg[1][1].set_markeredgewidth('0.4')
-
-        # if min(limits['o']['mags']) < lowerMag:
-        #     lowerMag = min(limits['o']['mags'])
-    if len(limits['c']['mjds']):
-        limitLeg = ax.errorbar(limits['c']['mjds'], limits['c']['mags'], yerr=limits[
-            'c']['magErrs'], color='#2aa198', fmt='o', mfc='white', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
-        # ERROBAR CAP THICKNESS
-        limitLeg[1][0].set_markeredgewidth('0.4')
-        limitLeg[1][1].set_markeredgewidth('0.4')
-        if not len(handles):
-            handles.append(limitLeg)
-
-    if len(limits['I']['mjds']):
-        limitLeg = ax.errorbar(limits['I']['mjds'], limits['I']['mags'], yerr=limits[
-            'I']['magErrs'], color='#dc322f', fmt='o', mfc='white', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=0.4, label='<3$\\sigma$ ', capsize=10, markeredgewidth=1.2)
-        # ERROBAR CAP THICKNESS
-        limitLeg[1][0].set_markeredgewidth('0.4')
-        limitLeg[1][1].set_markeredgewidth('0.4')
-        if not len(handles):
-            handles.append(limitLeg)
-
-    if len(magnitudes['o']['mjds']):
-        orangeMag = ax.errorbar(magnitudes['o']['mjds'], magnitudes['o']['mags'], yerr=magnitudes[
-            'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2,  label='o-band mag ', capsize=10)
-
-        # ERROBAR CAP THICKNESS
-        orangeMag[1][0].set_markeredgewidth('0.7')
-        orangeMag[1][1].set_markeredgewidth('0.7')
-        handles.append(orangeMag)
-        if max(np.array(magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['o']['mags']) + np.array(magnitudes['o']['magErrs']))
-
-        if min(np.array(magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs']))
-            lowerMagIndex = np.argmin((
-                magnitudes['o']['mags']) - np.array(magnitudes['o']['magErrs']))
-
-    if len(magnitudes['c']['mjds']):
-        cyanMag = ax.errorbar(magnitudes['c']['mjds'], magnitudes['c']['mags'], yerr=magnitudes[
-            'c']['magErrs'], color='#2aa198', fmt='o', mfc='#2aa198', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='c-band mag ', capsize=10)
-        # ERROBAR CAP THICKNESS
-        cyanMag[1][0].set_markeredgewidth('0.7')
-        cyanMag[1][1].set_markeredgewidth('0.7')
-        handles.append(cyanMag)
-        if max(np.array(magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['c']['mags']) + np.array(magnitudes['c']['magErrs']))
-
-        if min(np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
-            lowerMagIndex = np.argmin(
-                (magnitudes['c']['mags']) - np.array(magnitudes['c']['magErrs']))
-
-    if len(magnitudes['I']['mjds']):
-        cyanMag = ax.errorbar(magnitudes['I']['mjds'], magnitudes['I']['mags'], yerr=magnitudes[
-            'I']['magErrs'], color='#dc322f', fmt='o', mfc='#dc322f', mec='#dc322f', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='I-band mag ', capsize=10)
-        # ERROBAR CAP THICKNESS
-        cyanMag[1][0].set_markeredgewidth('0.7')
-        cyanMag[1][1].set_markeredgewidth('0.7')
-        handles.append(cyanMag)
-        if max(np.array(magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs'])) > upperMag:
-            upperMag = max(
-                np.array(magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs']))
-            upperMagIndex = np.argmax((
-                magnitudes['I']['mags']) + np.array(magnitudes['I']['magErrs']))
-
-        if min(np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs'])) < lowerMag:
-            lowerMag = min(
-                np.array(magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
-            lowerMagIndex = np.argmin(
-                (magnitudes['I']['mags']) - np.array(magnitudes['I']['magErrs']))
-
-    plt.legend(handles=handles, prop={
-               'size': 13.5}, bbox_to_anchor=(0.95, 1.2), loc=0, borderaxespad=0., ncol=4, scatterpoints=1)
-
-    # SET THE TEMPORAL X-RANGE
-    allMjd = magnitudes['o']['mjds'] + magnitudes['c']['mjds']
-    xmin = min(allMjd) - 5.
-    xmax = max(allMjd) + 5.
-    ax.set_xlim([xmin, xmax])
-
-    ax.set_ylim([0. - deltaMag, upperMag + deltaMag])
     y_formatter = mpl.ticker.FormatStrFormatter("%2.1f")
     ax.yaxis.set_major_formatter(y_formatter)
-
-    # PLOT THE MAGNITUDE SCALE
-    axisUpperFlux = upperMag
-    axisLowerFlux = 1e-29
-
-    axisLowerMag = -2.5 * math.log10(axisLowerFlux) - 48.6
-    axisUpperMag = -2.5 * math.log10(axisUpperFlux) - 48.6
-
-    ax.set_yticks([2.2])
-    import matplotlib.ticker as ticker
-
-    magLabels = [20., 19.5, 19.0, 18.5,
-                 18.0, 17.5, 17.0, 16.5, 16.0, 15.5, 15.0]
-    magFluxes = [pow(10, old_div(-(m + 48.6), 2.5)) * 1e27 for m in magLabels]
-
-    ax.yaxis.set_major_locator(ticker.FixedLocator((magFluxes)))
-    ax.yaxis.set_major_formatter(ticker.FixedFormatter((magLabels)))
-    # FLIP THE MAGNITUDE AXIS
-    # plt.gca().invert_yaxis()
+    ax.xaxis.grid(False)
 
     # ADD SECOND Y-AXIS
     ax2 = ax.twinx()
-    ax2.set_ylim([0. - deltaMag, upperMag + deltaMag])
     ax2.yaxis.set_major_formatter(y_formatter)
-
-    # RELATIVE TIME SINCE DISCOVERY
-    lower, upper = ax.get_xlim()
-    utLower = converter.mjd_to_ut_datetime(mjd=lower, datetimeObject=True)
-    utUpper = converter.mjd_to_ut_datetime(mjd=upper, datetimeObject=True)
+    ax2.set_ylabel('Flux ($\mu$Jy)', rotation=-90.,  labelpad=27)
+    ax2.grid(False)
 
     # ADD SECOND X-AXIS
     ax3 = ax.twiny()
-    ax3.set_xlim([utLower, utUpper])
     ax3.grid(True)
-    ax.xaxis.grid(False)
     plt.setp(ax3.xaxis.get_majorticklabels(),
              rotation=45, horizontalalignment='left')
-    ax3.xaxis.set_major_formatter(dates.DateFormatter('%b %d'))
-    # ax3.set_xlabel('Since Discovery (d)',  labelpad=10,)
 
-    # # Put a legend on plot
-    # box = ax.get_position()
-    # ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-    # ax.legend(loc='top right', bbox_to_anchor=(1.1, 0.5), prop={'size': 8})
-
-    # from matplotlib.ticker import LogLocator
-    # minorLocator = LogLocator(base=10, subs=[2.0, 5.0])
-    # if magRange < 1.5:
-    #     minorLocator = LogLocator(
-    #         base=10, subs=[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
-    # ax2.yaxis.set_minor_locator(minorLocator)
-    # ax2.yaxis.set_minor_formatter(y_formatter)
-    # ax2.tick_params(axis='y', which='major', pad=5)
-    # ax2.tick_params(axis='y', which='minor', pad=5)
-    ax2.set_ylabel('$F_{nu} \\times 1e^{27}$', rotation=-90.,  labelpad=27)
-
-    discoveryText = "discovery epoch\nmjd %(discoveryMjd)2.2f\n%(discoveryUT)s UT" % locals(
-    )
-    ax.text(0.05, 0.95, discoveryText,
-            verticalalignment='top', horizontalalignment='left',
-            transform=ax.transAxes,
-            color='black', fontsize=12, linespacing=1.5)
-
-    ax2.grid(False)
-    # SAVE PLOT TO FILE
-    pathToOutputPlotFolder = ""
-    title = objectName + " forced photometry lc"
-    # Recursively create missing directories
-    if not os.path.exists(cacheDirectory):
-        os.makedirs(cacheDirectory)
-    fileName = cacheDirectory + "/atlas_fp_lightcurve.png"
-    plt.savefig(fileName, bbox_inches='tight', transparent=False,
-                pad_inches=0.1)
-
-    # CLEAR FIGURE
-    plt.clf()
-
-    log.debug('completed the ``create_lc`` function')
-    return None
-
-
-def generate_atlas_lightcurves(
-        dbConn,
-        log,
-        settings):
-    """generate atlas lightcurves
-
-    **Key Arguments**
-
-    - ``dbConn`` -- mysql database connection
-    - ``log`` -- logger
-    - ``settings`` -- settings for the marshall.
-
-
-    **Return**
-
-    - None
-
-
-    **Usage**
-
-    ..todo::
-
-        add usage info
-        create a sublime snippet for usage
-
-    ```python
-    usage code
-    ```
-
-
-    ..todo::
-
-        - @review: when complete, clean generate_atlas_lightcurves function
-        - @review: when complete add logging
-        - @review: when complete, decide whether to abstract function to another module
-    """
-    log.debug('starting the ``generate_atlas_lightcurves`` function')
-
-    # SELECT OUT THE SOURCES THAT NEED THEIR LCS UPDATED
-    sqlQuery = u"""
-        SELECT
-            a.transientBucketId
-        FROM
-            (SELECT
-                transientBucketId, dateCreated
-            FROM
-                transientBucket
-            WHERE
-                survey = 'ATLAS FP' and limitingMag = 0
-            ORDER BY dateCreated DESC) a,
-            pesstoObjects p
-            where p.transientBucketId=a.transientBucketId
-            and ((p.atlas_fp_lightcurve < a.dateCreated) or p.atlas_fp_lightcurve is null)
-        GROUP BY a.transientBucketId;
-    """ % locals()
-    rows = readquery(
-        log=log,
-        sqlQuery=sqlQuery,
-        dbConn=dbConn
+    # CONVERTER TO CONVERT MJD TO DATE
+    converter = conversions(
+        log=log
     )
 
-    total = len(rows)
-    if total > 300:
-        print("ATLAS lightcurves need generated for %(total)s sources - generating next 300" % locals())
-        rows = rows[:300]
-        total = len(rows)
+    if len(transientIds) < 3:
+        plotPaths = []
+        for transientBucketId in transientIds:
+            plotPaths.append(
+                plot_single_result(
+                    log=log,
+                    transientBucketId=transientBucketId,
+                    fig=fig,
+                    converter=converter,
+                    ax=ax,
+                    settings=settings)
+            )
     else:
-        print("Generating ATLAS lightcurves for %(total)s sources" % locals())
-
-    index = 1
-    for row in rows:
-
-        # SELECT OUT THE LIGHT CURVE DATA FOR A GIVEN ATLAS TRANSIENT
-        transientBucketId = row["transientBucketId"]
-
-        if index > 1:
-            # Cursor up one line and clear line
-            sys.stdout.write("\x1b[1A\x1b[2K")
-
-        percent = (old_div(float(index), float(total))) * 100.
-        print('%(index)s/%(total)s (%(percent)1.1f%% done): generating ATLAS LC for transientBucketId: %(transientBucketId)s' % locals())
-        index += 1
-
-        sqlQuery = u"""
-            SELECT
-                atlas_designation,
-                mjd_obs,
-                filter,
-                marshall_mag as mag,
-                marshall_mag_error as dm,
-                fnu*1e27 as fnu,
-                fnu_error*1e27 as fnu_error,
-                snr,
-                zp,
-                marshall_limiting_mag as limiting_mag
-            FROM
-                fs_atlas_forced_phot
-            WHERE
-                (skyfit > 0) and
-                atlas_designation in (SELECT distinct name
-            FROM
-                transientBucket
-            WHERE
-                survey = 'ATLAS FP'
-                    AND transientBucketId = %(transientBucketId)s
-                    AND dateDeleted IS NULL)
-            and fnu is not null;
-        """ % locals()
-        epochs = readquery(
+        log.info("""starting multiprocessing""")
+        plotPaths = fmultiprocess(
             log=log,
-            sqlQuery=sqlQuery,
-            dbConn=dbConn
+            function=plot_single_result,
+            inputArray=transientIds,
+            poolSize=False,
+            timeout=7200,
+            fig=fig,
+            converter=converter,
+            ax=ax,
+            settings=settings
         )
+        log.info("""finished multiprocessing""")
 
-        epochs = sigma_clip_data(epochs)
-
-        # FIND THE CACHE DIR FOR THE SOURCE
-        cacheDirectory = settings[
-            "cache-directory"] + "/transients/" + str(transientBucketId)
-
-        # CREATE THE PLOT FOR THIS ONE ATLAS SOURCE
-        create_lc(
-            log=log,
-            cacheDirectory=cacheDirectory,
-            epochs=epochs
-        )
-
-        # UPDATE THE OBJECTS FLAG
-        sqlQuery = """update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID = %(transientBucketId)s """ % locals()
+    # UPDATE THE atlas_fp_lightcurve DATE FOR TRANSIENTS WE HAVE JUST
+    # GENERATED PLOTS FOR
+    if len(transientIds):
+        transientIds = (",").join([str(t) for t in transientIds])
+        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID in ({transientIds})"""
         writequery(
             log=log,
             sqlQuery=sqlQuery,
@@ -574,53 +170,276 @@ def generate_atlas_lightcurves(
     return None
 
 
+def plot_single_result(
+        transientBucketId,
+        log,
+        fig,
+        converter,
+        ax,
+        settings):
+    """*plot single result*
+
+    **Key Arguments:**
+        - `transientBucketId` -- thr transient ID for the source in the database
+        - `log` -- logger
+        - `fig` -- the matplotlib figure to use for the plot
+        - `converter` -- converter to switch mjd to ut-date
+        - `ax` -- plot axis
+        - `settings` -- dictionary of settings (from yaml settings file)
+
+    **Return:**
+        - `filePath` -- path to the output PNG plot
+    """
+    log.info('starting the ``plot_single_result`` method')
+
+    # SETUP DATABASE CONNECTION
+    dbConn = database(
+        log=log,
+        dbSettings=settings["database settings"]
+    ).connect()
+
+    # GET THE DATA FROM THE DATABASE
+    sqlQuery = u"""
+        SELECT
+            atlas_designation,
+            mjd_obs,
+            filter,
+            marshall_mag as mag,
+            marshall_mag_error as dm,
+            fnu*1e29 as uJy,
+            fnu_error*1e29 as duJy,
+            snr,
+            zp,
+            marshall_limiting_mag as limiting_mag
+        FROM
+            fs_atlas_forced_phot
+        WHERE
+            (skyfit > 0) and
+            atlas_designation in (SELECT distinct name
+        FROM
+            transientBucket
+        WHERE
+            survey = 'ATLAS FP'
+                AND transientBucketId = %(transientBucketId)s
+                AND dateDeleted IS NULL)
+        and fnu is not null;
+    """ % locals()
+    epochs = readquery(
+        log=log,
+        sqlQuery=sqlQuery,
+        dbConn=dbConn
+    )
+
+    ax2 = get_twin_axis(ax, "x")
+    ax3 = get_twin_axis(ax, "y")
+
+    # ax = fig.gca()
+    epochs = sigma_clip_data(log=log, fpData=epochs)
+
+    # c = cyan, o = arange
+    magnitudes = {
+        'c': {'mjds': [], 'mags': [], 'magErrs': []},
+        'o': {'mjds': [], 'mags': [], 'magErrs': []},
+        'I': {'mjds': [], 'mags': [], 'magErrs': []},
+    }
+
+    # SPLIT BY FILTER
+    for epoch in epochs:
+        if epoch["filter"] in ["c", "o", "I"]:
+            magnitudes[epoch["filter"]]["mjds"].append(epoch["mjd_obs"])
+            magnitudes[epoch["filter"]]["mags"].append(epoch["uJy"])
+            magnitudes[epoch["filter"]]["magErrs"].append(epoch["duJy"])
+
+    # STACK PHOTOMETRY IF REQUIRED
+    magnitudes = stack_photometry(log=log,
+                                  magnitudes=magnitudes, binningDays=1.)
+
+    # ADD MAGNITUDES AND LIMITS FOR EACH FILTER
+    handles = []
+
+    # SET AXIS LIMITS FOR MAGNTIUDES
+    upperMag = -99999999999
+    lowerMag = 99999999999
+
+    # DETERMINE THE TIME-RANGE OF DETECTION FOR THE SOURCE
+    mjdList = magnitudes['o']['mjds'] + \
+        magnitudes['c']['mjds'] + magnitudes['I']['mjds']
+    if len(mjdList) == 0:
+        log.error(f'{transientBucketId} does not have enough data to plot LC')
+        return None
+    lowerDetectionMjd = min(mjdList)
+    upperDetectionMjd = max(mjdList)
+
+    # DETERMIN MAGNITUDE RANGE
+    allMags = magnitudes['o']['mags'] + magnitudes['c']['mags']
+    magRange = max(allMags) - min(allMags)
+    deltaMag = magRange * 0.1
+
+    if len(magnitudes['o']['mjds']):
+        orangeMag = ax.errorbar(magnitudes['o']['mjds'], magnitudes['o']['mags'], yerr=magnitudes[
+            'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2,  label='o-band mag ', capsize=10)
+
+        # ERROBAR CAP THICKNESS
+        orangeMag[1][0].set_markeredgewidth('0.7')
+        orangeMag[1][1].set_markeredgewidth('0.7')
+        handles.append(orangeMag)
+        errMask = np.array(magnitudes['o']['magErrs'])
+        np.putmask(errMask, errMask > 30, 30)
+
+        if max(np.array(magnitudes['o']['mags']) + errMask) > upperMag:
+            upperMag = max(
+                np.array(magnitudes['o']['mags']) + errMask)
+            upperMagIndex = np.argmax((
+                magnitudes['o']['mags']) + errMask)
+
+        if min(np.array(magnitudes['o']['mags']) - errMask) < lowerMag:
+            lowerMag = min(
+                np.array(magnitudes['o']['mags']) - errMask)
+            lowerMagIndex = np.argmin((
+                magnitudes['o']['mags']) - errMask)
+
+    if len(magnitudes['c']['mjds']):
+        cyanMag = ax.errorbar(magnitudes['c']['mjds'], magnitudes['c']['mags'], yerr=magnitudes[
+            'c']['magErrs'], color='#2aa198', fmt='o', mfc='#2aa198', mec='#2aa198', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='c-band mag ', capsize=10)
+        # ERROBAR CAP THICKNESS
+        cyanMag[1][0].set_markeredgewidth('0.7')
+        cyanMag[1][1].set_markeredgewidth('0.7')
+        handles.append(cyanMag)
+        errMask = np.array(magnitudes['c']['magErrs'])
+        np.putmask(errMask, errMask > 30, 30)
+
+        if max(np.array(magnitudes['c']['mags']) + errMask) > upperMag:
+            upperMag = max(
+                np.array(magnitudes['c']['mags']) + errMask)
+            upperMagIndex = np.argmax((
+                magnitudes['c']['mags']) + errMask)
+
+        if min(np.array(magnitudes['c']['mags']) - errMask) < lowerMag:
+            lowerMag = min(
+                np.array(magnitudes['c']['mags']) - errMask)
+            lowerMagIndex = np.argmin(
+                (magnitudes['c']['mags']) - errMask)
+
+    # if self.firstPlot:
+    plt.legend(handles=handles, prop={
+        'size': 13.5}, bbox_to_anchor=(0.95, 1.2), loc=0, borderaxespad=0., ncol=4, scatterpoints=1)
+
+    # SET THE TEMPORAL X-RANGE
+    allMjd = magnitudes['o']['mjds'] + magnitudes['c']['mjds']
+    xmin = min(allMjd) - 5.
+    xmax = max(allMjd) + 5.
+    mjdRange = xmax - xmin
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
+
+    # PLOT THE MAGNITUDE SCALE
+    axisUpperFlux = upperMag
+    axisLowerFlux = 1e-29
+    axisLowerMag = -2.5 * math.log10(axisLowerFlux) + 23.9
+    if axisUpperFlux > 0.:
+        axisUpperMag = -2.5 * math.log10(axisUpperFlux) + 23.9
+    else:
+        axisUpperMag = None
+    if axisUpperMag:
+        ax.set_ylabel('Apparent Magnitude', labelpad=15)
+        magLabels = [20., 17.0, 15.0, 14.0, 13.5, 13.0]
+        if axisUpperMag < 14:
+            magLabels = [20.0, 16.0, 15.0, 14.0,
+                         13.0, 12.5, 12.0, 11.5, 11.0]
+        elif axisUpperMag < 17:
+            magLabels = [20.,
+                         18.0, 17.0, 16.5, 16.0, 15.5, 15.0]
+        elif axisUpperMag < 18:
+            magLabels = [20., 19.5, 19.0, 18.5,
+                         18.0, 17.5, 17.0, 16.5, 16.0, 15.5, 15.0]
+        elif axisUpperMag < 20:
+            magLabels = [20.5, 20.0, 19.5, 19.0, 18.5, 18.0]
+
+        magFluxes = [pow(10, old_div(-(m - 23.9), 2.5)) for m in magLabels]
+
+        ax.yaxis.set_major_locator(mtick.FixedLocator((magFluxes)))
+        ax.yaxis.set_major_formatter(mtick.FixedFormatter((magLabels)))
+    else:
+        ax.set_yticks([])
+
+    # ADD SECOND Y-AXIS
+    ax2.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
+
+    # RELATIVE TIME SINCE DISCOVERY
+    lower, upper = ax.get_xlim()
+    utLower = converter.mjd_to_ut_datetime(mjd=lower, datetimeObject=True)
+    utUpper = converter.mjd_to_ut_datetime(mjd=upper, datetimeObject=True)
+    ax3.set_xlim([utLower, utUpper])
+
+    if mjdRange > 365:
+        ax3.xaxis.set_major_formatter(dates.DateFormatter('%b %d %y'))
+    else:
+        ax3.xaxis.set_major_formatter(dates.DateFormatter('%b %d'))
+
+    # FIND THE CACHE DIR FOR THE SOURCE
+    cacheDirectory = settings[
+        "cache-directory"] + "/transients/" + str(transientBucketId)
+    if not os.path.exists(cacheDirectory):
+        os.makedirs(cacheDirectory)
+    filePath = cacheDirectory + "/atlas_fp_lightcurve.png"
+    plt.savefig(filePath, bbox_inches='tight', transparent=False,
+                pad_inches=0.1, optimize=True, progressive=True)
+
+    try:
+        cyanMag.remove()
+    except:
+        pass
+
+    try:
+        orangeMag.remove()
+    except:
+        pass
+
+    firstPlot = False
+
+    log.debug('completed the ``plot_single_result`` method')
+    return filePath
+
+
 def sigma_clip_data(
+        log,
         fpData,
         clippingSigma=2.2):
     """*clean up rouge data from the files by performing some basic clipping*
 
     **Key Arguments:**
 
-    - `fpFile` -- path to single force photometry file
+    - `fpData` -- data dictionary of force photometry
     - `clippingSigma` -- the level at which to clip flux data
 
     **Return:**
 
     - `epochs` -- sigma clipped and cleaned epoch data
     """
-    log.info('starting the ``read_and_sigma_clip_data`` function')
+    log.info('starting the ``sigma_clip_data`` function')
 
     mjdMin = False
     mjdMax = False
 
-    print(fpData)
-
     # PARSE DATA WITH SOME FIXED CLIPPING
     oepochs = []
     cepochs = []
-    csvReader = csv.DictReader(
-        fpData, dialect='excel', delimiter=',', quotechar='"')
 
-    for row in csvReader:
-        for k, v in row.items():
-            try:
-                row[k] = float(v)
-            except:
-                pass
-        # REMOVE VERY HIGH ERROR DATA POINTS & POOR CHI SQUARED
-        if row["duJy"] > 4000 or row["chi/N"] > 100:
+    for row in fpData:
+        # REMOVE VERY HIGH ERROR DATA POINTS
+        if row["duJy"] > 4000:
             continue
         if mjdMin and mjdMax:
-            if row["MJD"] < mjdMin or row["MJD"] > mjdMax:
+            if row["mjd_obs"] < mjdMin or row["mjd_obs"] > mjdMax:
                 continue
-        if row["F"] == "c":
+        if row["filter"] == "c":
             cepochs.append(row)
-        if row["F"] == "o":
+        if row["filter"] == "o":
             oepochs.append(row)
 
     # SORT BY MJD
-    cepochs = sorted(cepochs, key=itemgetter('MJD'), reverse=False)
-    oepochs = sorted(oepochs, key=itemgetter('MJD'), reverse=False)
+    cepochs = sorted(cepochs, key=itemgetter('mjd_obs'), reverse=False)
+    oepochs = sorted(oepochs, key=itemgetter('mjd_obs'), reverse=False)
 
     # SIGMA-CLIP THE DATA WITH A ROLLING WINDOW
     cdataFlux = []
@@ -649,5 +468,97 @@ def sigma_clip_data(
     except:
         oepochs = []
 
-    log.debug('completed the ``read_and_sigma_clip_data`` function')
+    log.debug('completed the ``sigma_clip_data`` function')
     return cepochs + oepochs
+
+
+def stack_photometry(
+        log,
+        magnitudes,
+        binningDays=1.):
+    """*stack the photometry for the given temporal range*
+
+    **Key Arguments:**
+        - `magnitudes` -- dictionary of photometry divided into filter sets
+        - `binningDays` -- the binning to use (in days)
+
+    **Return:**
+        - `summedMagnitudes` -- the stacked photometry
+    """
+    log.debug('starting the ``stack_photometry`` method')
+
+    # IF WE WANT TO 'STACK' THE PHOTOMETRY
+    summedMagnitudes = {
+        'c': {'mjds': [], 'mags': [], 'magErrs': [], 'n': []},
+        'o': {'mjds': [], 'mags': [], 'magErrs': [], 'n': []},
+        'I': {'mjds': [], 'mags': [], 'magErrs': [], 'n': []},
+    }
+
+    # MAGNITUDES/FLUXES ARE DIVIDED IN UNIQUE FILTER SETS - SO ITERATE OVER
+    # FILTERS
+    allData = []
+    for fil, data in list(magnitudes.items()):
+        # WE'RE GOING TO CREATE FURTHER SUBSETS FOR EACH UNQIUE MJD (FLOORED TO AN INTEGER)
+        # MAG VARIABLE == FLUX (JUST TO CONFUSE YOU)
+        distinctMjds = {}
+        for mjd, flx, err in zip(data["mjds"], data["mags"], data["magErrs"]):
+            # DICT KEY IS THE UNIQUE INTEGER MJD
+            key = str(int(math.floor(mjd / float(binningDays))))
+            # FIRST DATA POINT OF THE NIGHTS? CREATE NEW DATA SET
+            if key not in distinctMjds:
+                distinctMjds[key] = {
+                    "mjds": [mjd],
+                    "mags": [flx],
+                    "magErrs": [err]
+                }
+            # OR NOT THE FIRST? APPEND TO ALREADY CREATED LIST
+            else:
+                distinctMjds[key]["mjds"].append(mjd)
+                distinctMjds[key]["mags"].append(flx)
+                distinctMjds[key]["magErrs"].append(err)
+
+        # ALL DATA NOW IN MJD SUBSETS. SO FOR EACH SUBSET (I.E. INDIVIDUAL
+        # NIGHTS) ...
+        for k, v in list(distinctMjds.items()):
+            # GIVE ME THE MEAN MJD
+            meanMjd = old_div(sum(v["mjds"]), len(v["mjds"]))
+            summedMagnitudes[fil]["mjds"].append(meanMjd)
+            # GIVE ME THE MEAN FLUX
+            meanFLux = old_div(sum(v["mags"]), len(v["mags"]))
+            summedMagnitudes[fil]["mags"].append(meanFLux)
+            # GIVE ME THE COMBINED ERROR
+            combError = sum(v["magErrs"]) / len(v["magErrs"]
+                                                ) / math.sqrt(len(v["magErrs"]))
+            summedMagnitudes[fil]["magErrs"].append(combError)
+            # GIVE ME NUMBER OF DATA POINTS COMBINED
+            n = len(v["mjds"])
+            summedMagnitudes[fil]["n"].append(n)
+            allData.append({
+                'MJD': f'{meanMjd:0.2f}',
+                'uJy': f'{meanFLux:0.2f}',
+                'duJy': f'{combError:0.2f}',
+                'F': fil,
+                'n': n
+            })
+
+    log.debug('completed the ``stack_photometry`` method')
+    return summedMagnitudes
+
+
+def get_twin(ax, axis):
+
+    for sibling in siblings:
+        if sibling.bbox.bounds == ax.bbox.bounds and sibling is not ax:
+            return sibling
+    return None
+
+
+def get_twin_axis(ax, axis):
+    assert axis in ("x", "y")
+    for other_ax in ax.figure.axes:
+        if other_ax is ax:
+            siblings = getattr(ax, f"get_shared_{axis}_axes")().get_siblings(ax)
+            for sibling in siblings:
+                if sibling.bbox.bounds == ax.bbox.bounds and sibling is not ax:
+                    return sibling
+    return None

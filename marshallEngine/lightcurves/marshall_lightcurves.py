@@ -424,9 +424,9 @@ class marshall_lightcurves(object):
         if currentMag > 23:
             currentMag = -9999.
 
-        # plt.clf()
+        plt.clf()
         plt.cla()
-        # ax = fig.add_subplot(1, 1, 1)
+        ax = fig.add_subplot(1, 1, 1)
         # print(currentMag)
         # print(bigTimeArray)
         # print(bigMagArray)

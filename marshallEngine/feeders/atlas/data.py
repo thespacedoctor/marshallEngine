@@ -29,7 +29,6 @@ class data(basedata):
     - ``dbConn`` -- the marshall database connection
     - ``settings`` -- the settings dictionary
 
-
     **Usage**
 
     To setup your logger, settings and database connections, please use the ``fundamentals`` package (`see tutorial here <http://fundamentals.readthedocs.io/en/latest/#tutorial>`_). 

@@ -142,9 +142,8 @@ class images(object):
                 stampWhere = v + " = 2 "
 
             # CREATE THE SURVEY WHERE CLAUSE
-            dbSurveyNames = "survey LIKE '%%" + \
-                ("%%' OR survey LIKE '%%").join(self.dbSurveyNames) + "%%'"
-            dbSurveyNames2 = dbSurveyNames.replace("survey L", "a.survey L")
+            dbSurveyNames = "t.survey LIKE '%%" + \
+                ("%%' OR t.survey LIKE '%%").join(self.dbSurveyNames) + "%%'"
 
             # NOW GENERATE SQL TO GET THE URLS OF STAMPS NEEDING DOWNLOADED
             if self.survey == "useradded":
@@ -177,30 +176,17 @@ class images(object):
             else:
                 sqlQuery = u"""
                     SELECT 
-            distinct a.transientBucketId, a.%(imageUrl)s 
-        FROM
-            transientBucket a
-                JOIN
-            (SELECT 
-                MIN(magnitude) AS mag, transientBucketId
-            FROM
-                transientBucket
-            WHERE
-                magnitude IS NOT NULL
-                    AND %(imageUrl)s IS NOT NULL
-                    AND transientBucketId IN (SELECT 
-                        transientBucketId
-                    FROM
-                        pesstoObjects
-                    WHERE
-                        %(stampWhere)s)
-                    AND (%(dbSurveyNames)s) and limitingMag = 0 
-            GROUP BY transientBucketId
-            ORDER BY transientBucketId) AS b ON a.transientBucketId = b.transientBucketId
-                AND a.magnitude = b.mag
-        WHERE
-            (%(dbSurveyNames2)s) and limitingMag = 0 and magnitude IS NOT NULL AND %(imageUrl)s IS NOT NULL GROUP BY a.transientBucketId;
-                """ % locals()
+    MIN(magnitude) AS mag, t.transientBucketId, %(imageUrl)s
+FROM
+    transientBucket t,
+    pesstoObjects p
+WHERE
+    t.magnitude IS NOT NULL
+        AND t.%(imageUrl)s IS NOT NULL
+        AND p.%(stampWhere)s
+        AND t.transientbucketId = p.transientbucketId
+        AND (%(dbSurveyNames)s)
+        AND t.limitingMag = 0 group by t.transientBucketId;""" % locals()
 
             if failedImage:
                 sqlQuery = sqlQuery.replace("AND a.magnitude = b.mag", "").replace(
