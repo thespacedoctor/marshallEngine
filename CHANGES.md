@@ -1,7 +1,11 @@
 
 ## Marshall Engine Release Notes  
 
-* refactoring resurrection code
+**v1.0.9 - May 2, 2021**  
+
+* **REFACTOR**: resurrection code optimised to resurface a few more objects
+* **REFACTOR**: some MySQL queries rewritten and table indexes added to optimise common queries 
+* **REFACTOR**: ATLAS forced photometry plotting code refactored to bring plots in-line with those produced by ATLAS forced photometry server. Biggest improvement is the more robust clipping of outlying data points.
 
 **v1.0.8 - March 17, 2021**  
   
