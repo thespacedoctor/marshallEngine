@@ -77,7 +77,7 @@ def generate_atlas_lightcurves(
     total = len(transientIds)
     if total > 1000:
         print("ATLAS lightcurves need generated for %(total)s sources - generating next 1000" % locals())
-        transientIds = transientIds[:100]
+        transientIds = transientIds[:1000]
         total = len(transientIds)
     else:
         print("Generating ATLAS lightcurves for %(total)s sources" % locals())
@@ -154,6 +154,9 @@ def generate_atlas_lightcurves(
             settings=settings
         )
         log.info("""finished multiprocessing""")
+
+    # REMOVE MISSING PLOTS
+    transientIds = [t for p, t in zip(plotPaths, transientIds) if p]
 
     # UPDATE THE atlas_fp_lightcurve DATE FOR TRANSIENTS WE HAVE JUST
     # GENERATED PLOTS FOR
