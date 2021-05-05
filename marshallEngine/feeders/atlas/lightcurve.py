@@ -64,7 +64,7 @@ def generate_atlas_lightcurves(
             WHERE
                 p.transientBucketId=t.transientBucketId
                 and t.survey = 'ATLAS FP' and t.limitingMag = 0
-                and ((p.atlas_fp_lightcurve < t.dateCreated) or p.atlas_fp_lightcurve is null)
+                and ((p.atlas_fp_lightcurve < t.dateCreated and p.atlas_fp_lightcurve != 0) or p.atlas_fp_lightcurve is null)
             GROUP BY t.transientBucketId;
     """
     rows = readquery(
@@ -155,14 +155,26 @@ def generate_atlas_lightcurves(
         )
         log.info("""finished multiprocessing""")
 
-    # REMOVE MISSING PLOTS
-    transientIds = [t for p, t in zip(plotPaths, transientIds) if p]
+    # REMOVE MISSING PLOTStrn
+    transientIdGood = [t for p, t in zip(plotPaths, transientIds) if p]
+    transientIdBad = [t for p, t in zip(plotPaths, transientIds) if p is None]
 
     # UPDATE THE atlas_fp_lightcurve DATE FOR TRANSIENTS WE HAVE JUST
     # GENERATED PLOTS FOR
-    if len(transientIds):
-        transientIds = (",").join([str(t) for t in transientIds])
-        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID in ({transientIds})"""
+    if len(transientIdGood):
+        transientIdGood = (",").join([str(t) for t in transientIdGood])
+        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID in ({transientIdGood})"""
+        writequery(
+            log=log,
+            sqlQuery=sqlQuery,
+            dbConn=dbConn
+        )
+
+    # UPDATE THE atlas_fp_lightcurve DATE FOR TRANSIENTS WE HAVE JUST
+    # GENERATED PLOTS FOR
+    if len(transientIdBad):
+        transientIdBad = (",").join([str(t) for t in transientIdBad])
+        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = 0 where transientBucketID in ({transientIdBad})"""
         writequery(
             log=log,
             sqlQuery=sqlQuery,
@@ -217,16 +229,10 @@ def plot_single_result(
         FROM
             fs_atlas_forced_phot
         WHERE
-            (skyfit > 0) and
-            atlas_designation in (SELECT distinct name
-        FROM
-            transientBucket
-        WHERE
-            survey = 'ATLAS FP'
-                AND transientBucketId = %(transientBucketId)s
-                AND dateDeleted IS NULL)
+            transientBucketId = %(transientBucketId)s
         and fnu is not null;
     """ % locals()
+
     epochs = readquery(
         log=log,
         sqlQuery=sqlQuery,
