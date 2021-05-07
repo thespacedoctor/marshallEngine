@@ -77,7 +77,7 @@ def generate_atlas_lightcurves(
     total = len(transientIds)
     if total > 1000:
         print("ATLAS lightcurves need generated for %(total)s sources - generating next 1000" % locals())
-        transientIds = transientIds[:100]
+        transientIds = transientIds[:1000]
         total = len(transientIds)
     else:
         print("Generating ATLAS lightcurves for %(total)s sources" % locals())
