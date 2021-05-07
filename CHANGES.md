@@ -1,7 +1,7 @@
 
 ## Marshall Engine Release Notes  
 
-**v1.0.9 - May 2, 2021**  
+**v1.0.9 - May 7, 2021**  
 
 * **REFACTOR**: resurrection code optimised to resurface a few more objects
 * **REFACTOR**: some MySQL queries rewritten and table indexes added to optimise common queries 
