@@ -1,6 +1,8 @@
 
 ## Marshall Engine Release Notes  
 
+adding tns-marker into the TNS search requests
+
 **v1.0.9 - May 7, 2021**  
 
 * **REFACTOR**: resurrection code optimised to resurface a few more objects
