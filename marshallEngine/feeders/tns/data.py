@@ -86,7 +86,8 @@ class data(basedata):
         # PARSE TNS
         tns = search(
             log=self.log,
-            discInLastDays=withinLastDays
+            discInLastDays=withinLastDays,
+            settings=self.settings
         )
 
         lists = [tns.sources, tns.photometry, tns.files, tns.spectra]
