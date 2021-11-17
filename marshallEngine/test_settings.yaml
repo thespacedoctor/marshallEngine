@@ -17,6 +17,8 @@ database settings:
 #     remote datbase host: mydatabaseName
 #     port: 9002
 
+astronote-cache: /tmp/astronote-cache
+user-agent: 'tns_marker{"tns_id":49,"type": "user", "name":"David Young"}'
 
 
 logging settings:
