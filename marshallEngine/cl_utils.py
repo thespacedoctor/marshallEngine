@@ -9,6 +9,7 @@ Usage:
     marshall import <survey> [<withInLastDay>] [-s <pathToSettingsFile>]
     marshall lightcurve <transientBucketId> [-s <pathToSettingsFile>]
     marshall refresh <transientBucketId>  [-s <pathToSettingsFile>]
+    marshall syncOBs  [-s <pathToSettingsFile>]
 
 Options:
     init                  setup the marshallEngine settings file for the first time
@@ -17,6 +18,7 @@ Options:
     refresh               update the cached metadata for a given transient
     lightcurve            generate a lightcurve for a transient in the marshall database
     transientBucketId     the transient ID from the database
+    syncOBs               request and update OB status with scheduler
     survey                name of survey to import [panstarrs|atlas|useradded]
     withInLastDay         import transient detections from the last N days (Default 30)
 
@@ -227,6 +229,14 @@ def main(arguments=None):
             dbConn=dbConn,
             transientBucketId=transientBucketId
         ).update()
+
+    if a["syncOBs"]:
+        from marshallEngine.services import soxs_scheduler
+        schr = soxs_scheduler(
+            log=log,
+            dbConn=dbConn,
+            settings=settings
+        ).request_all_required_auto_obs()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
