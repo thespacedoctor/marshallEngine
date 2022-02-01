@@ -245,6 +245,7 @@ def plot_single_result(
     # ax = fig.gca()
     epochs = sigma_clip_data(log=log, fpData=epochs)
 
+
     # c = cyan, o = arange
     magnitudes = {
         'c': {'mjds': [], 'mags': [], 'magErrs': []},
@@ -462,7 +463,7 @@ def sigma_clip_data(
             log=log,
             array=flux,
             clippingSigma=clippingSigma,
-            windowSize=11)
+            windowSize=7)
         maskList.append(fullMask)
 
     try:

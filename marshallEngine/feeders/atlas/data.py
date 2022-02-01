@@ -77,6 +77,7 @@ class data(basedata):
         """
         self.log.debug('starting the ``ingest`` method')
 
+
         timelimit = datetime.now() - timedelta(days=int(withinLastDays))
         timelimit = timelimit.strftime("%Y-%m-%d")
 
