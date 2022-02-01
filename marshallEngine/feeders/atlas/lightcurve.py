@@ -174,7 +174,7 @@ def generate_atlas_lightcurves(
     # GENERATED PLOTS FOR
     if len(transientIdBad):
         transientIdBad = (",").join([str(t) for t in transientIdBad])
-        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = 0 where transientBucketID in ({transientIdBad})"""
+        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID in ({transientIdBad})"""
         writequery(
             log=log,
             sqlQuery=sqlQuery,
