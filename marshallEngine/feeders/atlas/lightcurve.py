@@ -64,7 +64,7 @@ def generate_atlas_lightcurves(
             WHERE
                 p.transientBucketId=t.transientBucketId
                 and t.survey = 'ATLAS FP' and t.limitingMag = 0
-                and ((p.atlas_fp_lightcurve < t.dateCreated and p.atlas_fp_lightcurve != 0) or p.atlas_fp_lightcurve is null)
+                and ((DATE_SUB(p.atlas_fp_lightcurve, INTERVAL 2 HOUR) < t.dateCreated and p.atlas_fp_lightcurve != 0) or p.atlas_fp_lightcurve is null)
             GROUP BY t.transientBucketId;
     """
     rows = readquery(
