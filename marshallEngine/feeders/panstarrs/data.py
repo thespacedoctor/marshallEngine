@@ -108,20 +108,24 @@ class data(basedata):
         allLists.extend(self._clean_data_pre_ingest(
             surveyName="ps23pi", withinLastDays=withinLastDays))
 
-        csvDicts = self.get_csv_data(
-            url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
-            user=self.settings["credentials"]["pso3"]["username"],
-            pwd=self.settings["credentials"]["pso3"]["password"]
-        )
-        allLists.extend(self._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=withinLastDays))
-        csvDicts = self.get_csv_data(
-            url=self.settings["panstarrs urls"]["pso3"]["recurrence csv"],
-            user=self.settings["credentials"]["pso3"]["username"],
-            pwd=self.settings["credentials"]["pso3"]["password"]
-        )
-        allLists.extend(self._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=withinLastDays))
+
+        try:
+            csvDicts = self.get_csv_data(
+                url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
+                user=self.settings["credentials"]["pso3"]["username"],
+                pwd=self.settings["credentials"]["pso3"]["password"]
+            )
+            allLists.extend(self._clean_data_pre_ingest(
+                surveyName="pso3", withinLastDays=withinLastDays))
+            csvDicts = self.get_csv_data(
+                url=self.settings["panstarrs urls"]["pso3"]["recurrence csv"],
+                user=self.settings["credentials"]["pso3"]["username"],
+                pwd=self.settings["credentials"]["pso3"]["password"]
+            )
+            allLists.extend(self._clean_data_pre_ingest(
+                surveyName="pso3", withinLastDays=withinLastDays))
+        except:
+            pass
 
         self.dictList = allLists
         self._import_to_feeder_survey_table()
