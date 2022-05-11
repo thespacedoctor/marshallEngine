@@ -174,7 +174,7 @@ def generate_atlas_lightcurves(
     # GENERATED PLOTS FOR
     if len(transientIdBad):
         transientIdBad = (",").join([str(t) for t in transientIdBad])
-        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = 0 where transientBucketID in ({transientIdBad})"""
+        sqlQuery = f"""update pesstoObjects set atlas_fp_lightcurve = NOW() where transientBucketID in ({transientIdBad})"""
         writequery(
             log=log,
             sqlQuery=sqlQuery,
@@ -244,6 +244,7 @@ def plot_single_result(
 
     # ax = fig.gca()
     epochs = sigma_clip_data(log=log, fpData=epochs)
+
 
     # c = cyan, o = arange
     magnitudes = {
@@ -462,7 +463,7 @@ def sigma_clip_data(
             log=log,
             array=flux,
             clippingSigma=clippingSigma,
-            windowSize=11)
+            windowSize=7)
         maskList.append(fullMask)
 
     try:
