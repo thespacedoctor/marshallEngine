@@ -77,6 +77,7 @@ class data(basedata):
         """
         self.log.debug('starting the ``ingest`` method')
 
+
         timelimit = datetime.now() - timedelta(days=int(withinLastDays))
         timelimit = timelimit.strftime("%Y-%m-%d")
 
@@ -186,7 +187,7 @@ class data(basedata):
                 mjdStr = str(int(float(target.split("_")[1])))
                 if target:
                     iid, mjdString, diffId, ippIdet, type = target.split('_')
-                    targetImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
+                    targetImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + target + '.jpeg'
                     objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
@@ -194,7 +195,7 @@ class data(basedata):
                 mjdStr = str(int(float(ref.split("_")[1])))
                 if ref:
                     iid, mjdString, diffId, ippIdet, type = ref.split('_')
-                    refImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
+                    refImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + ref + '.jpeg'
                     objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 
@@ -202,7 +203,7 @@ class data(basedata):
                 mjdStr = str(int(float(diff.split("_")[1])))
                 if diff:
                     iid, mjdString, diffId, ippIdet, type = diff.split('_')
-                    diffImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/site_media/images/data/atlas4/" % locals() + '/' + \
+                    diffImageURL = "https://star.pst.qub.ac.uk/sne/atlas4/media/images/data/atlas4/" % locals() + '/' + \
                         mjdStr + '/' + diff + '.jpeg'
                     objectURL = "https://star.pst.qub.ac.uk/sne/atlas4/candidate/" + iid
 

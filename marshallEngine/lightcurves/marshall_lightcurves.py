@@ -7,6 +7,21 @@
     David Young
 """
 from __future__ import print_function
+from numpy.polynomial.chebyshev import chebfit, chebval
+import math
+from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.ticker as mtick
+import matplotlib.ticker as ticker
+import matplotlib.pyplot as plt
+from matplotlib import dates
+import matplotlib as mpl
+import warnings
+import numpy as np
+from astrocalc.times import conversions, now
+from fundamentals.mysql import database
+from fundamentals.mysql import readquery, writequery
+from fundamentals import fmultiprocess
+from fundamentals import tools
 from builtins import str
 from builtins import zip
 from builtins import range
@@ -14,24 +29,8 @@ from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from fundamentals import fmultiprocess
-from fundamentals.mysql import readquery, writequery
-from fundamentals.mysql import database
-from astrocalc.times import conversions, now
-import numpy as np
 # SUPPRESS MATPLOTLIB WARNINGS
-import warnings
 warnings.filterwarnings("ignore")
-import matplotlib as mpl
-from matplotlib import dates
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-import matplotlib.ticker as mtick
-from matplotlib.backends.backend_pdf import PdfPages
-import math
-
-from numpy.polynomial.chebyshev import chebfit, chebval
 
 
 class marshall_lightcurves(object):
@@ -471,16 +470,16 @@ class marshall_lightcurves(object):
                              size=30, va='top', ha='center', clip_on=True, color=color, zorder=1)
             if len(magNoErr):
                 theseMags = ax.errorbar(magNoErrMjd, magNoErr, yerr=magNoErrFudge, color=color, fmt='o', mfc=color,
-                                        mec=color, zorder=2, ms=12., alpha=0.8, linewidth=1.2,  label=k, capsize=0)
+                                        mec=color, zorder=2, ms=12., alpha=0.8, linewidth=1.2, label=k, capsize=0)
                 theseMags[-1][0].set_linestyle('--')
 
             if len(mag):
                 theseMags = ax.errorbar(magMjd, mag, yerr=magErr, color=color, fmt='o', mfc=color,
-                                        mec=color, zorder=3, ms=12., alpha=0.8, linewidth=1.2,  label=k, capsize=10)
+                                        mec=color, zorder=3, ms=12., alpha=0.8, linewidth=1.2, label=k, capsize=10)
 
             if not len(mag):
                 theseMags = ax.errorbar([-500], [20], yerr=[0.2], color=color, fmt='o', mfc=color,
-                                        mec=color, zorder=3, ms=12., alpha=0.8, linewidth=1.2,  label=k, capsize=10)
+                                        mec=color, zorder=3, ms=12., alpha=0.8, linewidth=1.2, label=k, capsize=10)
 
             if k not in handlesAdded:
                 handles.append(theseMags)
@@ -498,8 +497,8 @@ class marshall_lightcurves(object):
         # CHANGE PLOT TO FIXED TIME
         # SETUP THE AXES
         xUpperLimit = fixedXUpperLimit
-        ax.set_xlabel('MJD',  labelpad=20, fontsize=30)
-        ax.set_ylabel('Magnitude',  labelpad=20, fontsize=30)
+        ax.set_xlabel('MJD', labelpad=20, fontsize=30)
+        ax.set_ylabel('Magnitude', labelpad=20, fontsize=30)
         ax.set_title('')
         ax.set_xlim([xLowerLimit, xUpperLimit])
         ax.set_ylim([yUpperLimit, yLowerLimit])
@@ -596,7 +595,7 @@ class marshall_lightcurves(object):
         #     )
 
         results = fmultiprocess(log=self.log, function=_plot_one,
-                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
+                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings, turnOffMP=False)
 
         sqlQuery = ""
         updatedTransientBucketIds = []

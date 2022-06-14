@@ -1,6 +1,12 @@
 
 ## Marshall Engine Release Notes  
 
+**v1.0.10 - May 7, 2021** 
+
+* **ENHANCEMENT**: adding tns-marker into the TNS search requests
+* **FIXED**: doc fixes
+* **FIXED**: fixed atlas and panstarrs image stamp to download from new URLs
+
 **v1.0.9 - May 7, 2021**  
 
 * **REFACTOR**: resurrection code optimised to resurface a few more objects

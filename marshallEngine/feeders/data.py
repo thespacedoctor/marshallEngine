@@ -109,7 +109,8 @@ class data(object):
 
         if status_code != 200:
             print('HTTP Request failed - status %(status_code)s' % locals())
-            sys.exit(0)
+            raise ConnectionError(
+                'HTTP Request failed - status %(status_code)s. URL: %(url)s' % locals())
 
         # CONVERT THE RESPONSE TO CSV LIST OF DICTIONARIES
         self.csvDicts = csv.DictReader(

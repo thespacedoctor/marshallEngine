@@ -108,20 +108,24 @@ class data(basedata):
         allLists.extend(self._clean_data_pre_ingest(
             surveyName="ps23pi", withinLastDays=withinLastDays))
 
-        csvDicts = self.get_csv_data(
-            url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
-            user=self.settings["credentials"]["pso3"]["username"],
-            pwd=self.settings["credentials"]["pso3"]["password"]
-        )
-        allLists.extend(self._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=withinLastDays))
-        csvDicts = self.get_csv_data(
-            url=self.settings["panstarrs urls"]["pso3"]["recurrence csv"],
-            user=self.settings["credentials"]["pso3"]["username"],
-            pwd=self.settings["credentials"]["pso3"]["password"]
-        )
-        allLists.extend(self._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=withinLastDays))
+
+        try:
+            csvDicts = self.get_csv_data(
+                url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
+                user=self.settings["credentials"]["pso3"]["username"],
+                pwd=self.settings["credentials"]["pso3"]["password"]
+            )
+            allLists.extend(self._clean_data_pre_ingest(
+                surveyName="pso3", withinLastDays=withinLastDays))
+            csvDicts = self.get_csv_data(
+                url=self.settings["panstarrs urls"]["pso3"]["recurrence csv"],
+                user=self.settings["credentials"]["pso3"]["username"],
+                pwd=self.settings["credentials"]["pso3"]["password"]
+            )
+            allLists.extend(self._clean_data_pre_ingest(
+                surveyName="pso3", withinLastDays=withinLastDays))
+        except:
+            pass
 
         self.dictList = allLists
         self._import_to_feeder_survey_table()
@@ -213,19 +217,19 @@ class data(basedata):
             target = row["target"]
             if target:
                 id, mjdString, diffId, ippIdet, type = target.split('_')
-                thisDictionary["targetImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/site_media/images/data/%(surveyName)s" % locals() + '/' + \
+                thisDictionary["targetImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + target + '.jpeg'
 
             ref = row["ref"]
             if ref:
                 id, mjdString, diffId, ippIdet, type = ref.split('_')
-                thisDictionary["refImageURL"]  = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/site_media/images/data/%(surveyName)s" % locals() + '/' + \
+                thisDictionary["refImageURL"]  = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + ref + '.jpeg'
 
             diff = row["diff"]
             if diff:
                 id, mjdString, diffId, ippIdet, type = diff.split('_')
-                thisDictionary["diffImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/site_media/images/data/%(surveyName)s" % locals() + '/' + \
+                thisDictionary["diffImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + diff + '.jpeg'
 
             self.dictList.append(thisDictionary)
