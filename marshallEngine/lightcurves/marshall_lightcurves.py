@@ -31,6 +31,7 @@ import os
 os.environ['TERM'] = 'vt100'
 # SUPPRESS MATPLOTLIB WARNINGS
 warnings.filterwarnings("ignore")
+mpl.use('Agg')
 
 
 class marshall_lightcurves(object):
@@ -595,7 +596,7 @@ class marshall_lightcurves(object):
         #     )
 
         results = fmultiprocess(log=self.log, function=_plot_one,
-                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings, turnOffMP=False)
+                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
 
         sqlQuery = ""
         updatedTransientBucketIds = []
@@ -651,7 +652,7 @@ def _plot_one(
     """
     log.debug('starting the ``_plot_one`` method')
 
-    # MULTIPROCESSING NEEDS ONE CONNECTION PERPROCESS
+    # MULTIPROCESSING NEEDS ONE CONNECTION PER PROCESS
     sys.stdout.write("\x1b[1A\x1b[2K")
     print("updating LC for transient %(transientBucketId)s" % locals())
     dbConn = database(
