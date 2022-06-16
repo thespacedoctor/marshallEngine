@@ -631,8 +631,8 @@ class marshall_lightcurves(object):
 
 
 def _plot_one(
-        log,
         transientBucketId,
+        log,
         settings):
     """*plot a single transeint lightcurve*
 
