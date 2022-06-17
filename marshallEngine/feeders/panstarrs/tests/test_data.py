@@ -70,35 +70,6 @@ class test_data(unittest.TestCase):
         ingester._import_to_feeder_survey_table()
         ingester.insert_into_transientBucket()
 
-    def test_data_function2(self):
-
-        allLists = []
-        from marshallEngine.feeders.panstarrs.data import data
-        ingester = data(
-            log=log,
-            settings=settings,
-            dbConn=dbConn
-        )
-        csvDicts = ingester.get_csv_data(
-            url=settings["panstarrs urls"]["pso3"]["summary csv"],
-            user=settings["credentials"]["pso3"]["username"],
-            pwd=settings["credentials"]["pso3"]["password"]
-        )
-        data = ingester._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=1)
-        allLists.extend(data)
-        ingester.get_csv_data(
-            url=settings["panstarrs urls"]["pso3"]["recurrence csv"],
-            user=settings["credentials"]["pso3"]["username"],
-            pwd=settings["credentials"]["pso3"]["password"]
-        )
-        data = ingester._clean_data_pre_ingest(
-            surveyName="pso3", withinLastDays=1)
-        allLists.extend(data)
-        ingester.dictList = allLists
-        ingester._import_to_feeder_survey_table()
-        ingester.insert_into_transientBucket()
-
     def test_data_function3(self):
 
         from marshallEngine.feeders.panstarrs.data import data
