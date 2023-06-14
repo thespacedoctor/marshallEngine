@@ -1,5 +1,9 @@
 # marshallEngine
 
+
+[![](https://zenodo.org/badge/187837942.svg)](https://zenodo.org/badge/latestdoi/187837942) 
+
+
 <!-- INFO BADGES -->  
 
 [![](https://img.shields.io/pypi/pyversions/marshallEngine)](https://pypi.org/project/marshallEngine/)
@@ -24,3 +28,20 @@ Documentation for marshallEngine is hosted by [Read the Docs](https://marshallEn
 ## Features
 
 * 
+
+
+## How to cite marshallEngine
+
+If you use `marshallEngine` in your work, please cite using the following BibTeX entry: 
+
+```bibtex
+@software{Young_marshallEngine,
+    author = {Young, David R.},
+    doi = {10.5281/zenodo.8037614},
+    license = {GPL-3.0-only},
+    title = {{marshallEngine}},
+    url = {https://github.com/thespacedoctor/marshallEngine}
+}
+```
+ 
+
