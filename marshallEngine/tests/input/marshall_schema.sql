@@ -1,11 +1,11 @@
 DROP TRIGGER IF EXISTS astronotes_transients_BEFORE_INSERT;
 DROP TRIGGER IF EXISTS sherlock_classifications_BEFORE_INSERT;
 DROP TRIGGER IF EXISTS sherlock_classifications_AFTER_INSERT;
--- MySQL dump 10.19  Distrib 10.3.34-MariaDB, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.19  Distrib 10.3.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 10.131.21.162    Database: marshall
 -- ------------------------------------------------------
--- Server version	10.4.25-MariaDB-1:10.4.25+maria~focal-log
+-- Server version	10.4.31-MariaDB-1:10.4.31+maria~ubu2004-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,18 +26,17 @@ DROP TABLE IF EXISTS `_subview_object_akas`;
 /*!50001 DROP VIEW IF EXISTS `_subview_object_akas`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `_subview_object_akas` (
-  `transientBucketId` tinyint NOT NULL,
-  `primaryKeyId` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `referenceImageUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `subtractedImageUrl` tinyint NOT NULL,
-  `tripletImageUrl` tinyint NOT NULL,
-  `finderImageUrl` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `_subview_object_akas` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `primaryKeyId`,
+  1 AS `name`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `referenceImageUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `subtractedImageUrl`,
+  1 AS `tripletImageUrl`,
+  1 AS `finderImageUrl` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -62,7 +61,7 @@ CREATE TABLE `astronotes_content` (
   `html_parsed_flag` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `astronote` (`astronote`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -81,7 +80,7 @@ CREATE TABLE `astronotes_keywords` (
   `keyword` varchar(30) NOT NULL,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `astronote_keyword` (`astronote`,`keyword`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +127,7 @@ CREATE TABLE `astronotes_transients` (
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `astronote_iauname` (`astronote`,`iauname`),
   UNIQUE KEY `astronote_alt_name` (`alt_name`,`astronote`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -190,7 +189,7 @@ CREATE TABLE `atel_coordinates` (
   KEY `i_htm16ID` (`htm16ID`),
   KEY `idx_transientBucketId` (`transientBucketId`),
   KEY `idx_ingested` (`ingested`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,7 +218,7 @@ CREATE TABLE `atel_fullcontent` (
   `updated` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `atelnumber` (`atelNumber`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,7 +248,7 @@ CREATE TABLE `atel_names` (
   KEY `name` (`name`),
   KEY `idx_transientBucketId` (`transientBucketId`),
   KEY `idx_ingested` (`ingested`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,7 +294,7 @@ CREATE TABLE `fs_asassn_sne` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -335,7 +334,7 @@ CREATE TABLE `fs_asassn_transients` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,7 +392,7 @@ CREATE TABLE `fs_atlas` (
   KEY `i_htm16ID` (`htm16ID`),
   KEY `idx_htm20ID` (`htm20ID`),
   KEY `idx_transientBucketId` (`transientBucketId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -462,8 +461,10 @@ CREATE TABLE `fs_atlas_forced_phot` (
   KEY `idx_atlas_designation` (`atlas_designation`),
   KEY `idx_dateCreated` (`dateCreated`),
   KEY `idx_transientBucketId_designation` (`atlas_designation`,`transientBucketId`),
-  KEY `idx_ingested_limit` (`ingested`,`marshall_limiting_mag`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+  KEY `idx_ingested_limit` (`ingested`,`marshall_limiting_mag`),
+  KEY `idx_snr_dpeak` (`snr`,`dpeak`),
+  KEY `idx_snr_dpeak_lim_mag` (`snr`,`dpeak`,`marshall_limiting_mag`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -516,7 +517,7 @@ CREATE TABLE `fs_crts_css` (
   KEY `idx_htm16ID` (`htm16ID`),
   KEY `idx_htm10ID` (`htm10ID`),
   KEY `idx_htm13ID` (`htm13ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -569,7 +570,7 @@ CREATE TABLE `fs_crts_mls` (
   KEY `idx_htm16ID` (`htm16ID`),
   KEY `idx_htm10ID` (`htm10ID`),
   KEY `idx_htm13ID` (`htm13ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -622,7 +623,7 @@ CREATE TABLE `fs_crts_sss` (
   KEY `idx_htm16ID` (`htm16ID`),
   KEY `idx_htm10ID` (`htm10ID`),
   KEY `idx_htm13ID` (`htm13ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -670,7 +671,7 @@ CREATE TABLE `fs_des` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -713,7 +714,7 @@ CREATE TABLE `fs_gaia` (
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`),
   KEY `idx_htm20ID` (`htm20ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -762,7 +763,7 @@ CREATE TABLE `fs_master` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -820,7 +821,7 @@ CREATE TABLE `fs_ogle` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -870,7 +871,7 @@ CREATE TABLE `fs_panstarrs` (
   KEY `i_htm10ID` (`htm10ID`) KEY_BLOCK_SIZE=1024,
   KEY `i_htm13ID` (`htm13ID`) KEY_BLOCK_SIZE=1024,
   KEY `i_htm16ID` (`htm16ID`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -930,7 +931,7 @@ CREATE TABLE `fs_skymapper` (
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`),
   KEY `idx_htm20ID` (`htm20ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -978,7 +979,7 @@ CREATE TABLE `fs_tns_transients` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1027,7 +1028,7 @@ CREATE TABLE `fs_user_added` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1084,7 +1085,7 @@ CREATE TABLE `fs_ztf` (
   KEY `idx_tripletImageUrl` (`tripletImageUrl`),
   KEY `idx_mjd` (`mjd`),
   KEY `idx_isdiffpos` (`isdiffpos`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1101,8 +1102,85 @@ CREATE TABLE `logs_executable_timings` (
   `end_time` datetime NOT NULL,
   `running_time` varchar(100) NOT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `lvk_alerts`
+--
+
+DROP TABLE IF EXISTS `lvk_alerts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `lvk_alerts` (
+  `superevent_id` varchar(20) NOT NULL,
+  `significant` tinyint(4) DEFAULT NULL,
+  `alert_type` varchar(20) DEFAULT NULL,
+  `alert_time` datetime DEFAULT NULL,
+  `alert_delta_sec` int(11) DEFAULT NULL,
+  `date_obs` datetime DEFAULT NULL COMMENT 'original keyword: date-obs',
+  `mjd_obs` double DEFAULT NULL COMMENT 'original keyword: mjd-obs',
+  `far_hz` double DEFAULT NULL,
+  `far_years` double DEFAULT NULL,
+  `distmean` double DEFAULT NULL,
+  `diststd` double DEFAULT NULL,
+  `class_bbh` double DEFAULT NULL,
+  `class_bns` double DEFAULT NULL,
+  `class_nsbh` double DEFAULT NULL,
+  `class_terrestrial` double DEFAULT NULL,
+  `prop_hasns` double DEFAULT NULL,
+  `prop_hasremnant` double DEFAULT NULL,
+  `prop_hasmassgap` double DEFAULT NULL,
+  `area10` double DEFAULT NULL,
+  `area50` double DEFAULT NULL,
+  `area90` double DEFAULT NULL,
+  `creator` varchar(30) DEFAULT NULL,
+  `ra_centre` double DEFAULT NULL,
+  `dec_centre` double DEFAULT NULL,
+  `group` varchar(100) DEFAULT NULL,
+  `logbci` double DEFAULT NULL,
+  `logbsn` double DEFAULT NULL,
+  `pipeline` varchar(100) DEFAULT NULL,
+  `search` varchar(100) DEFAULT NULL,
+  `map` varchar(400) DEFAULT NULL,
+  `dateAdded` datetime DEFAULT current_timestamp(),
+  `dateLastModified` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `dateLastMatched` datetime DEFAULT NULL,
+  UNIQUE KEY `superevent_id_alert_time_alert_type` (`superevent_id`,`alert_time`,`alert_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Temporary table structure for view `lvk_events`
+--
+
+DROP TABLE IF EXISTS `lvk_events`;
+/*!50001 DROP VIEW IF EXISTS `lvk_events`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `lvk_events` AS SELECT
+ 1 AS `superevent_id`,
+  1 AS `significant`,
+  1 AS `latest_alert`,
+  1 AS `alert_time`,
+  1 AS `alert_delta_sec`,
+  1 AS `date_obs`,
+  1 AS `mjd_obs`,
+  1 AS `far_hz`,
+  1 AS `far_years`,
+  1 AS `distmean`,
+  1 AS `diststd`,
+  1 AS `class_bbh`,
+  1 AS `class_bns`,
+  1 AS `class_nsbh`,
+  1 AS `class_terrestrial`,
+  1 AS `prop_hasns`,
+  1 AS `prop_hasremnant`,
+  1 AS `prop_hasmassgap`,
+  1 AS `area10`,
+  1 AS `area50`,
+  1 AS `area90` */;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `map_survey_marshall_discoveries`
@@ -1118,7 +1196,7 @@ CREATE TABLE `map_survey_marshall_discoveries` (
   `view_tns_photometry_discoveries` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`columnName`),
   UNIQUE KEY `columnName_UNIQUE` (`columnName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1133,7 +1211,7 @@ CREATE TABLE `map_survey_marshall_photometry` (
   `tns_photometry` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`columnName`),
   UNIQUE KEY `columnName_UNIQUE` (`columnName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1148,7 +1226,7 @@ CREATE TABLE `map_survey_marshall_spectra` (
   `tns_spectra` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`columnName`),
   UNIQUE KEY `columnName_UNIQUE` (`columnName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1162,7 +1240,7 @@ CREATE TABLE `map_survey_transientbucket` (
   `columnName` varchar(150) NOT NULL,
   PRIMARY KEY (`columnName`),
   UNIQUE KEY `columnName_UNIQUE` (`columnName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1180,7 +1258,7 @@ CREATE TABLE `marshall_fs_column_map` (
   `fs_table_column` varchar(45) NOT NULL,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `unquie_fs_table_name_fs_table_column` (`fs_table_name`,`fs_table_column`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1200,7 +1278,7 @@ CREATE TABLE `marshall_sources` (
   UNIQUE KEY `u_marshallId` (`marshallId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `u_raDeg_decDeg` (`raDeg`,`decDeg`) KEY_BLOCK_SIZE=1024,
   KEY `i_marshallId` (`marshallId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1239,7 +1317,7 @@ CREATE TABLE `marshall_sources_discoveries` (
   KEY `i_survey` (`survey`),
   KEY `i_surveyId` (`name`),
   KEY `i_masterId` (`masterId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1269,7 +1347,7 @@ CREATE TABLE `marshall_sources_photometry` (
   UNIQUE KEY `u_primaryId` (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `u_surveyId_mjd` (`name`,`observationMJD`),
   KEY `i_marshallId` (`marshallId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1286,7 +1364,7 @@ CREATE TABLE `marshall_sources_related_files` (
   PRIMARY KEY (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `u_primaryId` (`primaryId`) KEY_BLOCK_SIZE=1024,
   KEY `i_marshallId` (`marshallId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1318,7 +1396,7 @@ CREATE TABLE `marshall_sources_spectra` (
   UNIQUE KEY `u_name_mjd` (`name`,`observationMJD`),
   UNIQUE KEY `u_id_survey_specType` (`spectralType`,`marshallId`,`survey`),
   KEY `i_marshallId` (`marshallId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1342,7 +1420,7 @@ CREATE TABLE `marshall_transient_akas` (
   KEY `idx_name` (`name`),
   KEY `idx_url` (`url`),
   KEY `idx_url_name_transientbucketid_addedDate` (`transientBucketId`,`name`,`url`,`addedDate`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1359,7 +1437,7 @@ CREATE TABLE `meta_workflow_lists_counts` (
   PRIMARY KEY (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `primaryId_UNIQUE` (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `listname_unique` (`listname`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1371,13 +1449,13 @@ DROP TABLE IF EXISTS `pessto_marshall_object_summaries`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pessto_marshall_object_summaries` (
   `transientBucketId` bigint(20) NOT NULL COMMENT 'This is set to the primaryKeyId of the **first** entry of this object into the database (i.e. earliest dateCreated)',
-  `name` varchar(40) CHARACTER SET utf8 NOT NULL COMMENT 'the name of the transient given by the reporting survey.',
-  `survey` varchar(45) CHARACTER SET utf8 DEFAULT NULL COMMENT 'the survey reporting observation of this transient',
+  `name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'the name of the transient given by the reporting survey.',
+  `survey` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'the survey reporting observation of this transient',
   `raDeg` double DEFAULT NULL COMMENT 'RA is decimal degreed',
   `decDeg` double DEFAULT NULL COMMENT 'DEC in decimal degrees',
-  `spectralType` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT 'the spectral classification given by the reporting survey (if any)',
+  `spectralType` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'the spectral classification given by the reporting survey (if any)',
   `transientRedshift` float DEFAULT NULL COMMENT 'redshift as measured from a spectrum of the transient'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1408,7 +1486,7 @@ CREATE TABLE `pessto_papers` (
   `authors` varchar(800) DEFAULT NULL,
   PRIMARY KEY (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `bibcode_pubdate` (`bibcode`,`pubdate`) KEY_BLOCK_SIZE=4096
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1483,7 +1561,7 @@ CREATE TABLE `pesstoobjects` (
   KEY `awl` (`alertWorkflowLocation`),
   FULLTEXT KEY `fulltext` (`pi_name`),
   FULLTEXT KEY `fulltext_pi_name` (`pi_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1500,7 +1578,7 @@ CREATE TABLE `pesstoobjectschangelog` (
   `whenChangeOccured` datetime NOT NULL,
   `changeAuthor` varchar(45) NOT NULL,
   PRIMARY KEY (`pesstoObjectsChangeLog`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1522,7 +1600,7 @@ CREATE TABLE `pesstoobjectscomments` (
   PRIMARY KEY (`pesstoObjectsCommentsId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `objectId_date_author_comment` (`pesstoObjectsId`,`dateCreated`,`commentAuthor`,`comment`(90)) KEY_BLOCK_SIZE=1024,
   KEY `pesstoObjectsId` (`pesstoObjectsId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1546,7 +1624,7 @@ CREATE TABLE `scheduler_api_calls` (
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `primaryId_UNIQUE` (`primaryId`),
   UNIQUE KEY `uni_transientbucketid_triggerDate` (`transientBucketId`,`triggerTime`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1569,7 +1647,7 @@ CREATE TABLE `scheduler_obs` (
   PRIMARY KEY (`transientBucketId`),
   UNIQUE KEY `transientBucketId_UNIQUE` (`transientBucketId`),
   UNIQUE KEY `OB_ID_UNIQUE` (`OB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1595,7 +1673,7 @@ CREATE TABLE `sherlock_classifications` (
   KEY `idx_classification` (`classification`),
   KEY `idx_summary` (`summary`),
   KEY `idx_dateLastModified` (`dateLastModified`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1721,7 +1799,7 @@ CREATE TABLE `sherlock_crossmatches` (
   KEY `key_catalogue_object_id` (`catalogue_object_id`),
   KEY `idx_separationArcsec` (`separationArcsec`),
   KEY `idx_rank` (`rank`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1737,7 +1815,7 @@ CREATE TABLE `stats_full_release_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1753,7 +1831,7 @@ CREATE TABLE `stats_ssdr1_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1769,7 +1847,7 @@ CREATE TABLE `stats_ssdr2_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1785,7 +1863,7 @@ CREATE TABLE `stats_ssdr3_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1801,7 +1879,7 @@ CREATE TABLE `tcs_catalogue_tables` (
   `description` varchar(60) NOT NULL,
   `url` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1853,7 +1931,7 @@ CREATE TABLE `tcs_helper_catalogue_tables_info` (
   `filterName5ColName` varchar(45) DEFAULT NULL,
   `filterErr5ColName` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1872,7 +1950,7 @@ CREATE TABLE `tcs_helper_catalogue_views_info` (
   `old_view_name` varchar(100) DEFAULT NULL,
   `table_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1895,7 +1973,7 @@ CREATE TABLE `tcs_stats_catalogues` (
   `transientStream` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `table_id` (`table_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1918,7 +1996,7 @@ CREATE TABLE `tns_files` (
   `comment` varchar(800) DEFAULT NULL,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `tnsid_url` (`TNSId`,`url`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1959,7 +2037,7 @@ CREATE TABLE `tns_photometry` (
   UNIQUE KEY `u_tnsid_survey_obsdate` (`TNSId`,`survey`,`obsdate`),
   UNIQUE KEY `u_tnsid_obsdate_objname` (`TNSId`,`obsdate`,`objectName`),
   KEY `idx_transientBucketId` (`transientBucketId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1998,7 +2076,7 @@ CREATE TABLE `tns_sources` (
   UNIQUE KEY `tnsid` (`TNSId`),
   KEY `idx_transientBucketId` (`transientBucketId`),
   KEY `idx_ingested` (`ingested`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2038,7 +2116,7 @@ CREATE TABLE `tns_spectra` (
   KEY `idx_ingested` (`ingested`),
   KEY `idx_TNSName` (`TNSName`),
   KEY `idx_dateCreated` (`dateCreated`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2135,7 +2213,7 @@ CREATE TABLE `transientbucket` (
   FULLTEXT KEY `fulltext` (`name`,`survey`,`surveyObjectUrl`),
   FULLTEXT KEY `fulltext_name_survey_surveyObjectUrl` (`name`,`survey`,`surveyObjectUrl`),
   FULLTEXT KEY `fulltext_name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2196,7 +2274,7 @@ CREATE TABLE `transientbucketsummaries` (
   KEY `idx_htm10ID` (`htm10ID`),
   KEY `idx_htm13ID` (`htm13ID`),
   KEY `idx_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2214,7 +2292,7 @@ CREATE TABLE `transients_history_logs` (
   PRIMARY KEY (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `unique_index` (`transientBucketId`,`dateCreated`) KEY_BLOCK_SIZE=1024,
   KEY `tbi` (`transientBucketId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2225,37 +2303,36 @@ DROP TABLE IF EXISTS `vview_fs_crts_css_summary`;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_css_summary`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_fs_crts_css_summary` (
-  `primaryId` tinyint NOT NULL,
-  `circularUrl` tinyint NOT NULL,
-  `comment` tinyint NOT NULL,
-  `commentIngested` tinyint NOT NULL,
-  `dateCreated` tinyint NOT NULL,
-  `dateLastModified` tinyint NOT NULL,
-  `dateLastRead` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `finderChartUrl` tinyint NOT NULL,
-  `finderChartWebpage` tinyint NOT NULL,
-  `imagesUrl` tinyint NOT NULL,
-  `ingested` tinyint NOT NULL,
-  `lightcurveUrl` tinyint NOT NULL,
-  `mag` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `summaryRow` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `transientTypePrediction` tinyint NOT NULL,
-  `uniqueId` tinyint NOT NULL,
-  `htm16ID` tinyint NOT NULL,
-  `magErr` tinyint NOT NULL,
-  `lastNonDetectionDate` tinyint NOT NULL,
-  `lastNonDetectionMJD` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_fs_crts_css_summary` AS SELECT
+ 1 AS `primaryId`,
+  1 AS `circularUrl`,
+  1 AS `comment`,
+  1 AS `commentIngested`,
+  1 AS `dateCreated`,
+  1 AS `dateLastModified`,
+  1 AS `dateLastRead`,
+  1 AS `decDeg`,
+  1 AS `filter`,
+  1 AS `finderChartUrl`,
+  1 AS `finderChartWebpage`,
+  1 AS `imagesUrl`,
+  1 AS `ingested`,
+  1 AS `lightcurveUrl`,
+  1 AS `mag`,
+  1 AS `name`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `raDeg`,
+  1 AS `summaryRow`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `transientTypePrediction`,
+  1 AS `uniqueId`,
+  1 AS `htm16ID`,
+  1 AS `magErr`,
+  1 AS `lastNonDetectionDate`,
+  1 AS `lastNonDetectionMJD` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2266,37 +2343,36 @@ DROP TABLE IF EXISTS `vview_fs_crts_mls_summary`;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_mls_summary`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_fs_crts_mls_summary` (
-  `primaryId` tinyint NOT NULL,
-  `circularUrl` tinyint NOT NULL,
-  `comment` tinyint NOT NULL,
-  `commentIngested` tinyint NOT NULL,
-  `dateCreated` tinyint NOT NULL,
-  `dateLastModified` tinyint NOT NULL,
-  `dateLastRead` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `finderChartUrl` tinyint NOT NULL,
-  `finderChartWebpage` tinyint NOT NULL,
-  `imagesUrl` tinyint NOT NULL,
-  `ingested` tinyint NOT NULL,
-  `lightcurveUrl` tinyint NOT NULL,
-  `mag` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `summaryRow` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `transientTypePrediction` tinyint NOT NULL,
-  `uniqueId` tinyint NOT NULL,
-  `htm16ID` tinyint NOT NULL,
-  `magErr` tinyint NOT NULL,
-  `lastNonDetectionDate` tinyint NOT NULL,
-  `lastNonDetectionMJD` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_fs_crts_mls_summary` AS SELECT
+ 1 AS `primaryId`,
+  1 AS `circularUrl`,
+  1 AS `comment`,
+  1 AS `commentIngested`,
+  1 AS `dateCreated`,
+  1 AS `dateLastModified`,
+  1 AS `dateLastRead`,
+  1 AS `decDeg`,
+  1 AS `filter`,
+  1 AS `finderChartUrl`,
+  1 AS `finderChartWebpage`,
+  1 AS `imagesUrl`,
+  1 AS `ingested`,
+  1 AS `lightcurveUrl`,
+  1 AS `mag`,
+  1 AS `name`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `raDeg`,
+  1 AS `summaryRow`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `transientTypePrediction`,
+  1 AS `uniqueId`,
+  1 AS `htm16ID`,
+  1 AS `magErr`,
+  1 AS `lastNonDetectionDate`,
+  1 AS `lastNonDetectionMJD` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2307,37 +2383,36 @@ DROP TABLE IF EXISTS `vview_fs_crts_sss_summary`;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_sss_summary`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_fs_crts_sss_summary` (
-  `primaryId` tinyint NOT NULL,
-  `circularUrl` tinyint NOT NULL,
-  `comment` tinyint NOT NULL,
-  `commentIngested` tinyint NOT NULL,
-  `dateCreated` tinyint NOT NULL,
-  `dateLastModified` tinyint NOT NULL,
-  `dateLastRead` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `finderChartUrl` tinyint NOT NULL,
-  `finderChartWebpage` tinyint NOT NULL,
-  `imagesUrl` tinyint NOT NULL,
-  `ingested` tinyint NOT NULL,
-  `lightcurveUrl` tinyint NOT NULL,
-  `mag` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `summaryRow` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `transientTypePrediction` tinyint NOT NULL,
-  `uniqueId` tinyint NOT NULL,
-  `htm16ID` tinyint NOT NULL,
-  `magErr` tinyint NOT NULL,
-  `lastNonDetectionDate` tinyint NOT NULL,
-  `lastNonDetectionMJD` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_fs_crts_sss_summary` AS SELECT
+ 1 AS `primaryId`,
+  1 AS `circularUrl`,
+  1 AS `comment`,
+  1 AS `commentIngested`,
+  1 AS `dateCreated`,
+  1 AS `dateLastModified`,
+  1 AS `dateLastRead`,
+  1 AS `decDeg`,
+  1 AS `filter`,
+  1 AS `finderChartUrl`,
+  1 AS `finderChartWebpage`,
+  1 AS `imagesUrl`,
+  1 AS `ingested`,
+  1 AS `lightcurveUrl`,
+  1 AS `mag`,
+  1 AS `name`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `raDeg`,
+  1 AS `summaryRow`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `transientTypePrediction`,
+  1 AS `uniqueId`,
+  1 AS `htm16ID`,
+  1 AS `magErr`,
+  1 AS `lastNonDetectionDate`,
+  1 AS `lastNonDetectionMJD` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2348,34 +2423,33 @@ DROP TABLE IF EXISTS `vview_fs_ogle_summary`;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_ogle_summary`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_fs_ogle_summary` (
-  `primaryId` tinyint NOT NULL,
-  `dateCreated` tinyint NOT NULL,
-  `dateLastModified` tinyint NOT NULL,
-  `dateLastRead` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `ingested` tinyint NOT NULL,
-  `lastNonDetectionDate` tinyint NOT NULL,
-  `lastNonDetectionMJD` tinyint NOT NULL,
-  `lightcurveUrl` tinyint NOT NULL,
-  `mag` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `referenceFitsUrl` tinyint NOT NULL,
-  `referenceImageUrl` tinyint NOT NULL,
-  `subtractedFitsUrl` tinyint NOT NULL,
-  `subtractedImageUrl` tinyint NOT NULL,
-  `summaryRow` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `targetFitsUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `transientTypePrediction` tinyint NOT NULL,
-  `htm16ID` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_fs_ogle_summary` AS SELECT
+ 1 AS `primaryId`,
+  1 AS `dateCreated`,
+  1 AS `dateLastModified`,
+  1 AS `dateLastRead`,
+  1 AS `decDeg`,
+  1 AS `filter`,
+  1 AS `ingested`,
+  1 AS `lastNonDetectionDate`,
+  1 AS `lastNonDetectionMJD`,
+  1 AS `lightcurveUrl`,
+  1 AS `mag`,
+  1 AS `name`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `raDeg`,
+  1 AS `referenceFitsUrl`,
+  1 AS `referenceImageUrl`,
+  1 AS `subtractedFitsUrl`,
+  1 AS `subtractedImageUrl`,
+  1 AS `summaryRow`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `targetFitsUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `transientTypePrediction`,
+  1 AS `htm16ID` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2386,18 +2460,17 @@ DROP TABLE IF EXISTS `vview_object_akas`;
 /*!50001 DROP VIEW IF EXISTS `vview_object_akas`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_object_akas` (
-  `transientBucketId` tinyint NOT NULL,
-  `primaryKeyId` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `referenceImageUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `subtractedImageUrl` tinyint NOT NULL,
-  `tripletImageUrl` tinyint NOT NULL,
-  `finderImageUrl` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_object_akas` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `primaryKeyId`,
+  1 AS `name`,
+  1 AS `survey`,
+  1 AS `surveyObjectUrl`,
+  1 AS `referenceImageUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `subtractedImageUrl`,
+  1 AS `tripletImageUrl`,
+  1 AS `finderImageUrl` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2408,23 +2481,22 @@ DROP TABLE IF EXISTS `vview_object_temporal_data`;
 /*!50001 DROP VIEW IF EXISTS `vview_object_temporal_data`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_object_temporal_data` (
-  `transientBucketId` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `magnitude` tinyint NOT NULL,
-  `magnitudeError` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `referenceImageUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `subtractedImageUrl` tinyint NOT NULL,
-  `tripletImageUrl` tinyint NOT NULL,
-  `telescope` tinyint NOT NULL,
-  `instrument` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_object_temporal_data` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `name`,
+  1 AS `survey`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `magnitude`,
+  1 AS `magnitudeError`,
+  1 AS `filter`,
+  1 AS `surveyObjectUrl`,
+  1 AS `referenceImageUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `subtractedImageUrl`,
+  1 AS `tripletImageUrl`,
+  1 AS `telescope`,
+  1 AS `instrument` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2435,10 +2507,9 @@ DROP TABLE IF EXISTS `vview_objectredshifts`;
 /*!50001 DROP VIEW IF EXISTS `vview_objectredshifts`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_objectredshifts` (
-  `transientBucketId` tinyint NOT NULL,
-  `transientRedshift` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_objectredshifts` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `transientRedshift` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2449,10 +2520,9 @@ DROP TABLE IF EXISTS `vview_objectspectraltypes`;
 /*!50001 DROP VIEW IF EXISTS `vview_objectspectraltypes`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_objectspectraltypes` (
-  `transientBucketId` tinyint NOT NULL,
-  `spectralType` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_objectspectraltypes` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `spectralType` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2463,14 +2533,13 @@ DROP TABLE IF EXISTS `vview_tns_photometry_discoveries`;
 /*!50001 DROP VIEW IF EXISTS `vview_tns_photometry_discoveries`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_tns_photometry_discoveries` (
-  `raDeg` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `objectName` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `suggestedType` tinyint NOT NULL,
-  `hostRedshift` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_tns_photometry_discoveries` AS SELECT
+ 1 AS `raDeg`,
+  1 AS `decDeg`,
+  1 AS `objectName`,
+  1 AS `survey`,
+  1 AS `suggestedType`,
+  1 AS `hostRedshift` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2481,50 +2550,49 @@ DROP TABLE IF EXISTS `vview_transientbucketmaster`;
 /*!50001 DROP VIEW IF EXISTS `vview_transientbucketmaster`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_transientbucketmaster` (
-  `primaryKeyId` tinyint NOT NULL,
-  `transientBucketId` tinyint NOT NULL,
-  `masterIDFlag` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `raDegErr` tinyint NOT NULL,
-  `decDegErr` tinyint NOT NULL,
-  `observationDate` tinyint NOT NULL,
-  `observationMJD` tinyint NOT NULL,
-  `magnitude` tinyint NOT NULL,
-  `magnitudeError` tinyint NOT NULL,
-  `filter` tinyint NOT NULL,
-  `transientRedshift` tinyint NOT NULL,
-  `transientRedshiftNotes` tinyint NOT NULL,
-  `spectralType` tinyint NOT NULL,
-  `discoveryPhase` tinyint NOT NULL,
-  `dateCreated` tinyint NOT NULL,
-  `dateLastModified` tinyint NOT NULL,
-  `surveyObjectUrl` tinyint NOT NULL,
-  `transientTypePrediction` tinyint NOT NULL,
-  `transientTypePredicationSource` tinyint NOT NULL,
-  `hostRedshift` tinyint NOT NULL,
-  `hostRedshiftType` tinyint NOT NULL,
-  `referenceImageUrl` tinyint NOT NULL,
-  `targetImageUrl` tinyint NOT NULL,
-  `subtractedImageUrl` tinyint NOT NULL,
-  `tripletImageUrl` tinyint NOT NULL,
-  `htm20ID` tinyint NOT NULL,
-  `htm16ID` tinyint NOT NULL,
-  `cx` tinyint NOT NULL,
-  `cy` tinyint NOT NULL,
-  `cz` tinyint NOT NULL,
-  `telescope` tinyint NOT NULL,
-  `instrument` tinyint NOT NULL,
-  `reducer` tinyint NOT NULL,
-  `lastNonDetectionDate` tinyint NOT NULL,
-  `lastNonDetectionMJD` tinyint NOT NULL,
-  `dateLastRead` tinyint NOT NULL,
-  `finderImageUrl` tinyint NOT NULL,
-  `lightcurveURL` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_transientbucketmaster` AS SELECT
+ 1 AS `primaryKeyId`,
+  1 AS `transientBucketId`,
+  1 AS `masterIDFlag`,
+  1 AS `name`,
+  1 AS `survey`,
+  1 AS `raDeg`,
+  1 AS `decDeg`,
+  1 AS `raDegErr`,
+  1 AS `decDegErr`,
+  1 AS `observationDate`,
+  1 AS `observationMJD`,
+  1 AS `magnitude`,
+  1 AS `magnitudeError`,
+  1 AS `filter`,
+  1 AS `transientRedshift`,
+  1 AS `transientRedshiftNotes`,
+  1 AS `spectralType`,
+  1 AS `discoveryPhase`,
+  1 AS `dateCreated`,
+  1 AS `dateLastModified`,
+  1 AS `surveyObjectUrl`,
+  1 AS `transientTypePrediction`,
+  1 AS `transientTypePredicationSource`,
+  1 AS `hostRedshift`,
+  1 AS `hostRedshiftType`,
+  1 AS `referenceImageUrl`,
+  1 AS `targetImageUrl`,
+  1 AS `subtractedImageUrl`,
+  1 AS `tripletImageUrl`,
+  1 AS `htm20ID`,
+  1 AS `htm16ID`,
+  1 AS `cx`,
+  1 AS `cy`,
+  1 AS `cz`,
+  1 AS `telescope`,
+  1 AS `instrument`,
+  1 AS `reducer`,
+  1 AS `lastNonDetectionDate`,
+  1 AS `lastNonDetectionMJD`,
+  1 AS `dateLastRead`,
+  1 AS `finderImageUrl`,
+  1 AS `lightcurveURL` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2535,15 +2603,14 @@ DROP TABLE IF EXISTS `vview_wiserep_object_summaries`;
 /*!50001 DROP VIEW IF EXISTS `vview_wiserep_object_summaries`*/;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE TABLE `vview_wiserep_object_summaries` (
-  `transientBucketId` tinyint NOT NULL,
-  `name` tinyint NOT NULL,
-  `survey` tinyint NOT NULL,
-  `raDeg` tinyint NOT NULL,
-  `decDeg` tinyint NOT NULL,
-  `spectralType` tinyint NOT NULL,
-  `transientRedshift` tinyint NOT NULL
-) ENGINE=MyISAM */;
+/*!50001 CREATE VIEW `vview_wiserep_object_summaries` AS SELECT
+ 1 AS `transientBucketId`,
+  1 AS `name`,
+  1 AS `survey`,
+  1 AS `raDeg`,
+  1 AS `decDeg`,
+  1 AS `spectralType`,
+  1 AS `transientRedshift` */;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -2561,7 +2628,7 @@ CREATE TABLE `webapp_users` (
   `permissions` varchar(45) NOT NULL DEFAULT 'edit_users',
   PRIMARY KEY (`id`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `first_second` (`firstname`,`secondname`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2590,7 +2657,7 @@ CREATE TABLE `zlegacy_april2016_april2017_stats` (
   `classificationSubtype` varchar(45) DEFAULT NULL,
   `classificationPhaseBin` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`transientBucketId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2629,7 +2696,7 @@ CREATE TABLE `zlegacy_cbats` (
   KEY `idx_cbat_type` (`cbatType`),
   KEY `name` (`snType`),
   KEY `ra_dec` (`raDeg`,`decDeg`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2657,7 +2724,7 @@ CREATE TABLE `zlegacy_fs_asassn_discoveries` (
   UNIQUE KEY `candidateid` (`candidateID`),
   KEY `ra_dec` (`dec_deg`,`ra_deg`),
   KEY `htm16` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2696,7 +2763,7 @@ CREATE TABLE `zlegacy_fs_brightsnlist_discoveries` (
   KEY `i_htm10ID` (`htm10ID`),
   KEY `i_htm13ID` (`htm13ID`),
   KEY `i_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2751,7 +2818,7 @@ CREATE TABLE `zlegacy_fs_lsq` (
   KEY `htm16` (`htm16ID`),
   KEY `ingested` (`ingested`),
   KEY `summaryRow` (`summaryRow`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2806,7 +2873,7 @@ CREATE TABLE `zlegacy_fs_lsq_current_summaries` (
   KEY `htm16` (`htm16ID`),
   KEY `ingested` (`ingested`),
   KEY `summaryRow` (`summaryRow`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2856,7 +2923,7 @@ CREATE TABLE `zlegacy_fs_lsq_discoveries` (
   KEY `htm16` (`htm16ID`),
   KEY `ingested` (`ingested`),
   KEY `summaryRow` (`summaryRow`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2907,7 +2974,7 @@ CREATE TABLE `zlegacy_fs_lsq_recalibrated_data` (
   KEY `htm16` (`htm16ID`),
   KEY `ingested` (`ingested`),
   KEY `summaryRow` (`summaryRow`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2944,7 +3011,7 @@ CREATE TABLE `zlegacy_fs_tocp` (
   KEY `idx_htm16ID` (`htm16ID`),
   KEY `idx_htm10ID` (`htm13ID`),
   KEY `idx_htm13ID` (`htm13ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2994,7 +3061,7 @@ CREATE TABLE `zlegacy_lssndb_candidates` (
   KEY `cand_name` (`cand_name`),
   KEY `cand_index` (`cand_index`),
   KEY `ra_dec` (`ra`,`dec`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3013,7 +3080,7 @@ CREATE TABLE `zlegacy_lssndb_comments` (
   `comment_added` tinyint(4) NOT NULL DEFAULT 0,
   PRIMARY KEY (`comment_id`),
   KEY `cand_name` (`cand_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3039,7 +3106,7 @@ CREATE TABLE `zlegacy_lssndb_followup_status` (
   `lcogt_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `other` varchar(200) DEFAULT NULL,
   `other_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3057,7 +3124,7 @@ CREATE TABLE `zlegacy_lssndb_marshall_comments` (
   `user_name` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cand_name` (`cand_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3073,7 +3140,7 @@ CREATE TABLE `zlegacy_lssndb_marshall_lc_followup` (
   `survey` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cand_name` (`cand_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3118,7 +3185,7 @@ CREATE TABLE `zlegacy_lssndb_ms_lightcurves` (
   KEY `mjd` (`mjd`),
   KEY `summary` (`summaryRow`),
   KEY `idx_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3186,12 +3253,14 @@ CREATE TABLE `zlegacy_lssndb_summary` (
   KEY `ra_dec` (`avg_ra`,`avg_dec`),
   KEY `idx_htm20ID` (`htm20ID`),
   KEY `idx_htm16ID` (`htm16ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping routines for database 'marshall'
 --
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP FUNCTION IF EXISTS `does_column_exist` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3199,8 +3268,6 @@ CREATE TABLE `zlegacy_lssndb_summary` (
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  FUNCTION `does_column_exist`(table_name_IN VARCHAR(100), column_name_IN VARCHAR(100)) RETURNS int(11)
 RETURN (
@@ -3215,6 +3282,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `create_table_column` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3222,8 +3291,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `create_table_column`(
     IN table_name_IN VARCHAR(100)
@@ -3252,6 +3319,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `insert_atel_titles_to_comments` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3259,8 +3328,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `insert_atel_titles_to_comments`()
 BEGIN
@@ -3309,6 +3376,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `insert_new_marshall_objects` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3316,8 +3385,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `insert_new_marshall_objects`()
 BEGIN
@@ -3345,6 +3412,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `insert_new_transients_into_transientbucketsummaries` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3352,8 +3421,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `insert_new_transients_into_transientbucketsummaries`()
 BEGIN
@@ -3367,6 +3434,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `insert_object_comment` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3374,8 +3443,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `insert_object_comment`(transientBucketId_IN BIGINT(11), author_in VARCHAR(100), comment_in VARCHAR(500))
 BEGIN
@@ -3393,6 +3460,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `resurrect_objects` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3400,8 +3469,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `resurrect_objects`()
 BEGIN
@@ -3505,6 +3572,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sync_marshall_feeder_survey_transientBucketId` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3512,8 +3581,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `sync_marshall_feeder_survey_transientBucketId`(ARG_fs_table varchar(45))
 sync_marshall_feeder_survey_transientBucketId:BEGIN
@@ -3576,6 +3643,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_astronotes_tables` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3583,8 +3652,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_astronotes_tables`()
 BEGIN
@@ -3595,6 +3662,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_fs_atlas_forced_phot` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3602,8 +3671,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_fs_atlas_forced_phot`()
 BEGIN
@@ -3623,6 +3690,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_fs_ztf` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3630,8 +3699,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_fs_ztf`()
 BEGIN
@@ -3639,8 +3706,7 @@ BEGIN
 	update fs_ztf set filt = 'r' where fid = 2 and filt is null;
 	update fs_ztf set filt = 'i' where fid = 3 and filt is null;
     update fs_ztf set primaryId = candidateId where primaryId is null;
-	update fs_ztf set  surveyUrl = CONCAT("http://lasair.roe.ac.uk/object/",objectId) where surveyUrl is null;
-	update fs_ztf set tripletImageUrl = concat("http://lasair.roe.ac.uk/lasair/static/ztf/stamps/jpg/",SUBSTRING(candidateId, 1, 3),"/candid",candidateId,".jpg") where tripletImageUrl is null and candidateId is not null;
+	update fs_ztf set  surveyUrl = CONCAT("https://lasair-ztf.lsst.ac.uk/objects/",objectId) where surveyUrl is null;
 
 ## UPDATE NONDETECTION COORDINATES
 update fs_ztf a, (SELECT 
@@ -3677,6 +3743,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_inbox_auto_archiver` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3684,8 +3752,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_inbox_auto_archiver`()
 BEGIN
@@ -3706,6 +3772,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_scheduler_obs` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3713,8 +3781,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_scheduler_obs`()
 BEGIN
@@ -3733,6 +3799,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_sherlock_crossmatches` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3740,8 +3808,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_sherlock_crossmatches`()
 BEGIN
@@ -3760,6 +3826,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_sherlock_xmatch_counts` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3767,8 +3835,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_sherlock_xmatch_counts`()
 BEGIN
@@ -3811,6 +3877,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_single_transientbucket_summary` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -3818,8 +3886,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_single_transientbucket_summary`(
 	IN thisID BIGINT(20)
@@ -4350,6 +4416,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_tns_tables` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -4357,8 +4425,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_tns_tables`()
 BEGIN
@@ -4373,6 +4439,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_transientbucketsummaries` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -4380,8 +4448,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transientbucketsummaries`()
 BEGIN
@@ -4412,8 +4478,7 @@ SET
     marshallWorkflowLocation = 'review for followup',
     snoozed = 0
 WHERE
-	-- marshallWorkflowLocation IN ('pending classification' , 'inbox')
-    marshallWorkflowLocation IN ('inbox')
+    marshallWorkflowLocation IN ('inbox','Pending Observation')
         AND classifiedFlag = 1;
                         
                     
@@ -4897,6 +4962,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_transientBucket_atlas_sources` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -4904,8 +4971,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transientBucket_atlas_sources`()
 BEGIN
@@ -5020,6 +5085,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_transientbucket_observation_dates` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -5027,8 +5094,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transientbucket_observation_dates`()
 BEGIN
@@ -5056,6 +5121,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_transients_with_no_masteridflag` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -5063,8 +5130,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transients_with_no_masteridflag`()
 BEGIN
@@ -5105,6 +5170,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `update_transient_akas` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -5112,8 +5179,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = utf8mb4 */ ;
 /*!50003 SET character_set_results = utf8mb4 */ ;
 /*!50003 SET collation_connection  = utf8mb4_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
 CREATE  PROCEDURE `update_transient_akas`(IN weeks INT)
 BEGIN
@@ -5206,7 +5271,7 @@ WHERE
         and a.name like "ATLAS%" and a.addedDate > DATE_SUB(curdate(), INTERVAL 3 WEEK);
 
 -- CREATE URLS FOR AKAs TABLE
-update marshall_transient_akas set url = concat("https://lasair.roe.ac.uk/object/",name) where name like "ZTF%" and url is null;
+update marshall_transient_akas set url = concat("https://lasair-ztf.lsst.ac.uk/objects/",name) where name like "ZTF%" and url is null;
 update marshall_transient_akas set url = concat("https://www.wis-tns.org/object/",name) where (name like "AT20%" or name like "AT19%" or name like "SN19%" or name like "SN20%") and url is null;
 
 -- LSQ URLS
@@ -5301,7 +5366,6 @@ DELIMITER ;
 -- Final view structure for view `_subview_object_akas`
 --
 
-/*!50001 DROP TABLE IF EXISTS `_subview_object_akas`*/;
 /*!50001 DROP VIEW IF EXISTS `_subview_object_akas`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5317,10 +5381,27 @@ DELIMITER ;
 /*!50001 SET collation_connection      = @saved_col_connection */;
 
 --
+-- Final view structure for view `lvk_events`
+--
+
+/*!50001 DROP VIEW IF EXISTS `lvk_events`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013  SQL SECURITY DEFINER */
+/*!50001 VIEW `lvk_events` AS (select `a`.`superevent_id` AS `superevent_id`,`b`.`significant` AS `significant`,`a`.`alert_type` AS `latest_alert`,`a`.`alert_time` AS `alert_time`,`a`.`alert_delta_sec` AS `alert_delta_sec`,`b`.`date_obs` AS `date_obs`,`b`.`mjd_obs` AS `mjd_obs`,`b`.`far_hz` AS `far_hz`,`b`.`far_years` AS `far_years`,`b`.`distmean` AS `distmean`,`b`.`diststd` AS `diststd`,`b`.`class_bbh` AS `class_bbh`,`b`.`class_bns` AS `class_bns`,`b`.`class_nsbh` AS `class_nsbh`,`b`.`class_terrestrial` AS `class_terrestrial`,`b`.`prop_hasns` AS `prop_hasns`,`b`.`prop_hasremnant` AS `prop_hasremnant`,`b`.`prop_hasmassgap` AS `prop_hasmassgap`,`b`.`area10` AS `area10`,`b`.`area50` AS `area50`,`b`.`area90` AS `area90` from ((select `lvk_alerts`.`superevent_id` AS `superevent_id`,`lvk_alerts`.`significant` AS `significant`,`lvk_alerts`.`alert_type` AS `alert_type`,`lvk_alerts`.`alert_time` AS `alert_time`,`lvk_alerts`.`alert_delta_sec` AS `alert_delta_sec`,`lvk_alerts`.`date_obs` AS `date_obs`,`lvk_alerts`.`mjd_obs` AS `mjd_obs`,`lvk_alerts`.`far_hz` AS `far_hz`,`lvk_alerts`.`far_years` AS `far_years`,`lvk_alerts`.`distmean` AS `distmean`,`lvk_alerts`.`diststd` AS `diststd`,`lvk_alerts`.`class_bbh` AS `class_bbh`,`lvk_alerts`.`class_bns` AS `class_bns`,`lvk_alerts`.`class_nsbh` AS `class_nsbh`,`lvk_alerts`.`class_terrestrial` AS `class_terrestrial`,`lvk_alerts`.`prop_hasns` AS `prop_hasns`,`lvk_alerts`.`prop_hasremnant` AS `prop_hasremnant`,`lvk_alerts`.`prop_hasmassgap` AS `prop_hasmassgap`,`lvk_alerts`.`area10` AS `area10`,`lvk_alerts`.`area50` AS `area50`,`lvk_alerts`.`area90` AS `area90`,`lvk_alerts`.`creator` AS `creator`,`lvk_alerts`.`ra_centre` AS `ra_centre`,`lvk_alerts`.`dec_centre` AS `dec_centre`,`lvk_alerts`.`group` AS `group`,`lvk_alerts`.`logbci` AS `logbci`,`lvk_alerts`.`logbsn` AS `logbsn`,`lvk_alerts`.`pipeline` AS `pipeline`,`lvk_alerts`.`search` AS `search`,`lvk_alerts`.`map` AS `map`,`lvk_alerts`.`dateAdded` AS `dateAdded`,`lvk_alerts`.`dateLastModified` AS `dateLastModified` from (`lvk_alerts` join (select `lvk_alerts`.`superevent_id` AS `superevent_id`,max(`lvk_alerts`.`alert_time`) AS `alert_time` from `lvk_alerts` group by `lvk_alerts`.`superevent_id`) `latest_alert`) where `lvk_alerts`.`superevent_id` = `latest_alert`.`superevent_id` and `lvk_alerts`.`alert_time` = `latest_alert`.`alert_time`) `a` join (select `lvk_alerts`.`superevent_id` AS `superevent_id`,`lvk_alerts`.`significant` AS `significant`,`lvk_alerts`.`alert_type` AS `alert_type`,`lvk_alerts`.`alert_time` AS `alert_time`,`lvk_alerts`.`alert_delta_sec` AS `alert_delta_sec`,`lvk_alerts`.`date_obs` AS `date_obs`,`lvk_alerts`.`mjd_obs` AS `mjd_obs`,`lvk_alerts`.`far_hz` AS `far_hz`,`lvk_alerts`.`far_years` AS `far_years`,`lvk_alerts`.`distmean` AS `distmean`,`lvk_alerts`.`diststd` AS `diststd`,`lvk_alerts`.`class_bbh` AS `class_bbh`,`lvk_alerts`.`class_bns` AS `class_bns`,`lvk_alerts`.`class_nsbh` AS `class_nsbh`,`lvk_alerts`.`class_terrestrial` AS `class_terrestrial`,`lvk_alerts`.`prop_hasns` AS `prop_hasns`,`lvk_alerts`.`prop_hasremnant` AS `prop_hasremnant`,`lvk_alerts`.`prop_hasmassgap` AS `prop_hasmassgap`,`lvk_alerts`.`area10` AS `area10`,`lvk_alerts`.`area50` AS `area50`,`lvk_alerts`.`area90` AS `area90`,`lvk_alerts`.`creator` AS `creator`,`lvk_alerts`.`ra_centre` AS `ra_centre`,`lvk_alerts`.`dec_centre` AS `dec_centre`,`lvk_alerts`.`group` AS `group`,`lvk_alerts`.`logbci` AS `logbci`,`lvk_alerts`.`logbsn` AS `logbsn`,`lvk_alerts`.`pipeline` AS `pipeline`,`lvk_alerts`.`search` AS `search`,`lvk_alerts`.`map` AS `map`,`lvk_alerts`.`dateAdded` AS `dateAdded`,`lvk_alerts`.`dateLastModified` AS `dateLastModified` from (`lvk_alerts` join (select `lvk_alerts`.`superevent_id` AS `superevent_id`,max(`lvk_alerts`.`alert_time`) AS `alert_time` from `lvk_alerts` where `lvk_alerts`.`alert_type` <> 'RETRACTION' group by `lvk_alerts`.`superevent_id`) `latest_alert`) where `lvk_alerts`.`superevent_id` = `latest_alert`.`superevent_id` and `lvk_alerts`.`alert_time` = `latest_alert`.`alert_time`) `b`) where `a`.`superevent_id` = `b`.`superevent_id`) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
 -- Final view structure for view `vview_fs_crts_css_summary`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_fs_crts_css_summary`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_css_summary`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5339,7 +5420,6 @@ DELIMITER ;
 -- Final view structure for view `vview_fs_crts_mls_summary`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_fs_crts_mls_summary`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_mls_summary`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5358,7 +5438,6 @@ DELIMITER ;
 -- Final view structure for view `vview_fs_crts_sss_summary`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_fs_crts_sss_summary`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_crts_sss_summary`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5377,7 +5456,6 @@ DELIMITER ;
 -- Final view structure for view `vview_fs_ogle_summary`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_fs_ogle_summary`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_fs_ogle_summary`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5396,7 +5474,6 @@ DELIMITER ;
 -- Final view structure for view `vview_object_akas`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_object_akas`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_object_akas`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5415,7 +5492,6 @@ DELIMITER ;
 -- Final view structure for view `vview_object_temporal_data`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_object_temporal_data`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_object_temporal_data`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5434,7 +5510,6 @@ DELIMITER ;
 -- Final view structure for view `vview_objectredshifts`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_objectredshifts`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_objectredshifts`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5453,7 +5528,6 @@ DELIMITER ;
 -- Final view structure for view `vview_objectspectraltypes`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_objectspectraltypes`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_objectspectraltypes`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5472,7 +5546,6 @@ DELIMITER ;
 -- Final view structure for view `vview_tns_photometry_discoveries`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_tns_photometry_discoveries`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_tns_photometry_discoveries`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5491,7 +5564,6 @@ DELIMITER ;
 -- Final view structure for view `vview_transientbucketmaster`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_transientbucketmaster`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_transientbucketmaster`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5510,7 +5582,6 @@ DELIMITER ;
 -- Final view structure for view `vview_wiserep_object_summaries`
 --
 
-/*!50001 DROP TABLE IF EXISTS `vview_wiserep_object_summaries`*/;
 /*!50001 DROP VIEW IF EXISTS `vview_wiserep_object_summaries`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
@@ -5534,12 +5605,12 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-14 15:29:55
--- MySQL dump 10.19  Distrib 10.3.34-MariaDB, for debian-linux-gnu (x86_64)
+-- Dump completed on 2023-09-07 11:21:48
+-- MySQL dump 10.19  Distrib 10.3.38-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: 10.131.21.162    Database: marshall
 -- ------------------------------------------------------
--- Server version	10.4.25-MariaDB-1:10.4.25+maria~focal-log
+-- Server version	10.4.31-MariaDB-1:10.4.31+maria~ubu2004-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -5566,7 +5637,7 @@ CREATE TABLE `meta_workflow_lists_counts` (
   PRIMARY KEY (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `primaryId_UNIQUE` (`primaryId`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `listname_unique` (`listname`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5575,7 +5646,7 @@ CREATE TABLE `meta_workflow_lists_counts` (
 
 LOCK TABLES `meta_workflow_lists_counts` WRITE;
 /*!40000 ALTER TABLE `meta_workflow_lists_counts` DISABLE KEYS */;
-INSERT INTO `meta_workflow_lists_counts` VALUES (1,'archive',161002),(2,'following',53),(3,'followup complete',922),(4,'review for followup',138),(5,'pending observation',40),(6,'inbox',769),(7,'external alert released',7496),(8,'pending classification',0),(9,'pessto classification released',1170),(10,'archived without alert',18900),(11,'queued for atel',0),(17,'classified',17705),(19,'all',162924),(20,'snoozed',57481);
+INSERT INTO `meta_workflow_lists_counts` VALUES (1,'archive',180790),(2,'following',27),(3,'followup complete',1091),(4,'review for followup',597),(5,'pending observation',15),(6,'inbox',5231),(7,'external alert released',7496),(8,'pending classification',0),(9,'pessto classification released',1231),(10,'archived without alert',18966),(11,'queued for atel',19),(17,'classified',20422),(19,'all',187751),(20,'snoozed',75465);
 /*!40000 ALTER TABLE `meta_workflow_lists_counts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5594,7 +5665,7 @@ CREATE TABLE `webapp_users` (
   `permissions` varchar(45) NOT NULL DEFAULT 'edit_users',
   PRIMARY KEY (`id`) KEY_BLOCK_SIZE=1024,
   UNIQUE KEY `first_second` (`firstname`,`secondname`) KEY_BLOCK_SIZE=1024
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5603,7 +5674,7 @@ CREATE TABLE `webapp_users` (
 
 LOCK TABLES `webapp_users` WRITE;
 /*!40000 ALTER TABLE `webapp_users` DISABLE KEYS */;
-INSERT INTO `webapp_users` VALUES (1,'yen-chen','pan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(2,'alejandro','clocchiatt','noaccess','edit_users'),(3,'nicolas','jerkstrand','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(4,'anders','nyholm','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(5,'andrea','pastorello','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(6,'andy','howell','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(8,'antonia','morales-garoffolo','noaccess','edit_users'),(9,'ariel','goobar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(10,'armin','rest','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(11,'Assaf','Sternberg','noaccess','edit_users'),(12,'avet','harutyunyan','noaccess','edit_users'),(13,'avishay','gal-yam','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(14,'brian','schmidt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(15,'charlie','baltay','noaccess','edit_users'),(16,'chris','ashall','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(17,'christophe','balland','noaccess','edit_users'),(18,'claes','fransson','noaccess','edit_users'),(19,'claudia','gutierrez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(20,'Cosimo','Inserra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(21,'cristina','barbarino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(22,'cristina','knapic','noaccess','edit_users'),(24,'darryl','wright','noaccess','edit_users'),(25,'david','bersier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(26,'david','rabinowitz','noaccess','edit_users'),(27,'David','Young','$5$rounds=110000$xUZS2oqgUMEL3eSv$.OL5UMZ7lOpDOcZ5LcMZaX.tg/IxZjZeZ/hcapmwcX/','superadmin'),(28,'elisabeth','gall','noaccess','edit_users'),(29,'ellie','hadjiyska','noaccess','edit_users'),(30,'Emille','Ishida','noaccess','edit_users'),(31,'emir','karamehmetoglu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(32,'emma','riley','noaccess','edit_users'),(33,'emma','walker','noaccess','edit_users'),(34,'enrico','cappellaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(35,'eric','hsiao','noaccess','edit_users'),(36,'erkki','kankare','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(37,'fang','yuan','noaccess','edit_users'),(38,'Felipe','Olivares','noaccess','edit_users'),(39,'flora','cellier-holtzem','noaccess','edit_users'),(40,'Francesco','Taddia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(41,'francisco','forster','noaccess','edit_users'),(42,'franciso','forster','noaccess','edit_users'),(43,'Franz','Bauer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(44,'Giacomo','Terreran','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(45,'giorgos','dimitriadis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(46,'Giorgos','Leloudas','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(47,'giuliano','pignata','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(48,'hanindyo','kuncarayakti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(49,'heather','campbell','noaccess','edit_users'),(50,'Iair','Arcavi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(51,'isobel','hook','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(52,'jayne','doe','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(53,'jean-baptiste','marquette','noaccess','edit_users'),(54,'jesper','sollerman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(55,'joe','anderson','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(56,'joe','lyman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(57,'Joe','Polshaw','noaccess','edit_users'),(58,'joel','johansson','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(59,'john','danziger','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(60,'john','eldridge','noaccess','edit_users'),(61,'jonathan','mackey','noaccess','edit_users'),(62,'jordi','isern','noaccess','edit_users'),(63,'jose','maza','noaccess','edit_users'),(64,'justyn','maund','noaccess','edit_users'),(65,'Katalin','Takats','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(66,'kate','maguire','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(67,'Ken','Smith','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(68,'laura','greggio','noaccess','edit_users'),(69,'laurent','le-guillou','noaccess','edit_users'),(70,'leonardo','tartaglia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(71,'letizia','pumo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(72,'linda','astman','noaccess','edit_users'),(73,'lindsay','magill','noaccess','edit_users'),(74,'lluis','galbany','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(75,'luca','zampieri','noaccess','edit_users'),(76,'lukasz','wyrzykowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(77,'marco','limongi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(78,'marco','molinaro','noaccess','edit_users'),(79,'marek','kowalski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(80,'maria','teresa-botticella','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(81,'mario','hamuy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(82,'mark','huber','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(83,'Mark','Magee','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(84,'mark','sullivan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(85,'markus','kromer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(86,'massimo','dall\'ora','no access','edit_users'),(87,'massimo','della-valle','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(88,'massimo','turatto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(89,'mathilde','fleury','noaccess','edit_users'),(90,'matt','mccrum','noaccess','edit_users'),(91,'matthew','nicholl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(92,'mattia','bulla','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(93,'mattias','ergon','noaccess','edit_users'),(94,'max','stritzinger','noaccess','edit_users'),(95,'Michael','Childress','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(96,'michel','dennefeld','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(97,'milena','bufano','noaccess','edit_users'),(98,'morgan','fraser','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(99,'nadejda','blagorodnova','noaccess','edit_users'),(100,'nancy','elias-rosa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(101,'nando','patat','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(102,'neil','meharg','noaccess','edit_users'),(103,'nicholas','walton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(104,'nicolas','regnault','noaccess','edit_users'),(105,'norbert','langer','noaccess','edit_users'),(106,'ofer','yaron','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(107,'Paolo','Mazzali','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(108,'peter','lundqvist','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(109,'peter','nugent','noaccess','edit_users'),(110,'phil','james','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(111,'Philipp','Podsiadlowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(112,'pierre-francois','leget','noaccess','edit_users'),(113,'pignata','giuliano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(114,'rahman','amanullah','noaccess','edit_users'),(115,'reynald','pain','noaccess','edit_users'),(116,'ricardo','smareglia','noaccess','edit_users'),(117,'richard','scalzo','noaccess','edit_users'),(118,'robert','firth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(119,'rubina','kotak','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(120,'sandra','benitez','noaccess','edit_users'),(121,'santiago','gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(122,'sebastien','bongard','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(123,'seppo','mattila','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(124,'simon','hodgkin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(125,'sina','rostami','noaccess','edit_users'),(126,'stefan','taubenberger','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(127,'stefano','benetti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(128,'Stefano','Valenti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(129,'stephan','hachinger','noaccess','edit_users'),(130,'stephane','blondin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(131,'Stephen','Smartt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(132,'steve','schulze','$5$rounds=535000$lvgXQqIE4vM639YE$1kjpM2QxUBJ4KGRpqtOIrONeplIJ0KhNetB1.I9tdbA','edit_users'),(133,'steven','margheim','noaccess','edit_users'),(134,'stuart','sim','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(135,'susanna','spiro','noaccess','edit_users'),(136,'sylvain','baumont','noaccess','edit_users'),(137,'Thomas','De','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(138,'Ting-Wan','Chen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(139,'tuomas','kangas','noaccess','edit_users'),(140,'ulrich','feindt','noaccess','edit_users'),(141,'Vahagn','Harutyunyan','noaccess','edit_users'),(142,'vallery','stanishev','noaccess','edit_users'),(143,'wolfgang','hillebrandt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(145,'griffin','hosseinzadeh','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(147,'nicolas','chotard','noaccess','edit_users'),(149,'fang','huang','noaccess','edit_users'),(151,'marine','ducrot','noaccess','edit_users'),(153,'matt','smith','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(155,'jussi','harmanen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(157,'christoffer','fremling','noaccess','edit_users'),(159,'john','doe','noaccess','edit_users'),(161,'mikael','normann','noaccess','edit_users'),(163,'katia','migotto','noaccess','edit_users'),(165,'lina','tomasella','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(167,'paula','zelaya','noaccess','edit_users'),(169,'sergio','campana','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(171,'chris','frohmaier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(173,'natasha','karpenka','noaccess','edit_users'),(175,'regis','cartier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(177,'szymon','prajs','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(179,'ken','chambers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(181,'steven','williams','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(183,'assaf','horesh','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(185,'heather','flewelling','noaccess','edit_users'),(186,'alessandro','razza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(187,'ismael','pessa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(188,'tania','moraga','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(189,'claudia','agliozzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(190,'patrice','bouchet','noaccess','edit_users'),(191,'simon','prentice','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(192,'thomas','de.jaeger','noaccess','edit_users'),(193,'kate','furnell','noaccess','edit_users'),(194,'john','tonry','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(195,'larry','denneau','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(196,'andrei','sherst','noaccess','edit_users'),(197,'brian','stalder','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(198,'aren','heinze','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(200,'michele','sasdelli','noaccess','edit_users'),(201,'remy.le','breton','noaccess','edit_users'),(202,'ilan','manulis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(203,'ayan','mitra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(204,'aleksandar','cikota','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(205,'tamar','faran','noaccess','edit_users'),(206,'peter','jonker','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(207,'nancy','ellman','noaccess','edit_users'),(208,'curtis','mccully','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(209,'ira','bar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(211,'anais','moller','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(212,'brad','tucker','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(213,'tom','reynolds','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(214,'ashley','ruiter','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(215,'ivo','seitenzahl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(216,'bonnie','zhang','noaccess','edit_users'),(217,'lawrence','short','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(218,'michael','coughlin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(219,'peter','clark','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(220,'miika','pursiainen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(221,'pilar','ruiz-lapuente','noaccess','edit_users'),(222,'azalee','bostroem','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(223,'lixin','yu','noaccess','edit_users'),(224,'lingzhi','wang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(225,'osmar','rodriguez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(226,'david','oneill','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(227,'yongzhi','cai','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(228,'andreas','floers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(229,'zach','cano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(230,'silvia','piranomonte','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(231,'francesca','onori','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(232,'aleksandra','hamanowicz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(233,'rupak','roy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(234,'paolo','davanzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(235,'eliana','palazzi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(236,'giacomo','cannizzaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(237,'mariusz','gromadzki','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(238,'jan','bolmer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(239,'stefano','covino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(240,'frederic','daigne','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(241,'valerio','d.elia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(242,'kasper.elm','heintz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(243,'andrea','melandri','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(244,'jesse','palmerio','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(245,'andrea','rossi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(246,'boris','sbarufatti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(247,'pat','schady','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(248,'giulia','stratta','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(249,'gianpiero','tagliaferri','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(250,'susanna','vergani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(251,'luca','izzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(252,'krzysztof','rybicki','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(253,'daniel','kusters','noaccess','edit_users'),(254,'marica','branchesi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(258,'nicola','masetti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(259,'jakob','nordin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(260,'anna','franckowiak','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(262,'mickael','rigault','noaccess','edit_users'),(264,'nora','strotjohann','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(265,'valery','brinnel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(266,'jakob','van.santen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(267,'matteo','giomi','noaccess','edit_users'),(270,'paul','groot','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(271,'enzo','brocato','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(272,'zuzanna','kostrzewa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(273,'luke','shingles','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(274,'maria','patterson','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(275,'tim','naylor','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(276,'carlos','contreras','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(277,'roberta','carini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(278,'david','homan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(279,'christian','vogl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(280,'zhitong','li','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(281,'annalisa','de.cia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(282,'filomena','bufano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(283,'marco','berton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(284,'elena','mason','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(285,'paolo','ochner','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(286,'andy','lawrence','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(287,'charlotte','angus','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(288,'luc','dessart','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(289,'daniel','perley','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(292,'zhihao','chen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(293,'nikola','knezevic','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(294,'owen','mcbrien','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(295,'dave','morris','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(296,'emma','callis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(297,'phil','wiseman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(298,'roy','williams','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(299,'daniele','malesani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(300,'lana','salmon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(301,'antonio','martin.carrillo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(302,'lorraine','hanlon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(303,'david','murphy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(304,'david','sand','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(305,'ruoyu','zhu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(306,'achille','fiore','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(307,'kristhell','lopez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(312,'christa','gall','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(313,'wolfgang','kerzendorf','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(314,'shane','moran','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(315,'sadie','jones','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(316,'thomas','wevers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(317,'john','lightfoot','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(318,'enrico','congiu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(319,'adam','rubin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(320,'massimiliano','de.pasquale','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(321,'priscila','pessi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(322,'maayane.tamar','soumag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(323,'daichi','hiramatsu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(324,'jamie','burke','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(325,'tomas','muller','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(326,'robert','stein','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(327,'noel','castro.segura','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(328,'matthew','grayling','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(329,'philip','short','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(330,'tassilo','schweyer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(331,'matt','nicholl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(332,'jen','hjorth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(333,'ilya','mandel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(334,'felipe','olivares.estay','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(335,'jonathan','pineda','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(336,'andrea','reguitti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(337,'jens','hjorth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(338,'ana','sagues.carracedo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(339,'sasha','kozyreva','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(340,'fabio','ragosta','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(341,'kelly','skillen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(344,'deepak','eappachen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(350,'maria','vincenzi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(351,'craig','pellegrino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(352,'lisa','kelsey','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(353,'sean','brennan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(354,'barnabas','barna','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(355,'jacob','teffs','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(361,'nada','ihanec','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(362,'ignacio','sanchez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(363,'elizabeth','swann','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(365,'ido','irani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(366,'teppo','heikkila','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(367,'marco','landoni','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','52'),(368,'shubham','srivastav','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(369,'nico','meza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(370,'laureano','martinez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(371,'takashi','nagao','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(372,'jose','prieto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(373,'juanita','antilen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(374,'yize','dong','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(375,'michael','lundquist','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(376,'jennifer','andrews','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(377,'sam','wyatt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(378,'rachael','amaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(379,'emmanouela','paraskeva','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(380,'kuntal','mistra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(382,'samantha','goldwasser','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(383,'miguel','perez-torres','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(384,'matthew','temple','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(387,'meg','schwamb','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(388,'rachel','bruch','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(391,'james','gillanders','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(394,'panos','charalampopoulos','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(395,'eleonora','parrag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(396,'michael','fulton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(397,'giorgio','valerin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(398,'pietro','schipani','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(399,'kyle','medler','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(400,'cristina','cristina','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(401,'emma','reilly','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(402,'nicolas','meza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(403,'erez','zimmerman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(404,'melissa','amenouche','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(406,'maxime','deckers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(407,'arianna','zanon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(409,'antonia','morales.garoffolo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(410,'kuntal','misra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(411,'anne','inkenhaag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(412,'qinan','wang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(413,'ryan','ridden.harper','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(414,'este','padilla.gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(415,'admin','user','$5$rounds=535000$tOu/3ZMR75.Iujrt$jj07weVdX0TPe933hE0dEeW7wTOFJfl4R1u1yqz6tu.','superadmin'),(416,'scott','davis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(417,'zheng','cao','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(418,'evan','ridley','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(419,'lydia','makrygianni','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(420,'sheng','yang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(421,'robert','byrne','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(422,'ragnhild','lunnan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(425,'maria','delgado','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(428,'raul','gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(431,'sara','munoz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(433,'jacco','terwel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(439,'luke','harvey','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(441,'sherry','suyu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(444,'sumedha','biswas','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(446,'joao','silvestre','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(449,'timo','kravtsov','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(452,'niilo','koivisto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(453,'or','graur','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(454,'ryosuke','hirai','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(455,'marcus','toy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(458,'oliver','pedros','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(461,'david','ivens','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(464,'lucia','ferrari','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(467,'katja','matilainen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(468,'ben','gompertz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(471,'thallis','pessi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(472,'tom','killestein','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(474,'ernesto','camacho','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(483,'carys','evans','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(484,'thomas','moore','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(485,'tanja','petrushevska','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(489,'aysha','aamer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(492,'anamaria','gkini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(495,'xinyue','sheng','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(497,'mateusz','bronikowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(500,'stefano','cosentino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(503,'irene','salmaso','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(504,'bastian','ayala','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(507,'mauricio','ramirez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(510,'chen','ping','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(512,'deanne','coppejans','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(514,'beth','fitzpatrick','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(520,'umut','burgaz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(523,'keila','ertini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(525,'jielai','zhang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users');
+INSERT INTO `webapp_users` VALUES (1,'yen-chen','pan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(2,'alejandro','clocchiatt','noaccess','edit_users'),(3,'nicolas','jerkstrand','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(4,'anders','nyholm','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(5,'andrea','pastorello','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(6,'andy','howell','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(8,'antonia','morales-garoffolo','noaccess','edit_users'),(9,'ariel','goobar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(10,'armin','rest','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(11,'Assaf','Sternberg','noaccess','edit_users'),(12,'avet','harutyunyan','noaccess','edit_users'),(13,'avishay','gal-yam','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(14,'brian','schmidt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(15,'charlie','baltay','noaccess','edit_users'),(16,'chris','ashall','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(17,'christophe','balland','noaccess','edit_users'),(18,'claes','fransson','noaccess','edit_users'),(19,'claudia','gutierrez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(20,'Cosimo','Inserra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(21,'cristina','barbarino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(22,'cristina','knapic','noaccess','edit_users'),(24,'darryl','wright','noaccess','edit_users'),(25,'david','bersier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(26,'david','rabinowitz','noaccess','edit_users'),(27,'David','Young','$5$rounds=110000$xUZS2oqgUMEL3eSv$.OL5UMZ7lOpDOcZ5LcMZaX.tg/IxZjZeZ/hcapmwcX/','superadmin'),(28,'elisabeth','gall','noaccess','edit_users'),(29,'ellie','hadjiyska','noaccess','edit_users'),(30,'Emille','Ishida','noaccess','edit_users'),(31,'emir','karamehmetoglu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(32,'emma','riley','noaccess','edit_users'),(33,'emma','walker','noaccess','edit_users'),(34,'enrico','cappellaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(35,'eric','hsiao','noaccess','edit_users'),(36,'erkki','kankare','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(37,'fang','yuan','noaccess','edit_users'),(38,'Felipe','Olivares','noaccess','edit_users'),(39,'flora','cellier-holtzem','noaccess','edit_users'),(40,'Francesco','Taddia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(41,'francisco','forster','noaccess','edit_users'),(42,'franciso','forster','noaccess','edit_users'),(43,'Franz','Bauer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(44,'Giacomo','Terreran','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(45,'giorgos','dimitriadis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(46,'Giorgos','Leloudas','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(47,'giuliano','pignata','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(48,'hanindyo','kuncarayakti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(49,'heather','campbell','noaccess','edit_users'),(50,'Iair','Arcavi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(51,'isobel','hook','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(52,'jayne','doe','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(53,'jean-baptiste','marquette','noaccess','edit_users'),(54,'jesper','sollerman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(55,'joe','anderson','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(56,'joe','lyman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(57,'Joe','Polshaw','noaccess','edit_users'),(58,'joel','johansson','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(59,'john','danziger','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(60,'john','eldridge','noaccess','edit_users'),(61,'jonathan','mackey','noaccess','edit_users'),(62,'jordi','isern','noaccess','edit_users'),(63,'jose','maza','noaccess','edit_users'),(64,'justyn','maund','noaccess','edit_users'),(65,'Katalin','Takats','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(66,'kate','maguire','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(67,'Ken','Smith','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(68,'laura','greggio','noaccess','edit_users'),(69,'laurent','le-guillou','noaccess','edit_users'),(70,'leonardo','tartaglia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(71,'letizia','pumo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(72,'linda','astman','noaccess','edit_users'),(73,'lindsay','magill','noaccess','edit_users'),(74,'lluis','galbany','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(75,'luca','zampieri','noaccess','edit_users'),(76,'lukasz','wyrzykowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(77,'marco','limongi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(78,'marco','molinaro','noaccess','edit_users'),(79,'marek','kowalski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(80,'maria','teresa-botticella','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(81,'mario','hamuy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(82,'mark','huber','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(83,'Mark','Magee','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(84,'mark','sullivan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(85,'markus','kromer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(86,'massimo','dall\'ora','no access','edit_users'),(87,'massimo','della-valle','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(88,'massimo','turatto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(89,'mathilde','fleury','noaccess','edit_users'),(90,'matt','mccrum','noaccess','edit_users'),(91,'matthew','nicholl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(92,'mattia','bulla','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(93,'mattias','ergon','noaccess','edit_users'),(94,'max','stritzinger','noaccess','edit_users'),(95,'Michael','Childress','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(96,'michel','dennefeld','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(97,'milena','bufano','noaccess','edit_users'),(98,'morgan','fraser','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(99,'nadejda','blagorodnova','noaccess','edit_users'),(100,'nancy','elias-rosa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(101,'nando','patat','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(102,'neil','meharg','noaccess','edit_users'),(103,'nicholas','walton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(104,'nicolas','regnault','noaccess','edit_users'),(105,'norbert','langer','noaccess','edit_users'),(106,'ofer','yaron','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(107,'Paolo','Mazzali','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(108,'peter','lundqvist','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(109,'peter','nugent','noaccess','edit_users'),(110,'phil','james','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(111,'Philipp','Podsiadlowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(112,'pierre-francois','leget','noaccess','edit_users'),(113,'pignata','giuliano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(114,'rahman','amanullah','noaccess','edit_users'),(115,'reynald','pain','noaccess','edit_users'),(116,'ricardo','smareglia','noaccess','edit_users'),(117,'richard','scalzo','noaccess','edit_users'),(118,'robert','firth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(119,'rubina','kotak','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(120,'sandra','benitez','noaccess','edit_users'),(121,'santiago','gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(122,'sebastien','bongard','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(123,'seppo','mattila','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(124,'simon','hodgkin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(125,'sina','rostami','noaccess','edit_users'),(126,'stefan','taubenberger','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(127,'stefano','benetti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(128,'Stefano','Valenti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(129,'stephan','hachinger','noaccess','edit_users'),(130,'stephane','blondin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(131,'Stephen','Smartt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(132,'steve','schulze','$5$rounds=535000$lvgXQqIE4vM639YE$1kjpM2QxUBJ4KGRpqtOIrONeplIJ0KhNetB1.I9tdbA','edit_users'),(133,'steven','margheim','noaccess','edit_users'),(134,'stuart','sim','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(135,'susanna','spiro','noaccess','edit_users'),(136,'sylvain','baumont','noaccess','edit_users'),(137,'Thomas','De','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(138,'Ting-Wan','Chen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(139,'tuomas','kangas','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(140,'ulrich','feindt','noaccess','edit_users'),(141,'Vahagn','Harutyunyan','noaccess','edit_users'),(142,'vallery','stanishev','noaccess','edit_users'),(143,'wolfgang','hillebrandt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(145,'griffin','hosseinzadeh','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(147,'nicolas','chotard','noaccess','edit_users'),(149,'fang','huang','noaccess','edit_users'),(151,'marine','ducrot','noaccess','edit_users'),(153,'matt','smith','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(155,'jussi','harmanen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(157,'christoffer','fremling','noaccess','edit_users'),(159,'john','doe','noaccess','edit_users'),(161,'mikael','normann','noaccess','edit_users'),(163,'katia','migotto','noaccess','edit_users'),(165,'lina','tomasella','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(167,'paula','zelaya','noaccess','edit_users'),(169,'sergio','campana','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(171,'chris','frohmaier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(173,'natasha','karpenka','noaccess','edit_users'),(175,'regis','cartier','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(177,'szymon','prajs','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(179,'ken','chambers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(181,'steven','williams','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(183,'assaf','horesh','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(185,'heather','flewelling','noaccess','edit_users'),(186,'alessandro','razza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(187,'ismael','pessa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(188,'tania','moraga','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(189,'claudia','agliozzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(190,'patrice','bouchet','noaccess','edit_users'),(191,'simon','prentice','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(192,'thomas','de.jaeger','noaccess','edit_users'),(193,'kate','furnell','noaccess','edit_users'),(194,'john','tonry','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(195,'larry','denneau','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(196,'andrei','sherst','noaccess','edit_users'),(197,'brian','stalder','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(198,'aren','heinze','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(200,'michele','sasdelli','noaccess','edit_users'),(201,'remy.le','breton','noaccess','edit_users'),(202,'ilan','manulis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(203,'ayan','mitra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(204,'aleksandar','cikota','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(205,'tamar','faran','noaccess','edit_users'),(206,'peter','jonker','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(207,'nancy','ellman','noaccess','edit_users'),(208,'curtis','mccully','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(209,'ira','bar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(211,'anais','moller','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(212,'brad','tucker','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(213,'tom','reynolds','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(214,'ashley','ruiter','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(215,'ivo','seitenzahl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(216,'bonnie','zhang','noaccess','edit_users'),(217,'lawrence','short','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(218,'michael','coughlin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(219,'peter','clark','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(220,'miika','pursiainen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(221,'pilar','ruiz-lapuente','noaccess','edit_users'),(222,'azalee','bostroem','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(223,'lixin','yu','noaccess','edit_users'),(224,'lingzhi','wang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(225,'osmar','rodriguez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(226,'david','oneill','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(227,'yongzhi','cai','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(228,'andreas','floers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(229,'zach','cano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(230,'silvia','piranomonte','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(231,'francesca','onori','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(232,'aleksandra','hamanowicz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(233,'rupak','roy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(234,'paolo','davanzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(235,'eliana','palazzi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(236,'giacomo','cannizzaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(237,'mariusz','gromadzki','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(238,'jan','bolmer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(239,'stefano','covino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(240,'frederic','daigne','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(241,'valerio','d.elia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(242,'kasper.elm','heintz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(243,'andrea','melandri','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(244,'jesse','palmerio','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(245,'andrea','rossi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(246,'boris','sbarufatti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(247,'pat','schady','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(248,'giulia','stratta','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(249,'gianpiero','tagliaferri','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(250,'susanna','vergani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(251,'luca','izzo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(252,'krzysztof','rybicki','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(253,'daniel','kusters','noaccess','edit_users'),(254,'marica','branchesi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(258,'nicola','masetti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(259,'jakob','nordin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(260,'anna','franckowiak','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(262,'mickael','rigault','noaccess','edit_users'),(264,'nora','strotjohann','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(265,'valery','brinnel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(266,'jakob','van.santen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(267,'matteo','giomi','noaccess','edit_users'),(270,'paul','groot','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(271,'enzo','brocato','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(272,'zuzanna','kostrzewa','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(273,'luke','shingles','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(274,'maria','patterson','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(275,'tim','naylor','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(276,'carlos','contreras','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(277,'roberta','carini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(278,'david','homan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(279,'christian','vogl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(280,'zhitong','li','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(281,'annalisa','de.cia','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(282,'filomena','bufano','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(283,'marco','berton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(284,'elena','mason','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(285,'paolo','ochner','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(286,'andy','lawrence','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(287,'charlotte','angus','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(288,'luc','dessart','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(289,'daniel','perley','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(292,'zhihao','chen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(293,'nikola','knezevic','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(294,'owen','mcbrien','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(295,'dave','morris','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(296,'emma','callis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(297,'phil','wiseman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(298,'roy','williams','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(299,'daniele','malesani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(300,'lana','salmon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(301,'antonio','martin.carrillo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(302,'lorraine','hanlon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(303,'david','murphy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(304,'david','sand','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(305,'ruoyu','zhu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(306,'achille','fiore','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(307,'kristhell','lopez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(312,'christa','gall','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(313,'wolfgang','kerzendorf','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(314,'shane','moran','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(315,'sadie','jones','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(316,'thomas','wevers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(317,'john','lightfoot','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(318,'enrico','congiu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(319,'adam','rubin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(320,'massimiliano','de.pasquale','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(321,'priscila','pessi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(322,'maayane.tamar','soumag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(323,'daichi','hiramatsu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(324,'jamie','burke','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(325,'tomas','muller','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(326,'robert','stein','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(327,'noel','castro.segura','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(328,'matthew','grayling','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(329,'philip','short','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(330,'tassilo','schweyer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(331,'matt','nicholl','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(332,'jen','hjorth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(333,'ilya','mandel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(334,'felipe','olivares.estay','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(335,'jonathan','pineda','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(336,'andrea','reguitti','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(337,'jens','hjorth','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(338,'ana','sagues.carracedo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(339,'sasha','kozyreva','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(340,'fabio','ragosta','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(341,'kelly','skillen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(344,'deepak','eappachen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(350,'maria','vincenzi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(351,'craig','pellegrino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(352,'lisa','kelsey','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(353,'sean','brennan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(354,'barnabas','barna','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(355,'jacob','teffs','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(361,'nada','ihanec','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(362,'ignacio','sanchez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(363,'elizabeth','swann','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(365,'ido','irani','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(366,'teppo','heikkila','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(367,'marco','landoni','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','52'),(368,'shubham','srivastav','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(369,'nico','meza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(370,'laureano','martinez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(371,'takashi','nagao','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(372,'jose','prieto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(373,'juanita','antilen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(374,'yize','dong','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(375,'michael','lundquist','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(376,'jennifer','andrews','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(377,'sam','wyatt','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(378,'rachael','amaro','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(379,'emmanouela','paraskeva','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(380,'kuntal','mistra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(382,'samantha','goldwasser','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(383,'miguel','perez-torres','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(384,'matthew','temple','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(387,'meg','schwamb','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(388,'rachel','bruch','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(391,'james','gillanders','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(394,'panos','charalampopoulos','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(395,'eleonora','parrag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(396,'michael','fulton','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(397,'giorgio','valerin','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(398,'pietro','schipani','$5$rounds=535000$HFlOOKhWYrcCGuB9$qPERc0JMQ8Rp4GOECwBxMHR7BLua1jqVRXgR4YJlUV6','view_users'),(399,'kyle','medler','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(400,'cristina','cristina','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(401,'emma','reilly','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(402,'nicolas','meza','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(403,'erez','zimmerman','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(404,'melissa','amenouche','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(406,'maxime','deckers','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(407,'arianna','zanon','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(409,'antonia','morales.garoffolo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(410,'kuntal','misra','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(411,'anne','inkenhaag','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(412,'qinan','wang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(413,'ryan','ridden.harper','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(414,'este','padilla.gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(415,'admin','user','$5$rounds=535000$tOu/3ZMR75.Iujrt$jj07weVdX0TPe933hE0dEeW7wTOFJfl4R1u1yqz6tu.','superadmin'),(416,'scott','davis','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(417,'zheng','cao','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(418,'evan','ridley','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(419,'lydia','makrygianni','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(420,'sheng','yang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(421,'robert','byrne','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(422,'ragnhild','lunnan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(425,'maria','delgado','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(428,'raul','gonzalez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(431,'sara','munoz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(433,'jacco','terwel','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(439,'luke','harvey','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(441,'sherry','suyu','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(444,'sumedha','biswas','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(446,'joao','silvestre','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(449,'timo','kravtsov','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(452,'niilo','koivisto','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(453,'or','graur','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(454,'ryosuke','hirai','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(455,'marcus','toy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(458,'oliver','pedros','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(461,'david','ivens','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(464,'lucia','ferrari','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(467,'katja','matilainen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(468,'ben','gompertz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(471,'thallis','pessi','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(472,'tom','killestein','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(474,'ernesto','camacho','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(483,'carys','evans','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(484,'thomas','moore','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(485,'tanja','petrushevska','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(489,'aysha','aamer','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(492,'anamaria','gkini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(495,'xinyue','sheng','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(497,'mateusz','bronikowski','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(500,'stefano','cosentino','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(503,'irene','salmaso','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(504,'bastian','ayala','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(507,'mauricio','ramirez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(510,'chen','ping','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(512,'deanne','coppejans','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(514,'beth','fitzpatrick','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(520,'umut','burgaz','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(523,'keila','ertini','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(525,'jielai','zhang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(528,'james','derkacy','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(530,'konrad','grzeciak','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(531,'paige','ramsden','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(532,'ben','warwick','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(533,'cristina','jimenez','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(536,'kim','phan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(539,'yanan','wang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(542,'emily','hoang','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(543,'maria','kopsacheili','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(546,'albert','sneppen','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(548,'joseph','farah','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(551,'dhvanil','desai','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(554,'maider','gonzalez.banuelos','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(557,'test','user','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(560,'Kendall','Ackley','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(563,'José.Feliciano','Agüí.Fernández','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(566,'Maria.Cristina','Baglio','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(569,'Biswajit','Banerjee','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(572,'Maria.Grazia','Bernardini','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(575,'Sofia','Bisero','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(578,'Riccardo','Brivio','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(581,'Ana.Sagués','Carracedo','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(584,'Francesco','Cavallaro','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(587,'Jennifer.Alexandra','Chacón.Chávez','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(590,'Ashley','Chrimes','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(593,'Lise','Christensen','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(596,'Javier.Correa','Orellana','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(599,'Laura','Cotter','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(602,'Antonio.de.Ugarte','Postigo','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(605,'Pierre-Alexandre','Duverne','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(608,'Martin','Dyer','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(611,'Rob','Eyles-Ferris','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(614,'Matteo','Ferro','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(617,'Gabriel','Finneran','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(620,'Joe','Fisher','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(623,'Francis','Fortin','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(626,'Andrew','Fruchter','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(629,'Johan','Fynbo','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(632,'Duncan.Kenneth','Galloway','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(635,'Giulia','Gianfagna','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(638,'Andreja','Gomboc','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(641,'Santiago','Gonzalez-Gaitan','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(644,'Aniello','Grado','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(647,'Aprajita','Hajela','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(650,'Nandini','Hazra','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(656,'Youdong','Hu','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(659,'Zhiping','Jin','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(665,'Nandita','Khetan','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(668,'Sylvio','Klose','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(671,'Erik','Kool','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(674,'Andrew','Levan','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(677,'Aishwarya.Linesh','Thakur','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(680,'Sergio','Martín','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(683,'Sean','McGee','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(686,'Alessio','Mei','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(689,'Elena','Pian','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(692,'Daniëlle','Pieterse','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(695,'Jonathan.Alexander','Quirola.Vásquez','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(698,'Samuele','Ronchini','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(701,'Nadeen','Sabha','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(704,'Andrea','Saccardi','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(707,'Chiara','Salvaggio','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(710,'Ruben','Sanchez-Ramirez','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(713,'Paramvir','Singh','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(719,'Danny','Steeghs','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(722,'Heloise','Stevance','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(725,'Nial','Tanvir','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(728,'Vincenzo','Testa','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(731,'Krzysztof','Ulaczyk','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(734,'Darach','Watson','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(737,'Klaas','Wiersema','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(740,'Tayyaba','Zafar','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(743,'Hao','Zhou','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(744,'om','salafia','$5$rounds=535000$sQK6H7rcvZ4uSzu2$1nF1Pd3cT6b3dDj/szBbQunOvoLs/tHVcPzdhoFx/k4','view_users'),(745,'emilio','hueichapan','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(748,'raya','dastidar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(750,'ben','godson','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(753,'amit','kumar','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(756,'stan','barmentloo','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users'),(759,'ana','sainz-de-murieta','$5$rounds=110000$MAKWStjFVWb2dqhG$oqBc8072dGM.mtWRmEFQ.WnhSZ79hn9yphtE8QflxT1','edit_users');
 /*!40000 ALTER TABLE `webapp_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -5620,7 +5691,7 @@ CREATE TABLE `stats_ssdr1_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5646,7 +5717,7 @@ CREATE TABLE `stats_ssdr2_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5672,7 +5743,7 @@ CREATE TABLE `stats_ssdr3_overview` (
   `numberOfFiles` int(11) DEFAULT NULL,
   `dataVolumeBytes` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`primaryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5700,7 +5771,7 @@ CREATE TABLE `marshall_fs_column_map` (
   `fs_table_column` varchar(45) NOT NULL,
   PRIMARY KEY (`primaryId`),
   UNIQUE KEY `unquie_fs_table_name_fs_table_column` (`fs_table_name`,`fs_table_column`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -5722,4 +5793,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-14 15:29:55
+-- Dump completed on 2023-09-07 11:21:49
