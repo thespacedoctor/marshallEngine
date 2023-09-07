@@ -12,6 +12,7 @@ def readme():
 
 install_requires = [
     'pyyaml',
+    'greenlet==1.1.0',
     'marshallEngine',
     'fundamentals',
     'astrocalc',
