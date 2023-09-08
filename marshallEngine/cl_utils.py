@@ -9,6 +9,7 @@ Usage:
     marshall import <survey> [<withInLastDay>] [-s <pathToSettingsFile>]
     marshall lightcurve <transientBucketId> [-s <pathToSettingsFile>]
     marshall refresh <transientBucketId>  [-s <pathToSettingsFile>]
+    marshall skytag  [-s <pathToSettingsFile>]
     marshall syncOBs  [-s <pathToSettingsFile>]
 
 Options:
@@ -18,6 +19,7 @@ Options:
     refresh               update the cached metadata for a given transient
     lightcurve            generate a lightcurve for a transient in the marshall database
     transientBucketId     the transient ID from the database
+    skytag                tag transients against LVK event skymaps
     syncOBs               request and update OB status with scheduler
     survey                name of survey to import [panstarrs|atlas|useradded]
     withInLastDay         import transient detections from the last N days (Default 30)
@@ -27,15 +29,15 @@ Options:
     -s, --settings <pathToSettingsFile>     the settings file
 """
 from __future__ import print_function
+from subprocess import Popen, PIPE, STDOUT
+from fundamentals import tools, times
+from docopt import docopt
+import pickle
+import glob
+import readline
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import readline
-import glob
-import pickle
-from docopt import docopt
-from fundamentals import tools, times
-from subprocess import Popen, PIPE, STDOUT
 
 
 def tab_complete(text, state):
@@ -90,6 +92,7 @@ def main(arguments=None):
     survey = a["survey"]
     withInLastDay = a["withInLastDay"]
     settingsFlag = a["settingsFlag"]
+    skytag = a["skytag"]
 
     # set options interactively if user requests
     if "interactiveFlag" in a and a["interactiveFlag"]:
@@ -230,6 +233,15 @@ def main(arguments=None):
             transientBucketId=transientBucketId
         ).update()
 
+    if skytag:
+        from marshallEngine.services import lvk_tagger
+        lvk = lvk_tagger(
+            log=log,
+            settings=settings,
+            dbConn=dbConn
+        )
+        lvk.tag()
+
     if a["syncOBs"]:
         from marshallEngine.services import soxs_scheduler
         schr = soxs_scheduler(
@@ -248,6 +260,7 @@ def main(arguments=None):
              (endTime, runningTime, ))
 
     return
+
 
 if __name__ == '__main__':
     main()

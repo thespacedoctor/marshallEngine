@@ -8,6 +8,20 @@
 """
 from __future__ import print_function
 from __future__ import division
+from fundamentals.mysql import database, readquery, writequery
+from fundamentals import fmultiprocess
+from astrocalc.times import conversions
+import matplotlib.ticker as mtick
+from fundamentals.stats import rolling_window_sigma_clip
+from operator import itemgetter
+from datetime import datetime
+from fundamentals import tools
+from matplotlib import dates
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
 from builtins import zip
 from builtins import str
 from past.utils import old_div
@@ -16,20 +30,7 @@ import os
 # SUPPRESS MATPLOTLIB WARNINGS
 import warnings
 warnings.filterwarnings("ignore")
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import math
-import numpy as np
-from matplotlib import dates
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from datetime import datetime
-from operator import itemgetter
-from fundamentals.stats import rolling_window_sigma_clip
-import matplotlib.ticker as mtick
-from astrocalc.times import conversions
-from fundamentals import fmultiprocess
-from fundamentals.mysql import database, readquery, writequery
 
 
 def generate_atlas_lightcurves(
@@ -114,7 +115,7 @@ def generate_atlas_lightcurves(
     # ADD SECOND Y-AXIS
     ax2 = ax.twinx()
     ax2.yaxis.set_major_formatter(y_formatter)
-    ax2.set_ylabel('Flux ($\mu$Jy)', rotation=-90.,  labelpad=27)
+    ax2.set_ylabel('Flux ($\mu$Jy)', rotation=-90., labelpad=27)
     ax2.grid(False)
 
     # ADD SECOND X-AXIS
@@ -245,7 +246,6 @@ def plot_single_result(
     # ax = fig.gca()
     epochs = sigma_clip_data(log=log, fpData=epochs)
 
-
     # c = cyan, o = arange
     magnitudes = {
         'c': {'mjds': [], 'mags': [], 'magErrs': []},
@@ -287,7 +287,7 @@ def plot_single_result(
 
     if len(magnitudes['o']['mjds']):
         orangeMag = ax.errorbar(magnitudes['o']['mjds'], magnitudes['o']['mags'], yerr=magnitudes[
-            'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2,  label='o-band mag ', capsize=10)
+            'o']['magErrs'], color='#FFA500', fmt='o', mfc='#FFA500', mec='#FFA500', zorder=1, ms=12., alpha=0.8, linewidth=1.2, label='o-band mag ', capsize=10)
 
         # ERROBAR CAP THICKNESS
         orangeMag[1][0].set_markeredgewidth('0.7')

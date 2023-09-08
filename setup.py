@@ -24,7 +24,9 @@ install_requires = [
     'tornado',
     'numpy',
     'gitpython',
-    'atelParser'
+    'atelParser',
+    'skytag',
+    'tabulate'
 ]
 
 # READ THE DOCS SERVERS

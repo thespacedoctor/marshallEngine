@@ -6,15 +6,15 @@
 :Author:
     David Young
 """
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from transientNamer import search
+from astrocalc.times import now
+from ..data import data as basedata
+from fundamentals import tools
 from builtins import zip
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from ..data import data as basedata
-from astrocalc.times import now
-from transientNamer import search
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 
 
 class data(basedata):
@@ -89,6 +89,8 @@ class data(basedata):
             discInLastDays=withinLastDays,
             settings=self.settings
         )
+
+        print(tns)
 
         lists = [tns.sources, tns.photometry, tns.files, tns.spectra]
         tableNames = ["tns_sources", "tns_photometry",
