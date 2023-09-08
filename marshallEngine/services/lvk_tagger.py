@@ -208,8 +208,6 @@ class lvk_tagger(object):
         # CONVERT TO A LIST OF DICTIONARIES
         matchedTransients = matchedTransientsDF.to_dict('records')
 
-        print(matchedTransients)
-
         # USE dbSettings TO ACTIVATE MULTIPROCESSING - INSERT LIST OF DICTIONARIES INTO DATABASE
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.dbConn,
