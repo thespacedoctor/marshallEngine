@@ -216,8 +216,7 @@ class lvk_tagger(object):
             dateModified=True,
             dateCreated=True,
             batchSize=2500,
-            replace=True,
-            dbSettings=self.settings["database settings"]
+            replace=True
         )
 
         mapIds = (" ,").join(list(matchedTransientsDF["mapId"].values.astype("str")))
