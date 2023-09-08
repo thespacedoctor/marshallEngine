@@ -215,8 +215,8 @@ class lvk_tagger(object):
             dictList=matchedTransients,
             dbTableName="lvk_skytag",
             uniqueKeyList=["mapId", "transientBucketId"],
-            dateModified=True,
-            dateCreated=True,
+            dateModified=False,
+            dateCreated=False,
             batchSize=2500,
             replace=True,
             dbSettings=self.settings["database settings"]
