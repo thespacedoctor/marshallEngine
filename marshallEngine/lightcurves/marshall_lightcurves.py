@@ -426,6 +426,10 @@ class marshall_lightcurves(object):
 
         plt.clf()
         plt.cla()
+
+        plt.tick_params(left=False, right=False, labelleft=False,
+                        labelbottom=False, bottom=False)
+
         ax = fig.add_subplot(1, 1, 1)
         # print(currentMag)
         # print(bigTimeArray)
