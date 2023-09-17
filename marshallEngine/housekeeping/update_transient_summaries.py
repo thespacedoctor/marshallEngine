@@ -7,20 +7,20 @@
     David Young
 """
 from __future__ import print_function
+from HMpTy.mysql import add_htm_ids_to_mysql_database_table
+import numpy as np
+from astrocalc.distances import converter
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
+from astropy.coordinates import SkyCoord
+from astropy import units as u
+from fundamentals.mysql import writequery, readquery
+from fundamentals import tools
 from builtins import zip
 from builtins import str
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from fundamentals.mysql import writequery, readquery
-from astropy import units as u
-from astropy.coordinates import SkyCoord
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
-from astrocalc.distances import converter
-import numpy as np
-from HMpTy.mysql import add_htm_ids_to_mysql_database_table
 
 
 class update_transient_summaries(object):
@@ -210,10 +210,10 @@ class update_transient_summaries(object):
         if not total:
             return
 
-        if total > 1000:
+        if total > 100:
             print(
-                """%(total)s transients need updated - updating the next 1000""" % locals())
-            rows = np.random.choice(rows, size=1000, replace=False, p=None)
+                """%(total)s transients need updated - updating the next 100""" % locals())
+            rows = np.random.choice(rows, size=100, replace=False, p=None)
 
         # CREATE 3 LISTS - RA, DEC, ID
         raDeg = []
