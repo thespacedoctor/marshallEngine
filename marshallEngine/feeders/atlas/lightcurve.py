@@ -393,7 +393,7 @@ def plot_single_result(
         os.makedirs(cacheDirectory)
     filePath = cacheDirectory + "/atlas_fp_lightcurve.png"
     plt.savefig(filePath, bbox_inches='tight', transparent=False,
-                pad_inches=0.1, optimize=True, progressive=True)
+                pad_inches=0.1, progressive=True)
 
     try:
         cyanMag.remove()
