@@ -76,9 +76,9 @@ def generate_atlas_lightcurves(
     transientIds = [r["transientBucketId"] for r in rows]
 
     total = len(transientIds)
-    if total > 1000:
-        print("ATLAS lightcurves need generated for %(total)s sources - generating next 1000" % locals())
-        transientIds = transientIds[:1000]
+    if total > 100:
+        print("ATLAS lightcurves need generated for %(total)s sources - generating next 100" % locals())
+        transientIds = transientIds[:100]
         total = len(transientIds)
     else:
         print("Generating ATLAS lightcurves for %(total)s sources" % locals())
@@ -393,7 +393,7 @@ def plot_single_result(
         os.makedirs(cacheDirectory)
     filePath = cacheDirectory + "/atlas_fp_lightcurve.png"
     plt.savefig(filePath, bbox_inches='tight', transparent=False,
-                pad_inches=0.1, optimize=True, progressive=True)
+                pad_inches=0.1)
 
     try:
         cyanMag.remove()
