@@ -195,7 +195,7 @@ class lvk_tagger(object):
           PRIMARY KEY (`primaryId`),
           UNIQUE KEY `mapid_transientbucketid` (`mapId`,`transientBucketId`),
           KEY `idx_transientBucketId` (`transientBucketId`)
-        ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+        ) ENGINE=Innodb AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
         """
         writequery(
             log=self.log,
