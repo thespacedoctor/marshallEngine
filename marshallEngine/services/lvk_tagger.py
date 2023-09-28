@@ -64,7 +64,8 @@ class lvk_tagger(object):
         mapTransDF = self.collect_recent_event_maps()
         if mapTransDF is not None:
             matchedTransientsDF = self.match_transients_against_maps(mapTransDF)
-            self.add_tagged_transients_to_database(matchedTransientsDF)
+            if len(matchedTransientsDF.index):
+                self.add_tagged_transients_to_database(matchedTransientsDF)
 
         self.log.debug('completed the ``tag`` method')
         return None
@@ -194,7 +195,7 @@ class lvk_tagger(object):
           PRIMARY KEY (`primaryId`),
           UNIQUE KEY `mapid_transientbucketid` (`mapId`,`transientBucketId`),
           KEY `idx_transientBucketId` (`transientBucketId`)
-        ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+        ) ENGINE=Innodb AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
         """
         writequery(
             log=self.log,
@@ -206,6 +207,7 @@ class lvk_tagger(object):
 
         # CONVERT TO A LIST OF DICTIONARIES
         matchedTransients = matchedTransientsDF.to_dict('records')
+
         # USE dbSettings TO ACTIVATE MULTIPROCESSING - INSERT LIST OF DICTIONARIES INTO DATABASE
         insert_list_of_dictionaries_into_database_tables(
             dbConn=self.dbConn,
@@ -213,8 +215,8 @@ class lvk_tagger(object):
             dictList=matchedTransients,
             dbTableName="lvk_skytag",
             uniqueKeyList=["mapId", "transientBucketId"],
-            dateModified=True,
-            dateCreated=True,
+            dateModified=False,
+            dateCreated=False,
             batchSize=2500,
             replace=True,
             dbSettings=self.settings["database settings"]

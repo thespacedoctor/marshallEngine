@@ -90,8 +90,6 @@ class data(basedata):
             settings=self.settings
         )
 
-        print(tns)
-
         lists = [tns.sources, tns.photometry, tns.files, tns.spectra]
         tableNames = ["tns_sources", "tns_photometry",
                       "tns_files", "tns_spectra"]

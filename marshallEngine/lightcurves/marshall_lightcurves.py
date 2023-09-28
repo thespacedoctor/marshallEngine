@@ -426,6 +426,10 @@ class marshall_lightcurves(object):
 
         plt.clf()
         plt.cla()
+
+        plt.tick_params(left=False, right=False, labelleft=False,
+                        labelbottom=False, bottom=False)
+
         ax = fig.add_subplot(1, 1, 1)
         # print(currentMag)
         # print(bigTimeArray)
@@ -596,7 +600,7 @@ class marshall_lightcurves(object):
         #     )
 
         results = fmultiprocess(log=self.log, function=_plot_one,
-                                inputArray=self.transientBucketIds, poolSize=False, timeout=3600, settings=self.settings)
+                                inputArray=self.transientBucketIds, poolSize=False, timeout=7200, settings=self.settings)
 
         sqlQuery = ""
         updatedTransientBucketIds = []
