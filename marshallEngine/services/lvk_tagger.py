@@ -143,16 +143,22 @@ class lvk_tagger(object):
         matchedTransientsDF = []
         for mapPath, df in mapTransDF:
 
-            prob, deltas = prob_at_location(
+            prob, deltas, distance = prob_at_location(
                 log=self.log,
                 ra=list(df["raDeg"].values),
                 dec=list(df["decDeg"].values),
                 mjd=list(df["tMJD"].values.astype(float)),
-                mapPath=mapPath[0]
+                mapPath=mapPath[0],
+                distance=True
             )
 
             # CONTOUR TO HIGHEST 10%
             df["contour"] = np.ceil(np.array(prob) / 10) * 10
+            matchedTransientsDF.append(df)
+
+            # ADD DISTANCE AND SIGMA
+            df["distMpc"] = [l[0] for l in distance]
+            df["sigmaMpc"] = [l[1] for l in distance]
             matchedTransientsDF.append(df)
 
         matchedTransientsDF = pd.concat(matchedTransientsDF, ignore_index=True)
@@ -189,6 +195,8 @@ class lvk_tagger(object):
           `dateLastModified` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
           `contour` double NOT NULL,
           `daysSinceEvent` double NOT NULL,
+          `distMpc` double,
+          `sigmaMpc` double,
           `mapId` tinyint(4) NOT NULL,
           `superevent_id` varchar(100) NOT NULL,
           `transientBucketId` int(11) NOT NULL,
@@ -203,7 +211,7 @@ class lvk_tagger(object):
             dbConn=self.dbConn
         )
 
-        matchedTransientsDF = matchedTransientsDF[["mapId", "transientBucketId", "superevent_id", "contour", "daysSinceEvent"]]
+        matchedTransientsDF = matchedTransientsDF[["mapId", "transientBucketId", "superevent_id", "contour", "daysSinceEvent", "distMpc", "sigmaMpc"]]
 
         # CONVERT TO A LIST OF DICTIONARIES
         matchedTransients = matchedTransientsDF.to_dict('records')
