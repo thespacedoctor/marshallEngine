@@ -6,14 +6,14 @@
 :Author:
     David Young
 """
+from fundamentals.mysql import writequery
+from astrocalc.times import now
+from ..data import data as basedata
+from fundamentals import tools
 from builtins import str
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from ..data import data as basedata
-from astrocalc.times import now
-from fundamentals.mysql import writequery
 
 
 class data(basedata):
@@ -108,7 +108,6 @@ class data(basedata):
         allLists.extend(self._clean_data_pre_ingest(
             surveyName="ps23pi", withinLastDays=withinLastDays))
 
-
         try:
             csvDicts = self.get_csv_data(
                 url=self.settings["panstarrs urls"]["pso3"]["summary csv"],
@@ -133,7 +132,7 @@ class data(basedata):
         self.insert_into_transientBucket()
 
         # FIX ODD PANSTARRS COORDINATES
-        sqlQuery = """update transientBucket set raDeg = raDeg+360.0 where raDeg  < 0;""" % locals()
+        sqlQuery = """update transientBucket set raDeg = raDeg+360.0 where raDeg  < 0 and dateCreate > NOW() - INTERVAL 3 DAY """ % locals()
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -223,7 +222,7 @@ class data(basedata):
             ref = row["ref"]
             if ref:
                 id, mjdString, diffId, ippIdet, type = ref.split('_')
-                thisDictionary["refImageURL"]  = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/media/images/data/%(surveyName)s" % locals() + '/' + \
+                thisDictionary["refImageURL"] = "http://star.pst.qub.ac.uk/sne/%(surveyName)s/media/images/data/%(surveyName)s" % locals() + '/' + \
                     str(int(float(mjdString))) + '/' + ref + '.jpeg'
 
             diff = row["diff"]
