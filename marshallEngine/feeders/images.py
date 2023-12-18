@@ -7,6 +7,13 @@
     David Young
 """
 from __future__ import print_function
+from fundamentals.mysql import writequery
+from fundamentals import fmultiprocess
+import codecs
+from requests.auth import HTTPBasicAuth
+import requests
+from fundamentals.mysql import readquery
+from fundamentals import tools
 from __future__ import division
 from builtins import str
 from builtins import zip
@@ -15,13 +22,6 @@ from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from fundamentals.mysql import readquery
-import requests
-from requests.auth import HTTPBasicAuth
-import codecs
-from fundamentals import fmultiprocess
-from fundamentals.mysql import writequery
 
 
 class images(object):
@@ -184,6 +184,7 @@ WHERE
     t.magnitude IS NOT NULL
         AND t.%(imageUrl)s IS NOT NULL
         AND p.%(stampWhere)s
+        AND p.dateLastModified > NOW() - INTERVAL 45 DAY 
         AND t.transientbucketId = p.transientbucketId
         AND (%(dbSurveyNames)s)
         AND t.limitingMag = 0 group by t.transientBucketId;""" % locals()
