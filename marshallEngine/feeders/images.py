@@ -7,6 +7,7 @@
     David Young
 """
 from __future__ import print_function
+from __future__ import division
 from fundamentals.mysql import writequery
 from fundamentals import fmultiprocess
 import codecs
@@ -14,7 +15,6 @@ from requests.auth import HTTPBasicAuth
 import requests
 from fundamentals.mysql import readquery
 from fundamentals import tools
-from __future__ import division
 from builtins import str
 from builtins import zip
 from builtins import object
