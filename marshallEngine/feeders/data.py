@@ -7,12 +7,13 @@
     David Young
 """
 from __future__ import print_function
+from __future__ import division
 from fundamentals import tools
 from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
 from requests.auth import HTTPBasicAuth
 import requests
 import csv
-from __future__ import division
+
 from builtins import zip
 from builtins import str
 from builtins import range
