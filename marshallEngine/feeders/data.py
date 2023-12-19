@@ -7,6 +7,11 @@
     David Young
 """
 from __future__ import print_function
+from fundamentals import tools
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
+from requests.auth import HTTPBasicAuth
+import requests
+import csv
 from __future__ import division
 from builtins import zip
 from builtins import str
@@ -16,11 +21,6 @@ from past.utils import old_div
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-import csv
-import requests
-from requests.auth import HTTPBasicAuth
-from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables, readquery, writequery
-from fundamentals import tools
 
 
 class data(object):
@@ -525,7 +525,7 @@ class data(object):
         self.log.debug('starting the ``clean_up`` method')
 
         sqlQueries = [
-            "insert into sherlock_classifications (transient_object_id) select distinct transientBucketId from transientBucketSummaries ON DUPLICATE KEY UPDATE  transient_object_id = transientBucketId;",
+            "insert into sherlock_classifications (transient_object_id) select distinct transientBucketId from transientBucketSummaries where dateLastModified > NOW() -  INTERVAL 7 DAY ON DUPLICATE KEY UPDATE  transient_object_id = transientBucketId;",
             "CALL update_transient_akas(1); "
         ]
 
