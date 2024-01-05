@@ -680,14 +680,18 @@ def _plot_one(
     dataset, flatdata, flatLimits = lc._select_data_for_transient(
         transientBucketId)
     if dataset:
-        filepath, currentMag, gradient = lc._create_lightcurve_plot_file(
-            dataset=dataset,
-            flatdata=flatdata,
-            flatLimits=flatLimits,
-            objectNames="test object",
-            saveLocation=saveLocation,
-            saveFileName="master_lightcurve"
-        )
+        try:
+            filepath, currentMag, gradient = lc._create_lightcurve_plot_file(
+                dataset=dataset,
+                flatdata=flatdata,
+                flatLimits=flatLimits,
+                objectNames="test object",
+                saveLocation=saveLocation,
+                saveFileName="master_lightcurve"
+            )
+        except Exception as e:
+            log.warning(f"Could not print LC. Error: {e}")
+            return False, False, False
     else:
         return False, False, False
 
