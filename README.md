@@ -1,7 +1,7 @@
 # marshallEngine
 
 
-[![](https://zenodo.org/badge/187837942.svg)](https://zenodo.org/badge/latestdoi/187837942) 
+[![](https://zenodo.org/badge/DOI/10.5281/zenodo.8037613.svg)](https://zenodo.org/doi/10.5281/zenodo.8037613) 
 
 
 <!-- INFO BADGES -->  
@@ -37,10 +37,10 @@ If you use `marshallEngine` in your work, please cite using the following BibTeX
 ```bibtex
 @software{Young_marshallEngine,
     author = {Young, David R.},
-    doi = {10.5281/zenodo.8037614},
+    doi = {10.5281/zenodo.8037613},
     license = {GPL-3.0-only},
-    title = {{marshallEngine}},
-    url = {https://github.com/thespacedoctor/marshallEngine}
+    title = {{marshallEngine. The engine behind the Marshall webapp}},
+    url = {https://zenodo.org/doi/10.5281/zenodo.8037613}
 }
 ```
  
