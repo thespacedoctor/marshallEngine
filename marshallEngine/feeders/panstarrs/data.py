@@ -113,7 +113,7 @@ class data(basedata):
         self.insert_into_transientBucket()
 
         # FIX ODD PANSTARRS COORDINATES
-        sqlQuery = """update transientBucket set raDeg = raDeg+360.0 where raDeg  < 0 and dateCreated > NOW() - INTERVAL 3 DAY """ % locals()
+        sqlQuery = """update transientBucket FORCE INDEX (idx_dateCreated) set raDeg = raDeg+360.0 where raDeg  < 0 and dateCreated > NOW() - INTERVAL 3 DAY """ % locals()
         writequery(
             log=self.log,
             sqlQuery=sqlQuery,
