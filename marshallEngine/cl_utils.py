@@ -177,9 +177,9 @@ def main(arguments=None):
         ).update()
 
     if iimport:
-        if survey.lower() == "panstarrs":
-            from marshallEngine.feeders.panstarrs.data import data
-            from marshallEngine.feeders.panstarrs import images
+        # if survey.lower() == "panstarrs":
+        #     from marshallEngine.feeders.panstarrs.data import data
+        #     from marshallEngine.feeders.panstarrs import images
         if survey.lower() == "atlas":
             from marshallEngine.feeders.atlas.data import data
             from marshallEngine.feeders.atlas import images
