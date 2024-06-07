@@ -206,6 +206,7 @@ def main(arguments=None):
         #     dbConn=dbConn
         # ).cache(limit=3000)
 
+        print("HERE")
         from marshallEngine.services import panstarrs_location_stamps
         ps_stamp = panstarrs_location_stamps(
             log=log,
