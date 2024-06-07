@@ -195,16 +195,16 @@ def main(arguments=None):
         if survey.lower() == "atels" or survey.lower() == "atel":
             from marshallEngine.feeders.atels.data import data
             from marshallEngine.feeders.atels import images
-        ingester = data(
-            log=log,
-            settings=settings,
-            dbConn=dbConn
-        ).ingest(withinLastDays=withInLastDay)
-        cacher = images(
-            log=log,
-            settings=settings,
-            dbConn=dbConn
-        ).cache(limit=3000)
+        # ingester = data(
+        #     log=log,
+        #     settings=settings,
+        #     dbConn=dbConn
+        # ).ingest(withinLastDays=withInLastDay)
+        # cacher = images(
+        #     log=log,
+        #     settings=settings,
+        #     dbConn=dbConn
+        # ).cache(limit=3000)
 
         from marshallEngine.services import panstarrs_location_stamps
         ps_stamp = panstarrs_location_stamps(
