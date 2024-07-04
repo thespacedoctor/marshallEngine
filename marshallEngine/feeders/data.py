@@ -330,7 +330,7 @@ class data(object):
         else:
             limitClause = ""
         sqlQuery = u"""
-            select %(fs_name)s,  avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from (select * from %(fsTableName)s where ingested = 0   %(limitClause)s  limit 10000) as a where %(fs_ra)s is not null and %(fs_dec)s is not null group by atlas_designation;
+            select %(fs_name)s,  avg(%(fs_ra)s) as %(fs_ra)s, avg(%(fs_dec)s) as %(fs_dec)s from (select * from %(fsTableName)s where ingested = 0   %(limitClause)s  limit 100000) as a where %(fs_ra)s is not null and %(fs_dec)s is not null group by %(fs_name)s ;
         """ % locals()
 
         rows = readquery(
