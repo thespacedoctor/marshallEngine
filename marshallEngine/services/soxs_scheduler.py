@@ -9,14 +9,14 @@
 :Date Created:
     November 17, 2021
 """
+import json
+import requests
+from fundamentals.mysql import readquery, writequery
+from fundamentals import tools
 from builtins import object
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from fundamentals.mysql import readquery, writequery
-import requests
-import json
 
 
 class soxs_scheduler(object):
@@ -196,7 +196,7 @@ class soxs_scheduler(object):
             schd_status_code = 0
             http_status_code = 500
             response = requests.post(
-                url="https://soxs-scheduler-pwoxq.ondigitalocean.app/createAutoOB",
+                url=f"{self.baseurl}/createAutoOB",
                 headers={
                     "Content-Type": "application/json; charset=utf-8",
                 },
