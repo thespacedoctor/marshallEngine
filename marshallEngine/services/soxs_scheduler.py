@@ -237,5 +237,37 @@ class soxs_scheduler(object):
         self.log.debug('completed the ``_create_single_auto_ob`` method')
         return obid
 
+    def collect_schedule_obs_statuses(
+            self):
+        """*collect schedule obs statuses from the scheduler*
+
+        **Key Arguments:**
+            # -
+
+        **Return:**
+            - None
+
+        **Usage:**
+
+        ```python
+        usage code 
+        ```
+
+        ---
+
+        ```eval_rst
+        .. todo::
+
+            - add usage info
+            - create a sublime snippet for usage
+            - write a command-line tool for this method
+            - update package tutorial with command-line tool info if needed
+        ```
+        """
+        self.log.debug('starting the ``collect_schedule_obs_statuses`` method')
+
+        self.log.debug('completed the ``collect_schedule_obs_statuses`` method')
+        return None
+
     # use the tab-trigger below for new method
     # xt-class-method
