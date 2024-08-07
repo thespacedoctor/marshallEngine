@@ -268,16 +268,13 @@ class soxs_scheduler(object):
 
         try:
             response = requests.get(
-            url=f"{self.baseurl}/obMarshallShort",
+                url=f"{self.baseurl}/obMarshallShort",
             )
             data = response.json()
             print(data)
 
-
         except requests.exceptions.RequestException:
             self.log.debug('HTTP Request failed on obMarshallShort')
-
-
 
         self.log.debug('completed the ``collect_schedule_obs_statuses`` method')
         return None
