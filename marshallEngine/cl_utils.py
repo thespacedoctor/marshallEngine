@@ -249,9 +249,8 @@ def main(arguments=None):
             dbConn=dbConn,
             settings=settings
         )
-        schr.request_all_required_auto_obs()
+        #schr.request_all_required_auto_obs()
         #Updating status for each OB
-
         schr.collect_schedule_obs_statuses()
 
 
