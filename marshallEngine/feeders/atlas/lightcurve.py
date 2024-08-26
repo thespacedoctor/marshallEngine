@@ -77,9 +77,9 @@ def generate_atlas_lightcurves(
     transientIds = [r["transientBucketId"] for r in rows]
 
     total = len(transientIds)
-    if total > 100:
-        print("ATLAS lightcurves need generated for %(total)s sources - generating next 100" % locals())
-        transientIds = transientIds[:100]
+    if total > 5000:
+        print("ATLAS lightcurves need generated for %(total)s sources - generating next 5000" % locals())
+        transientIds = transientIds[:5000]
         total = len(transientIds)
     else:
         print("Generating ATLAS lightcurves for %(total)s sources" % locals())
