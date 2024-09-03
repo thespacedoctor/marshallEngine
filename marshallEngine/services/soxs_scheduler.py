@@ -277,11 +277,13 @@ class soxs_scheduler(object):
             self.log.debug('HTTP Request failed on obMarshallShort')
 
         try:
+            dictList = [{**d, 'ESO_OB_Status': d['ESO_OB_Status'] if d['ESO_OB_Status'] is not None else 'Not Available'} for d in data['data']['payload']]
+
 
             insert_list_of_dictionaries_into_database_tables(
                 dbConn=self.dbConn,
                 log=self.log,
-                dictList=data['data']['payload'],
+                dictList=dictList,
                 dbTableName="scheduler_obs",
                 dateModified=True,
                 dateCreated=True,
