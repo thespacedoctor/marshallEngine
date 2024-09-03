@@ -16,6 +16,7 @@ from fundamentals import tools
 from builtins import object
 import sys
 import os
+from fundamentals.mysql import insert_list_of_dictionaries_into_database_tables
 os.environ['TERM'] = 'vt100'
 
 
@@ -271,10 +272,27 @@ class soxs_scheduler(object):
                 url=f"{self.baseurl}/obMarshallShort",
             )
             data = response.json()
-            print(data)
 
         except requests.exceptions.RequestException:
             self.log.debug('HTTP Request failed on obMarshallShort')
+
+        try:
+
+            insert_list_of_dictionaries_into_database_tables(
+                dbConn=self.dbConn,
+                log=self.log,
+                dictList=data['data']['payload'],
+                dbTableName="scheduler_obs",
+                dateModified=True,
+                dateCreated=True,
+                batchSize=2500,
+                replace=True,
+                dbSettings=self.settings["database settings"]
+            )
+        except Exception as e:
+            print(e)
+            self.log.debug('Update failed. Exception caught: ' + str(e))
+
 
         self.log.debug('completed the ``collect_schedule_obs_statuses`` method')
         return None
