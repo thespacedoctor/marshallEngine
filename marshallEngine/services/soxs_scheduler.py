@@ -300,7 +300,7 @@ class soxs_scheduler(object):
         return None
 
     def remove_classified_obs(self):
-        sqlQuery = 'SELECT t.transientBucketId FROM  pesstoobjects AS t , scheduler_obs AS so  WHERE t.classifiedFlag = 1 AND so.transientBucketId = t.transientBucketId AND so.autoOB = 1'
+        sqlQuery = 'SELECT t.transientBucketId , so.OB_ID FROM  pesstoobjects AS t , scheduler_obs AS so  WHERE t.classifiedFlag = 1 AND so.transientBucketId = t.transientBucketId AND so.autoOB = 1'
         rows = readquery(
                 log=self.log,
                 sqlQuery=sqlQuery,
