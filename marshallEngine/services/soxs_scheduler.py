@@ -299,5 +299,37 @@ class soxs_scheduler(object):
         self.log.debug('completed the ``collect_schedule_obs_statuses`` method')
         return None
 
+    def remove_classified_obs(self):
+        sqlQuery = 'SELECT t.transientBucketId FROM  pesstoobjects AS t , scheduler_obs AS so  WHERE t.classifiedFlag = 1 AND so.transientBucketId = t.transientBucketId AND so.autoOB = 1'
+        rows = readquery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
+        for r in rows:
+            print(r)
+
+            #SEND TO SCHEDULER A DELETE COMMAND
+
+            response = requests.delete(
+                url=f"{self.baseurl}/deleteOB",
+                headers={
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                data=json.dumps({
+                    "OB_ID": r['OB_ID']
+                })
+            )
+
+            sqlQuery = "UPDATE scheduler_obs SET scheduler_obs.autoOB = -1 WHERE OB_ID = " + str(r['OB_ID']) + ";"
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
+            )
+
+
+
+
     # use the tab-trigger below for new method
     # xt-class-method
