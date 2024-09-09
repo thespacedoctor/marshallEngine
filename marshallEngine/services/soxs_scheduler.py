@@ -87,7 +87,7 @@ class soxs_scheduler(object):
             scheduler_obs s,
             transientbucketsummaries t
             WHERE
-            t.transientBucketId = s.transientBucketId AND s.OB_ID is null
+            t.transientBucketId = s.transientBucketId AND s.OB_ID is null and s.latestMag < 19.0
         """
 
         rows = readquery(
@@ -279,7 +279,6 @@ class soxs_scheduler(object):
         try:
             dictList = [{**d, 'ESO_OB_Status': d['ESO_OB_Status'] if d['ESO_OB_Status'] is not None else 'Not Available'} for d in data['data']['payload']]
 
-
             insert_list_of_dictionaries_into_database_tables(
                 dbConn=self.dbConn,
                 log=self.log,
@@ -295,21 +294,20 @@ class soxs_scheduler(object):
             print(e)
             self.log.debug('Update failed. Exception caught: ' + str(e))
 
-
         self.log.debug('completed the ``collect_schedule_obs_statuses`` method')
         return None
 
     def remove_classified_obs(self):
         sqlQuery = 'SELECT t.transientBucketId , so.OB_ID FROM  pesstoobjects AS t , scheduler_obs AS so  WHERE t.classifiedFlag = 1 AND so.transientBucketId = t.transientBucketId AND so.autoOB = 1'
         rows = readquery(
-                log=self.log,
-                sqlQuery=sqlQuery,
-                dbConn=self.dbConn
-            )
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
         for r in rows:
             print(r)
 
-            #SEND TO SCHEDULER A DELETE COMMAND
+            # SEND TO SCHEDULER A DELETE COMMAND
 
             response = requests.delete(
                 url=f"{self.baseurl}/deleteOB",
@@ -327,12 +325,6 @@ class soxs_scheduler(object):
                 sqlQuery=sqlQuery,
                 dbConn=self.dbConn
             )
-
-
-
-
-
-
 
     # use the tab-trigger below for new method
     # xt-class-method
