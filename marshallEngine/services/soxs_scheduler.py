@@ -329,7 +329,7 @@ class soxs_scheduler(object):
 
     #This method should be used ONLY in commisionig (La Silla 11 sept 2024)
     def removeOlderOBs(self):
-        sqlQuery = "SELECT COUNT(*) FROM  scheduler_obs  WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL AND autoOB = 1;"
+        sqlQuery = "SELECT * FROM  scheduler_obs  WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL AND autoOB = 1;"
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
