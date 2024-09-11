@@ -305,7 +305,7 @@ class soxs_scheduler(object):
             dbConn=self.dbConn
         )
         for r in rows:
-            print(r)
+            #print(r)
 
             # SEND TO SCHEDULER A DELETE COMMAND
 
