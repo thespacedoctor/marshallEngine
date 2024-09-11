@@ -327,7 +327,7 @@ class soxs_scheduler(object):
             )
     #This method should be used ONLY in debug
     def removeOlderOBs(self):
-        sqlQuery = "so.OB_ID FROM  scheduler_obs AS so WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL;"
+        sqlQuery = "SELECT OB_ID FROM  scheduler_obs  WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL;"
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
