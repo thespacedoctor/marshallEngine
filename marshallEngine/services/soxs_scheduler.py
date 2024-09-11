@@ -333,7 +333,25 @@ class soxs_scheduler(object):
             sqlQuery=sqlQuery,
             dbConn=self.dbConn
         )
-        print(rows)
+        #print(rows)
+
+
+        for r in rows:
+            #print(r)
+
+            # SEND TO SCHEDULER A DELETE COMMAND
+
+            response = requests.delete(
+                url=f"{self.baseurl}/deleteOB",
+                headers={
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                data=json.dumps({
+                    "OB_ID": r['OB_ID']
+                })
+            )
+
+            print('OB ' + str r['OB_ID'] + 'Deletet with response: ' + str(response))
 
 
     # use the tab-trigger below for new method
