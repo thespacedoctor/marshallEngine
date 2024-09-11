@@ -351,7 +351,7 @@ class soxs_scheduler(object):
                 })
             )
 
-            print('OB ' + str r['OB_ID'] + 'Deletet with response: ' + str(response))
+            print('OB ' + str(r['OB_ID']) + 'Deletet with response: ' + str(response))
 
 
     # use the tab-trigger below for new method
