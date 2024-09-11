@@ -325,9 +325,11 @@ class soxs_scheduler(object):
                 sqlQuery=sqlQuery,
                 dbConn=self.dbConn
             )
-    #This method should be used ONLY in debug
+    
+
+    #This method should be used ONLY in commisionig (La Silla 11 sept 2024)
     def removeOlderOBs(self):
-        sqlQuery = "SELECT OB_ID FROM  scheduler_obs  WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL;"
+        sqlQuery = "SELECT COUNT(*) FROM  scheduler_obs  WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL AND autoOB = 1;"
         rows = readquery(
             log=self.log,
             sqlQuery=sqlQuery,
@@ -349,6 +351,13 @@ class soxs_scheduler(object):
                 data=json.dumps({
                     "OB_ID": r['OB_ID']
                 })
+            )
+
+            sqlQuery = "UPDATE scheduler_obs SET scheduler_obs.autoOB = -1, scheduler_obs.ESO_OB_Status = 'Deleted' WHERE OB_ID = " + str(r['OB_ID']) + ";"
+            writequery(
+                log=self.log,
+                sqlQuery=sqlQuery,
+                dbConn=self.dbConn
             )
 
             print('OB ' + str(r['OB_ID']) + 'Deletet with response: ' + str(response))
