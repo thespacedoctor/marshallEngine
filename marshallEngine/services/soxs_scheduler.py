@@ -325,6 +325,16 @@ class soxs_scheduler(object):
                 sqlQuery=sqlQuery,
                 dbConn=self.dbConn
             )
+    #This method should be used ONLY in debug
+    def removeOlderOBs(self):
+        sqlQuery = "so.OB_ID FROM  scheduler_obs AS so WHERE `dateCreated` < date('2024-09-04') AND OB_ID is not NULL;"
+        rows = readquery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
+        print(rows)
+
 
     # use the tab-trigger below for new method
     # xt-class-method
