@@ -353,10 +353,10 @@ class soxs_scheduler(object):
                 })
             )
 
-            sqlQuery = "UPDATE scheduler_obs SET scheduler_obs.autoOB = -1, scheduler_obs.ESO_OB_Status = 'Deleted' WHERE OB_ID = " + str(r['OB_ID']) + ";"
+            sqlQueryUpdate = "UPDATE scheduler_obs SET scheduler_obs.autoOB = -1, scheduler_obs.ESO_OB_Status = 'Deleted' WHERE OB_ID = " + str(r['OB_ID']) + ";"
             writequery(
                 log=self.log,
-                sqlQuery=sqlQuery,
+                sqlQuery=sqlQueryUpdate,
                 dbConn=self.dbConn
             )
 
