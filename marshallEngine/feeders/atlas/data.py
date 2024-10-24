@@ -80,34 +80,34 @@ class data(basedata):
         timelimit = datetime.now() - timedelta(days=int(withinLastDays))
         timelimit = timelimit.strftime("%Y-%m-%d")
 
-        # csvDicts = self.get_csv_data(
-        #     url=self.settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
-        # )
+        csvDicts = self.get_csv_data(
+            url=self.settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
+        )
 
-        # self._clean_data_pre_ingest(
-        #     surveyName="ATLAS", withinLastDays=withinLastDays)
+        self._clean_data_pre_ingest(
+            surveyName="ATLAS", withinLastDays=withinLastDays)
 
-        # self._import_to_feeder_survey_table()
-        # self.insert_into_transientBucket(updateTransientSummaries=False)
+        self._import_to_feeder_survey_table()
+        self.insert_into_transientBucket(updateTransientSummaries=False)
 
-        # sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
-        # writequery(
-        #     log=self.log,
-        #     sqlQuery=sqlQuery,
-        #     dbConn=self.dbConn
-        # )
+        sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
-        # self.fsTableName = "fs_atlas_forced_phot"
-        # self.survey = "ATLAS FP"
+        self.fsTableName = "fs_atlas_forced_phot"
+        self.survey = "ATLAS FP"
 
-        # sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
-        # writequery(
-        #     log=self.log,
-        #     sqlQuery=sqlQuery,
-        #     dbConn=self.dbConn
-        # )
+        sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
-        # self.insert_into_transientBucket(importUnmatched=False)
+        self.insert_into_transientBucket(importUnmatched=False)
 
         # UPDATE THE ATLAS SPECIFIC FLUX SPACE LIGHTCURVES
         generate_atlas_lightcurves(
