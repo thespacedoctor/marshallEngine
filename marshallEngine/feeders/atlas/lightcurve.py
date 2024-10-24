@@ -345,6 +345,8 @@ def plot_single_result(
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
 
+    print(lowerMag - deltaMag, upperMag + deltaMag)
+
     # PLOT THE MAGNITUDE SCALE
     axisUpperFlux = upperMag
     axisLowerFlux = 1e-29
@@ -353,6 +355,9 @@ def plot_single_result(
         axisUpperMag = -2.5 * math.log10(axisUpperFlux) + 23.9
     else:
         axisUpperMag = None
+
+    print(axisLowerFlux, axisUpperFlux)
+    print(axisLowerMag, axisUpperMag)
     if axisUpperMag:
         ax.set_ylabel('Apparent Magnitude', labelpad=15)
         magLabels = [20., 17.0, 15.0, 14.0, 13.5, 13.0]
@@ -370,6 +375,9 @@ def plot_single_result(
 
         magFluxes = [pow(10, old_div(-(m - 23.9), 2.5)) for m in magLabels]
 
+        print("magFluxes")
+        print(magFluxes)
+
         ax.yaxis.set_major_locator(mtick.FixedLocator((magFluxes)))
         ax.yaxis.set_major_formatter(mtick.FixedFormatter((magLabels)))
     else:
@@ -377,6 +385,8 @@ def plot_single_result(
 
     # ADD SECOND Y-AXIS
     ax2.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
+
+    print(lowerMag - deltaMag, upperMag + deltaMag)
 
     # RELATIVE TIME SINCE DISCOVERY
     lower, upper = ax.get_xlim()
