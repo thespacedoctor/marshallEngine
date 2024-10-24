@@ -6,17 +6,17 @@
 :Author:
     David Young
 """
+from datetime import datetime, date, time, timedelta
+from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
+from fundamentals.mysql import writequery
+from astrocalc.times import conversions
+from astrocalc.times import now
+from ..data import data as basedata
+from fundamentals import tools
 from builtins import str
 import sys
 import os
 os.environ['TERM'] = 'vt100'
-from fundamentals import tools
-from ..data import data as basedata
-from astrocalc.times import now
-from astrocalc.times import conversions
-from fundamentals.mysql import writequery
-from marshallEngine.feeders.atlas.lightcurve import generate_atlas_lightcurves
-from datetime import datetime, date, time, timedelta
 
 
 class data(basedata):
@@ -77,38 +77,37 @@ class data(basedata):
         """
         self.log.debug('starting the ``ingest`` method')
 
-
         timelimit = datetime.now() - timedelta(days=int(withinLastDays))
         timelimit = timelimit.strftime("%Y-%m-%d")
 
-        csvDicts = self.get_csv_data(
-            url=self.settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
-        )
+        # csvDicts = self.get_csv_data(
+        #     url=self.settings["atlas urls"]["summary csv"] + f"?followup_flag_date__gte={timelimit}"
+        # )
 
-        self._clean_data_pre_ingest(
-            surveyName="ATLAS", withinLastDays=withinLastDays)
+        # self._clean_data_pre_ingest(
+        #     surveyName="ATLAS", withinLastDays=withinLastDays)
 
-        self._import_to_feeder_survey_table()
-        self.insert_into_transientBucket(updateTransientSummaries=False)
+        # self._import_to_feeder_survey_table()
+        # self.insert_into_transientBucket(updateTransientSummaries=False)
 
-        sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.dbConn
-        )
+        # sqlQuery = """call update_fs_atlas_forced_phot()""" % locals()
+        # writequery(
+        #     log=self.log,
+        #     sqlQuery=sqlQuery,
+        #     dbConn=self.dbConn
+        # )
 
-        self.fsTableName = "fs_atlas_forced_phot"
-        self.survey = "ATLAS FP"
+        # self.fsTableName = "fs_atlas_forced_phot"
+        # self.survey = "ATLAS FP"
 
-        sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
-        writequery(
-            log=self.log,
-            sqlQuery=sqlQuery,
-            dbConn=self.dbConn
-        )
+        # sqlQuery = """CALL update_transientBucket_atlas_sources()""" % locals()
+        # writequery(
+        #     log=self.log,
+        #     sqlQuery=sqlQuery,
+        #     dbConn=self.dbConn
+        # )
 
-        self.insert_into_transientBucket(importUnmatched=False)
+        # self.insert_into_transientBucket(importUnmatched=False)
 
         # UPDATE THE ATLAS SPECIFIC FLUX SPACE LIGHTCURVES
         generate_atlas_lightcurves(
