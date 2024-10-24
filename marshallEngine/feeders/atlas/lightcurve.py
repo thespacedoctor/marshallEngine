@@ -265,6 +265,8 @@ def plot_single_result(
     magnitudes = stack_photometry(log=log,
                                   magnitudes=magnitudes, binningDays=1.)
 
+    print(magnitudes)
+
     # ADD MAGNITUDES AND LIMITS FOR EACH FILTER
     handles = []
 
