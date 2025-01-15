@@ -109,30 +109,30 @@ class data(basedata):
                 dbSettings=self.settings["database settings"]
             )
 
-        # # INSERT THE SOURCES TABLE
-        # self.insert_into_transientBucket()
+        # INSERT THE SOURCES TABLE
+        self.insert_into_transientBucket()
 
-        # # NOW THE SPECTRA TABLE
-        # self.fsTableName = "tns_spectra"
-        # self.survey = "tns"
-        # self.insert_into_transientBucket(importUnmatched=False)
+        # NOW THE SPECTRA TABLE
+        self.fsTableName = "tns_spectra"
+        self.survey = "tns"
+        self.insert_into_transientBucket(importUnmatched=False)
 
-        # # NOW THE PHOTOMETRY TABLE
-        # self.fsTableName = "tns_photometry"
-        # self.survey = "tns"
-        # self.insert_into_transientBucket(importUnmatched=False)
+        # NOW THE PHOTOMETRY TABLE
+        self.fsTableName = "tns_photometry"
+        self.survey = "tns"
+        self.insert_into_transientBucket(importUnmatched=False)
 
-        # # ALSO MATCH NEW ASTRONOTES
-        # sqlQuery = """CALL sync_marshall_feeder_survey_transientBucketId('astronotes_transients');""" % locals(
-        # )
-        # writequery(
-        #     log=self.log,
-        #     sqlQuery=sqlQuery,
-        #     dbConn=self.dbConn
-        # )
+        # ALSO MATCH NEW ASTRONOTES
+        sqlQuery = """CALL sync_marshall_feeder_survey_transientBucketId('astronotes_transients');""" % locals(
+        )
+        writequery(
+            log=self.log,
+            sqlQuery=sqlQuery,
+            dbConn=self.dbConn
+        )
 
-        # # CLEAN UP TASKS TO MAKE THE TICKET UPDATE
-        # self.clean_up()
+        # CLEAN UP TASKS TO MAKE THE TICKET UPDATE
+        self.clean_up()
 
         self.log.debug('completed the ``ingest`` method')
         return None
