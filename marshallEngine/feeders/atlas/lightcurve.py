@@ -281,7 +281,7 @@ def plot_single_result(
     lowerDetectionMjd = min(mjdList)
     upperDetectionMjd = max(mjdList)
 
-    # DETERMIN MAGNITUDE RANGE
+    # DETERMINE MAGNITUDE RANGE
     allMags = magnitudes['o']['mags'] + magnitudes['c']['mags']
     magRange = max(allMags) - min(allMags)
     deltaMag = magRange * 0.1
@@ -342,6 +342,8 @@ def plot_single_result(
     mjdRange = xmax - xmin
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
+
+    print(lowerMag, upperMag, deltaMag)
 
     # PLOT THE MAGNITUDE SCALE
     axisUpperFlux = upperMag
