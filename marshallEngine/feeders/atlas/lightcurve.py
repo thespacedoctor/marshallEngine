@@ -343,8 +343,6 @@ def plot_single_result(
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
 
-    print(transientBucketId, lowerMag, upperMag, deltaMag)
-
     # PLOT THE MAGNITUDE SCALE
     axisUpperFlux = upperMag
     axisLowerFlux = 1e-29
@@ -353,8 +351,6 @@ def plot_single_result(
         axisUpperMag = -2.5 * math.log10(axisUpperFlux) + 23.9
     else:
         axisUpperMag = None
-
-    print(transientBucketId, axisLowerMag, axisUpperMag)
     if axisUpperMag:
         ax.set_ylabel('Apparent Magnitude', labelpad=15)
         magLabels = [20., 17.0, 15.0, 14.0, 13.5, 13.0]
