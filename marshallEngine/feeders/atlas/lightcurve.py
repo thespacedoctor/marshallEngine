@@ -343,7 +343,7 @@ def plot_single_result(
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([lowerMag - deltaMag, upperMag + deltaMag])
 
-    print(lowerMag, upperMag, deltaMag)
+    print(transientBucketId, lowerMag, upperMag, deltaMag)
 
     # PLOT THE MAGNITUDE SCALE
     axisUpperFlux = upperMag
