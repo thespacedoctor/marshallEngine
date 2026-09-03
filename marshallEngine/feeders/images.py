@@ -350,6 +350,13 @@ WHERE
     # xt-class-method
 
 
+def convert_to_jpg(content, pathToWriteFile):
+            """*convert the content to jpg format*"""
+            from PIL import Image
+            image = Image.open(io.BytesIO(content))
+            image.save(pathToWriteFile, 'JPEG')
+            return image
+
 def download_image_array(
         imageArray,
         log,
@@ -411,6 +418,19 @@ def download_image_array(
             print('image not found' % locals())
             statusArray.append(2)
             continue
+        pathToWriteFile = "%(filepath)s_%(stamp)s_stamp.jpeg" % locals()
+
+        #IF SURVEY IS USER ADDED, CHECK IF THE IMAGE IS JPEG FORMAT. OTHERWISE, CONVERT TO JPG
+        if survey == "useradded":
+            try:    
+                if not content.startswith(b'\xff\xd8'):
+                    content = convert_to_jpg(content)
+                    statusArray.append(1)
+                    continue
+            except:
+                print('error converting image to jpg' % locals())
+                statusArray.append(0)
+                continue
 
         # WRITE STAMP TO FILE
         try:

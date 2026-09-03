@@ -248,7 +248,12 @@ def main(arguments=None):
             log=log,
             dbConn=dbConn,
             settings=settings
-        ).request_all_required_auto_obs()
+        )
+        schr.request_all_required_auto_obs()
+        # Updating status for each OB
+        #schr.collect_schedule_obs_statuses()
+        schr.remove_classified_obs()
+        #schr.removeOlderOBs()
 
     if "dbConn" in locals() and dbConn:
         dbConn.commit()
